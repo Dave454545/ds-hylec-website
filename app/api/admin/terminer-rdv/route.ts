@@ -35,7 +35,7 @@ export async function POST(request: Request) {
       // 3. Chercher s'il y a un parrainage EN_ATTENTE pour cet email
       const parrainage = await tx.parrainage.findFirst({
         where: {
-          filleulEmail: reservation.user.email,
+          filleulEmail: reservation.user?.email || "", // <-- LE FIX EST ICI
           statut: 'EN_ATTENTE'
         }
       });

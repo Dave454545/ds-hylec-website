@@ -111,7 +111,7 @@ export async function POST(request: Request) {
         from: "DS HY'LEC <onboarding@resend.dev>",
         to: [data.email],
         subject: 'Confirmation de votre réservation ⚡', 
-        react: WelcomeEmail({ prenom: data.prenom, resetLink }),
+       react: WelcomeEmail({ prenom: data.prenom, resetLink }) as any,
       });
 
       const problemesText = data.problemes && data.problemes.length > 0 

@@ -7,7 +7,8 @@ import AdminUI from "./AdminUI";
 export default async function AdminDashboardPage() {
   const session = await getServerSession(authOptions);
 
-  if (!session || session.user?.role !== "ADMIN") {
+  // LA CORRECTION EST ICI : on utilise (session.user as any)
+  if (!session || (session.user as any)?.role !== "ADMIN") {
     redirect("/login");
   }
 
@@ -48,7 +49,7 @@ export default async function AdminDashboardPage() {
     initialReservations={safeReservations} 
     initialUsers={safeUsers} 
     initialIndisponibilites={safeIndisponibilites} 
-    initialTarifications={safeTarifications} 
+    initialTarifications={safeTarifications}
     stats={stats} 
   />;
 }

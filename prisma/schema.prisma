@@ -1,0 +1,191 @@
+// This is your Prisma schema file pour DS HY'LEC
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// === UTILISATEURS ===
+model User {
+  id            String     @id @default(cuid())
+  nom           String
+  prenom        String
+  email         String     @unique
+  motDePasse    String     // Hashé bcrypt
+  telephone     String?
+  role          Role       @default(CLIENT)
+  
+  // NOUVEAU : Différenciation Particulier / Pro
+  typeClient    TypeClient @default(PARTICULIER)
+
+  dateCreation  DateTime   @default(now())
+  dateMaj       DateTime   @updatedAt
+
+  // Logique de Parrainage
+  codeParrain   String?    @unique      // Le code unique à partager (ex: THOMAS-123)
+  cagnotte      Float      @default(0)  // L'argent cumulé disponible pour le prochain RDV
+
+  // Relations 1:N
+  vehicules     Vehicule[]
+  reservations  Reservation[]
+  parrainages   Parrainage[]
+
+  @@map("users")
+}
+
+// === VÉHICULES ===
+model Vehicule {
+  id               String      @id @default(cuid())
+  userId           String
+  marque           String
+  modele           String
+  annee            Int
+  carburant        Carburant
+  immatriculation  String?     @unique
+  dateProchainCT   DateTime?
+  dateCreation     DateTime    @default(now())
+  dateMaj          DateTime    @updatedAt
+
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reservations Reservation[]
+
+  @@map("vehicules")
+}
+
+// === RÉSERVATIONS ===
+model Reservation {
+  id               String            @id @default(cuid())
+  userId           String?
+  vehiculeId       String?
+  service          Service
+  dateIntervention DateTime
+  adresse          String
+  
+  // NOUVEAU : Simulateur de pannes (Tableau de chaînes de caractères)
+  problemes        String[]
+
+  statut           StatutReservation @default(EN_ATTENTE)
+  moyenPaiement    MoyenPaiement
+  
+  // Gestion des prix avec remise
+  montantTotal     Float             @default(0) // Prix final à payer
+  remiseAppliquee  Float             @default(0) // Montant de la réduction (Cagnotte ou Code Parrain)
+  
+  notes            String?
+  dateCreation     DateTime          @default(now())
+  dateMaj          DateTime          @updatedAt
+
+  // Relations
+  user     User?     @relation(fields: [userId], references: [id])
+  vehicule Vehicule? @relation(fields: [vehiculeId], references: [id])
+  facture  Facture?
+
+  @@map("reservations")
+}
+
+// === FACTURES ===
+model Facture {
+  id            String   @id @default(cuid())
+  reservationId String   @unique
+  urlPdf        String?
+  montant       Float
+  dateEmission  DateTime @default(now())
+
+  // UNE SEULE relation
+  reservation Reservation @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+
+  @@map("factures")
+}
+
+// === PARRAINAGE (Ledger/Historique) ===
+model Parrainage {
+  id            String           @id @default(cuid())
+  parrainId     String
+  filleulEmail  String           // Email de la personne invitée
+  code          String           // Le code qui a été utilisé
+  creditParrain Float            @default(10) // Ex: 10€ pour le parrain
+  remiseFilleul Float            @default(10) // Ex: 10% ou 10€ pour le filleul
+  statut        StatutParrainage @default(EN_ATTENTE) // On attend que le RDV soit terminé
+  dateCreation  DateTime         @default(now())
+
+  parrain User @relation(fields: [parrainId], references: [id])
+
+  @@map("parrainages")
+}
+
+// === ENUMS ===
+enum Role {
+  CLIENT
+  ADMIN
+}
+
+// NOUVEAU : Enum pour le type de client
+enum TypeClient {
+  PARTICULIER
+  PROFESSIONNEL
+}
+
+enum Carburant {
+  ESSENCE
+  DIESEL
+  HYBRIDE
+  ELECTRIQUE
+}
+
+// NOUVEAU : Mise à jour de la liste des services selon le PDF
+enum Service {
+  DIAGNOSTIC_ELECTRONIQUE
+  DECALAMINAGE_MOTEUR
+  REGENERATION_FAP
+  NETTOYAGE_EGR
+  DIAGNOSTIC_HYBRIDE
+  TEST_BATTERIE_HYBRIDE
+  NETTOYAGE_REFROIDISSEMENT_HYBRIDE
+  PACK_HYBRIDE_COMPLET
+}
+
+enum StatutReservation {
+  EN_ATTENTE
+  CONFIRMEE
+  EN_COURS
+  TERMINEE
+  ANNULEE
+}
+
+enum MoyenPaiement {
+  EN_LIGNE
+  SUR_PLACE
+}
+
+enum StatutParrainage {
+  EN_ATTENTE // Le filleul a réservé, on attend l'intervention
+  VALIDE     // Intervention terminée, argent ajouté à la cagnotte
+  EXPIRE
+}
+
+// === INDISPONIBILITÉS (Congés / Blocages de l'Admin) ===
+model Indisponibilite {
+  id          String   @id @default(cuid())
+  dateDebut   DateTime // Début du congé ou du blocage
+  dateFin     DateTime // Fin du congé ou du blocage
+  motif       String?  // Ex: "Congés annuels", "Maladie", "Formation"
+  jourEntier  Boolean  @default(true) // Si c'est pour toute la journée ou juste une heure
+  
+  dateCreation DateTime @default(now())
+
+  @@map("indisponibilites")
+}
+
+// === TARIFICATION DYNAMIQUE ===
+model Tarification {
+  id      String   @id @default(cuid())
+  service Service  @unique // Un seul prix actif par service
+  prix    Float
+  dateMaj DateTime @updatedAt
+
+  @@map("tarifications")
+}

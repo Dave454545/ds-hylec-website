@@ -6,7 +6,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 export async function DELETE(request: Request) {
   // Sécurité : On vérifie que c'est bien l'Admin
   const session = await getServerSession(authOptions);
-  if (!session || session.user.role !== "ADMIN") {
+  if (!session || (session.user as any)?.role !== "ADMIN") {
     return NextResponse.json({ error: "Non autorisé" }, { status: 403 });
   }
 

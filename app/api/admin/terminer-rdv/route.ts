@@ -7,7 +7,7 @@ export async function POST(request: Request) {
   try {
     // Sécurité : On vérifie que c'est bien l'admin qui fait ça
     const session = await getServerSession(authOptions);
-    if (!session || session.user.role !== "ADMIN") {
+    if (!session || (session.user as any)?.role !== "ADMIN") {
       return NextResponse.json({ error: "Non autorisé" }, { status: 403 });
     }
 

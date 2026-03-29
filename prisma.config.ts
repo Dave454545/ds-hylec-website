@@ -10,5 +10,5 @@ export default defineConfig({
   },
   
   // Logs pour debug
-  log: ['query', 'info', 'warn', 'error'],
+  //log: ['query', 'info', 'warn', 'error'],
 })

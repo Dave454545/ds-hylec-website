@@ -30,7 +30,7 @@ export default function LoginPage() {
       // On récupère la session pour connaître le rôle
       const session = await getSession();
       
-      if (session?.user?.role === "ADMIN") {
+      if ((session?.user as any)?.role === "ADMIN") {
         router.push("/admin");
       } else {
         router.push("/dashboard-client");

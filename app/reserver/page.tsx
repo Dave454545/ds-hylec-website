@@ -211,7 +211,6 @@ export default function Reserver() {
   }
 
   return (
-    // FIX MAJEUR: w-full max-w-[100vw] overflow-x-hidden empêche le débordement horizontal
     <main className="relative min-h-screen w-full max-w-[100vw] overflow-x-hidden font-sans selection:bg-[#43A047] selection:text-white pb-20">
       
       <video 
@@ -236,9 +235,7 @@ export default function Reserver() {
         </div>
       </nav>
 
-      {/* FIX CONTENEUR: px-3 pour plus d'espace sur les bords mobiles */}
       <div className="w-full max-w-xl mx-auto px-3 sm:px-4 pt-28 sm:pt-32 relative z-10 box-border">
-        {/* FIX CARD: p-5 sur mobile au lieu de p-10 */}
         <div className="bg-white/90 backdrop-blur-2xl rounded-[1.5rem] sm:rounded-[2.5rem] shadow-2xl p-5 sm:p-10 border border-white/60 w-full box-border">
           
           <div className="flex justify-between mb-8 sm:mb-10 px-2 sm:px-0">
@@ -249,6 +246,7 @@ export default function Reserver() {
             ))}
           </div>
 
+          {/* ÉTAPE 1 */}
           {step === 1 && (
             <div className="animate-in fade-in slide-in-from-right-4 duration-500 w-full">
               <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mb-6 sm:mb-8 drop-shadow-sm text-center sm:text-left">De quoi avez-vous besoin ?</h2>
@@ -274,21 +272,21 @@ export default function Reserver() {
             </div>
           )}
 
+          {/* ÉTAPE 2 - LE CORRECTIF COMPLET ANTI-DÉBORDEMENT */}
           {step === 2 && (
-            <div className="animate-in slide-in-from-right-4 duration-500 w-full">
+            <div className="animate-in slide-in-from-right-4 duration-500 w-full max-w-full overflow-hidden">
               <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mb-5 sm:mb-6 drop-shadow-sm text-center sm:text-left">Le Véhicule</h2>
               
-              {/* FIX MAJEUR: flex-col sur mobile, flex-row sur PC. Fini le texte coupé ! */}
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-4">
                 <div className="relative w-full">
                   <input 
                     type="text" 
-                    placeholder="Marque (ex: Peugeot)" 
+                    placeholder="Marque" 
                     value={vehicle.marque} 
                     onChange={(e) => { setVehicle({...vehicle, marque: e.target.value}); setShowBrands(true); }}
                     onFocus={() => setShowBrands(true)}
                     onBlur={() => setTimeout(() => setShowBrands(false), 200)}
-                    className="w-full box-border border-2 border-white/80 rounded-xl p-3.5 sm:p-4 bg-gray-50/80 backdrop-blur-sm outline-none focus:border-[#E30613] focus:bg-white transition-colors font-bold text-gray-800 text-sm sm:text-base shadow-inner" 
+                    className="w-full box-border border-2 border-white/80 rounded-xl p-3.5 sm:p-4 bg-gray-50/80 backdrop-blur-sm outline-none focus:border-[#E30613] focus:bg-white transition-colors font-bold text-gray-800 text-sm sm:text-base shadow-inner appearance-none" 
                   />
                   {showBrands && vehicle.marque.length > 0 && (
                     <div className="absolute z-50 w-full mt-2 bg-white/95 backdrop-blur-xl border border-gray-100 shadow-2xl rounded-xl max-h-48 overflow-y-auto hide-scrollbar">
@@ -304,12 +302,12 @@ export default function Reserver() {
                 <div className="relative w-full">
                   <input 
                     type="text" 
-                    placeholder="Modèle (ex: 208)" 
+                    placeholder="Modèle" 
                     value={vehicle.modele} 
                     onChange={(e) => { setVehicle({...vehicle, modele: e.target.value}); setShowModels(true); }}
                     onFocus={() => setShowModels(true)}
                     onBlur={() => setTimeout(() => setShowModels(false), 200)}
-                    className="w-full box-border border-2 border-white/80 rounded-xl p-3.5 sm:p-4 bg-gray-50/80 backdrop-blur-sm outline-none focus:border-[#E30613] focus:bg-white transition-colors font-bold text-gray-800 text-sm sm:text-base shadow-inner" 
+                    className="w-full box-border border-2 border-white/80 rounded-xl p-3.5 sm:p-4 bg-gray-50/80 backdrop-blur-sm outline-none focus:border-[#E30613] focus:bg-white transition-colors font-bold text-gray-800 text-sm sm:text-base shadow-inner appearance-none" 
                   />
                   {showModels && vehicle.modele.length > 0 && (
                     <div className="absolute z-50 w-full mt-2 bg-white/95 backdrop-blur-xl border border-gray-100 shadow-2xl rounded-xl max-h-48 overflow-y-auto hide-scrollbar">
@@ -323,7 +321,6 @@ export default function Reserver() {
                 </div>
               </div>
 
-              {/* FIX CARBURANT: Textes plus petits sur mobile (text-[11px]) pour ne pas déborder */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 mb-6 sm:mb-8">
                 {fuelTypes.map((fuel) => (
                   <button key={fuel.value} onClick={() => setVehicle({...vehicle, carburant: fuel.value})} className={`p-3 sm:p-4 rounded-xl border-2 text-[11px] sm:text-xs font-black uppercase tracking-wider transition-all break-words ${vehicle.carburant === fuel.value ? 'border-[#E30613] bg-[#E30613] text-white shadow-md' : 'bg-gray-50/80 text-gray-500 border-transparent hover:border-gray-300 hover:bg-white'}`}>
@@ -332,10 +329,10 @@ export default function Reserver() {
                 ))}
               </div>
 
-              <h3 className="font-bold text-gray-700 mb-3 text-sm sm:text-base">Quel problème a votre voiture ? (Optionnel)</h3>
+              <h3 className="font-bold text-gray-700 mb-3 text-sm sm:text-base">Problème ? (Optionnel)</h3>
               <div className="flex flex-wrap gap-2 mb-6 sm:mb-8">
                 {problemesList.map(prob => (
-                  <button key={prob} onClick={() => toggleProbleme(prob)} className={`px-3 py-2 sm:px-4 sm:py-2.5 rounded-full border-2 text-xs sm:text-sm font-bold transition-all shadow-sm ${problemes.includes(prob) ? 'border-[#E30613] bg-[#E30613]/10 text-[#E30613]' : 'border-gray-200 text-gray-500 bg-white hover:border-[#E30613]/40'}`}>
+                  <button key={prob} onClick={() => toggleProbleme(prob)} className={`px-3 py-2 rounded-full border-2 text-xs font-bold transition-all shadow-sm ${problemes.includes(prob) ? 'border-[#E30613] bg-[#E30613]/10 text-[#E30613]' : 'border-gray-200 text-gray-500 bg-white hover:border-[#E30613]/40'}`}>
                     {prob}
                   </button>
                 ))}
@@ -343,48 +340,53 @@ export default function Reserver() {
 
               <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mb-4 sm:mb-6 drop-shadow-sm text-center sm:text-left">Date & Heure</h2>
               
-              {/* FIX DATE: box-border indispensable */}
-              <div className="mb-6">
-                <input type="date" min={today} value={dateTime.date} onChange={(e) => setDateTime({...dateTime, date: e.target.value})} className="w-full box-border border-2 border-white/80 rounded-xl p-3.5 sm:p-4 bg-gray-50/80 backdrop-blur-sm outline-none focus:border-[#E30613] focus:bg-white font-bold text-gray-800 text-sm sm:text-base shadow-inner transition-colors" />
+              <div className="mb-6 w-full">
+                <input 
+                  type="date" 
+                  min={today} 
+                  value={dateTime.date} 
+                  onChange={(e) => setDateTime({...dateTime, date: e.target.value})} 
+                  className="w-full max-w-full box-border border-2 border-white/80 rounded-xl p-3 sm:p-4 bg-gray-50/80 backdrop-blur-sm outline-none focus:border-[#E30613] focus:bg-white font-bold text-gray-800 text-sm sm:text-base shadow-inner transition-colors appearance-none" 
+                />
               </div>
 
               {dateTime.date && (
-                <div className="mb-6 sm:mb-8">
-                  <label className="block text-xs sm:text-sm font-bold text-gray-500 mb-3 uppercase tracking-wider">Vos disponibilités à domicile</label>
+                <div className="mb-6 sm:mb-8 w-full">
+                  <label className="block text-xs sm:text-sm font-bold text-gray-500 mb-3 uppercase tracking-wider text-center sm:text-left">Créneaux</label>
                   {loadingSlots ? (
-                    <div className="text-center py-6 text-gray-400 font-bold text-sm sm:text-base animate-pulse bg-gray-50 rounded-xl">Recherche des disponibilités...</div>
+                    <div className="text-center py-6 text-gray-400 font-bold text-sm sm:text-base animate-pulse bg-gray-50 rounded-xl">Recherche...</div>
                   ) : availableSlots.length > 0 ? (
-                    <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-3">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 w-full">
                       {availableSlots.map(slot => (
                         <button
                           key={slot}
                           onClick={() => setDateTime({...dateTime, time: slot})}
-                          className={`py-3 sm:py-3.5 rounded-xl font-black text-xs sm:text-sm border-2 transition-all shadow-sm ${dateTime.time === slot ? 'bg-[#E30613] text-white border-[#E30613] scale-105' : 'bg-white text-gray-600 border-gray-200 hover:border-[#E30613]/50'}`}
+                          className={`py-3 px-1 rounded-xl font-black text-xs sm:text-sm border-2 transition-all shadow-sm truncate ${dateTime.time === slot ? 'bg-[#E30613] text-white border-[#E30613] scale-105' : 'bg-white text-gray-600 border-gray-200 hover:border-[#E30613]/50'}`}
                         >
                           {slot}
                         </button>
                       ))}
                     </div>
                   ) : (
-                    <div className="bg-red-50 border border-red-100 text-[#E30613] p-4 sm:p-5 rounded-xl text-center font-bold text-xs sm:text-sm">
-                      Mince ! Aucun créneau disponible à cette date.
+                    <div className="bg-red-50 border border-red-100 text-[#E30613] p-4 rounded-xl text-center font-bold text-xs sm:text-sm">
+                      Aucun créneau dispo.
                     </div>
                   )}
                 </div>
               )}
 
-              <div className="flex gap-3 sm:gap-4 mt-6 sm:mt-8">
-                <button onClick={() => setStep(1)} className="py-3.5 sm:py-4 bg-gray-100/80 rounded-xl flex-1 font-bold text-sm sm:text-base text-gray-500 hover:bg-gray-200 transition-colors">Retour</button>
-                <button onClick={() => setStep(3)} disabled={!vehicle.marque || !dateTime.date || !dateTime.time} className="py-3.5 sm:py-4 bg-[#E30613] hover:bg-[#B3050F] transition-all rounded-xl flex-[2] font-black text-sm sm:text-lg text-white disabled:opacity-30 shadow-lg shadow-[#E30613]/20">Suivant</button>
+              <div className="flex gap-3 sm:gap-4 mt-6 sm:mt-8 w-full">
+                <button onClick={() => setStep(1)} className="py-3 sm:py-4 bg-gray-100/80 rounded-xl flex-1 font-bold text-sm sm:text-base text-gray-500 hover:bg-gray-200 transition-colors">Retour</button>
+                <button onClick={() => setStep(3)} disabled={!vehicle.marque || !dateTime.date || !dateTime.time} className="py-3 sm:py-4 bg-[#E30613] hover:bg-[#B3050F] transition-all rounded-xl flex-[2] font-black text-sm sm:text-lg text-white disabled:opacity-30 shadow-lg shadow-[#E30613]/20">Suivant</button>
               </div>
             </div>
           )}
 
+          {/* ÉTAPE 3 */}
           {step === 3 && (
             <div className="animate-in slide-in-from-right-4 duration-500 w-full">
               <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mb-5 sm:mb-6 drop-shadow-sm text-center sm:text-left">Vos Coordonnées</h2>
               
-              {/* FIX TYPE CLIENT: flex-col sur petit mobile */}
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-6 sm:mb-8">
                 <button onClick={() => setTypeClient('PARTICULIER')} className={`flex-1 py-3.5 sm:py-4 rounded-xl border-2 font-black text-xs sm:text-sm uppercase tracking-wider transition-all ${typeClient === 'PARTICULIER' ? 'border-[#E30613] bg-[#E30613]/10 text-[#E30613] shadow-inner' : 'border-transparent text-gray-500 bg-gray-50/80 hover:border-gray-200 hover:bg-white'}`}>Particulier</button>
                 <button onClick={() => setTypeClient('PROFESSIONNEL')} className={`flex-1 py-3.5 sm:py-4 rounded-xl border-2 font-black text-xs sm:text-sm uppercase tracking-wider transition-all ${typeClient === 'PROFESSIONNEL' ? 'border-[#E30613] bg-[#E30613]/10 text-[#E30613] shadow-inner' : 'border-transparent text-gray-500 bg-gray-50/80 hover:border-gray-200 hover:bg-white'}`}>Pro (Taxi, VTC...)</button>
@@ -424,6 +426,7 @@ export default function Reserver() {
             </div>
           )}
 
+          {/* ÉTAPE 4 */}
           {step === 4 && (
             <div className="animate-in slide-in-from-right-4 duration-500 w-full">
               <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mb-5 sm:mb-6 drop-shadow-sm text-center sm:text-left">Paiement</h2>

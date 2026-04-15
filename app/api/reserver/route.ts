@@ -96,7 +96,7 @@ export async function POST(request: Request) {
   // Derive nom/prenom from fullName if not provided separately
   const names  = (data.fullName ?? '').split(' ');
   const prenom = data.prenom ?? names[0] ?? 'Client';
-  const nom    = data.nom    ?? names.slice(1).join(' ') || 'Client';
+  const nom    = data.nom    ?? (names.slice(1).join(' ') || 'Client');
 
   try {
     const resultat = await prisma.$transaction(async (tx) => {

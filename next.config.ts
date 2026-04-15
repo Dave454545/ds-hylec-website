@@ -2,30 +2,55 @@ import type { NextConfig } from "next";
 
 const withPWA = require("@ducanh2912/next-pwa").default({
   dest: "public",
-  cacheOnFrontEndNav: true,
-  // Désactivé : causait des requêtes réseau bloquées en données mobiles Safari
+  // false : ne pas mettre en cache les navigations — évite les réponses
+  // périmées sur données mobiles Safari
+  cacheOnFrontEndNav: false,
   aggressiveFrontEndNavCaching: false,
   reloadOnOnline: true,
   swcMinify: true,
   disable: process.env.NODE_ENV === "development",
   workboxOptions: {
     disableDevLogs: true,
-    // Les routes API ne doivent JAMAIS être servies depuis le cache.
-    // Sans ça, Safari en données mobiles (standalone PWA) reçoit des
-    // réponses mises en cache au lieu d'appeler le réseau.
+    // skipWaiting + clientsClaim : le nouveau SW prend le contrôle
+    // immédiatement après chaque déploiement, sans attendre la fermeture
+    // de tous les onglets. Essentiel pour éviter qu'un vieux SW cassé
+    // continue à servir des requêtes sur données mobiles.
+    skipWaiting: true,
+    clientsClaim: true,
+    // Limite la taille des fichiers pré-cachés : évite les échecs
+    // d'installation du SW sur connexions lentes (4G instable)
+    maximumFileSizeToCacheInBytes: 3 * 1024 * 1024, // 3 Mo max
     runtimeCaching: [
       {
-        // API routes → toujours réseau, jamais cache
+        // API routes → JAMAIS de cache, toujours le réseau
         urlPattern: /^\/api\/.*/i,
         handler: "NetworkOnly",
       },
       {
-        // Pages Next.js → network-first (réseau, fallback cache)
+        // Assets statiques (JS, CSS, fonts, images) → cache-first
+        urlPattern: /\.(?:js|css|woff2?|png|jpg|jpeg|svg|ico|mp4|webp)$/i,
+        handler: "CacheFirst",
+        options: {
+          cacheName: "static-assets",
+          expiration: {
+            maxEntries: 80,
+            maxAgeSeconds: 30 * 24 * 60 * 60, // 30 jours
+          },
+        },
+      },
+      {
+        // Pages → network-first avec timeout généreux pour données mobiles
+        // Si le réseau répond dans les 20s → contenu frais
+        // Sinon → fallback sur le cache (mode offline basique)
         urlPattern: /^\/(?!api\/).*/i,
         handler: "NetworkFirst",
         options: {
           cacheName: "pages-cache",
-          networkTimeoutSeconds: 10,
+          networkTimeoutSeconds: 20,
+          expiration: {
+            maxEntries: 20,
+            maxAgeSeconds: 24 * 60 * 60, // 24h max en cache
+          },
         },
       },
     ],

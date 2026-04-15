@@ -190,7 +190,7 @@ export default function Reserver() {
   if (success) {
     return (
       <main className="relative min-h-screen flex items-center justify-center overflow-hidden p-4 sm:p-6 text-center selection:bg-[#43A047] selection:text-white">
-        <video autoPlay loop muted playsInline poster="/ds_hylec_logo.png" className="fixed inset-0 w-full h-full object-cover -z-50 scale-105">
+        <video autoPlay loop muted playsInline className="fixed inset-0 w-full h-full object-cover -z-50 scale-105">
           <source src="/dshylec1.mp4" type="video/mp4" />
         </video>
         <div className="fixed inset-0 bg-black/40 backdrop-blur-[4px] -z-40" />
@@ -214,7 +214,7 @@ export default function Reserver() {
       
       <video
         autoPlay loop muted playsInline
-        poster="/ds_hylec_logo.png"
+       
         className="fixed inset-0 w-full h-full object-cover -z-50 scale-105"
       >
         <source src="/dshylec1.mp4" type="video/mp4" />

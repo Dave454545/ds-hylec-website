@@ -26,7 +26,7 @@ export default function APropos() {
         loop
         muted
         playsInline
-        poster="/ds_hylec_logo.png"
+       
         className="fixed inset-0 w-full h-full object-cover -z-50"
       >
         <source src="/dshylec2.mp4" type="video/mp4" />

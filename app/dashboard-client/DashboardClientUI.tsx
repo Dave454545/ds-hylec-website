@@ -18,7 +18,7 @@ export default function DashboardClientUI({ user, vehicules, factures, parrainag
         loop
         muted
         playsInline
-        poster="/ds_hylec_logo.png"
+       
         className="fixed inset-0 w-full h-full object-cover -z-50 scale-105"
       >
         <source src="/dshylec1.mp4" type="video/mp4" />

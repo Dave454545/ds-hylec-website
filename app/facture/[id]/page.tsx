@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
+import Link from 'next/link';
 import PrintButton from './PrintButton';
 
 // NOUVEAU : On indique que params est une Promesse
@@ -36,7 +37,18 @@ export default async function FacturePage({ params }: { params: Promise<{ id: st
 
   return (
     <div className="min-h-screen bg-gray-100 py-10 print:bg-white print:py-0 font-sans selection:bg-[#43A047] selection:text-white overflow-x-hidden">
-      
+
+      {/* BOUTON RETOUR (invisible sur le PDF) */}
+      <div className="print:hidden sticky top-0 z-50 px-4 py-3 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
+        <Link
+          href="/dashboard-client"
+          className="inline-flex items-center gap-2 text-sm font-bold text-gray-700 hover:text-[#E30613] transition-colors duration-200"
+          style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' } as React.CSSProperties}
+        >
+          <span className="text-base">←</span> Mon espace
+        </Link>
+      </div>
+
       {/* Le bouton de téléchargement (invisible sur le PDF) */}
       <PrintButton />
 

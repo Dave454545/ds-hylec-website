@@ -6,7 +6,7 @@ export default function BottomNav() {
   const pathname = usePathname();
 
   // Hide on pages that have their own full navigation or don't need bottom nav
-  const hiddenPrefixes = ['/admin', '/facture', '/login', '/register', '/reset-password', '/setup-admin'];
+  const hiddenPrefixes = ['/admin', '/login', '/register', '/reset-password', '/setup-admin'];
   if (hiddenPrefixes.some(p => pathname.startsWith(p))) return null;
 
   const items = [

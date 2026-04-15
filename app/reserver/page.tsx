@@ -210,7 +210,7 @@ export default function Reserver() {
   }
 
   return (
-    <main className="relative min-h-screen w-full max-w-[100vw] overflow-x-hidden font-sans selection:bg-[#43A047] selection:text-white pb-20">
+    <main className="relative min-h-screen w-full max-w-[100vw] overflow-x-hidden font-sans selection:bg-[#43A047] selection:text-white">
       
       <video
         autoPlay loop muted playsInline

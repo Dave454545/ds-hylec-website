@@ -41,13 +41,14 @@ export default function LoginPage() {
 
   return (
     <main className="relative flex flex-col items-center justify-center min-h-screen font-sans selection:bg-[#E30613] selection:text-white overflow-hidden p-4">
-      
-      {/* BOUTON RETOUR (Top Left) */}
-      <Link 
-        href="/" 
-        className="absolute top-8 left-8 z-50 flex items-center gap-2 bg-white/70 backdrop-blur-md px-5 py-2.5 rounded-full font-bold text-sm text-gray-800 hover:bg-white hover:scale-105 hover:shadow-lg transition-all duration-300 border border-white/50"
+
+      {/* BOUTON FERMER (Top Right) */}
+      <Link
+        href="/"
+        className="absolute top-6 right-6 z-50 flex items-center justify-center w-11 h-11 bg-white/70 backdrop-blur-md rounded-full font-bold text-xl text-gray-800 hover:bg-white hover:scale-110 hover:shadow-lg transition-all duration-300 border border-white/50"
+        aria-label="Retour à l'accueil"
       >
-        <span>←</span> Retour à l'accueil
+        ×
       </Link>
 
       {/* VIDÉO FIXE EN ARRIÈRE-PLAN */}
@@ -56,7 +57,7 @@ export default function LoginPage() {
         loop
         muted
         playsInline
-       
+
         className="fixed inset-0 w-full h-full object-cover -z-50 scale-105"
       >
         <source src="/dshylec1.mp4" type="video/mp4" />
@@ -72,21 +73,20 @@ export default function LoginPage() {
 
       {/* FORMULAIRE FLOTTANT (Glassmorphism) */}
       <div className="relative z-10 w-full max-w-md animate-in fade-in slide-in-from-bottom-12 duration-1000">
-        
-        {/* LOGO AU DESSUS DU FORMULAIRE */}
-        <div className="flex justify-center mb-8 drop-shadow-xl">
-          <div className="relative h-32 w-64 bg-white/90 backdrop-blur-md rounded-2xl p-4 shadow-lg border border-white/50">
-            <Image 
-              src="/ds_hylec_logo.png" 
-              alt="DS HY'LEC Logo" 
-              fill 
-              className="object-contain p-2" 
-              priority
-            />
-          </div>
-        </div>
 
         <div className="bg-white/85 backdrop-blur-xl rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] p-10 border border-white/60">
+          {/* LOGO INTÉGRÉ EN HAUT DU FORMULAIRE */}
+          <div className="flex justify-center mb-6">
+            <div className="relative h-16 w-40">
+              <Image
+                src="/ds_hylec_logo.png"
+                alt="DS HY'LEC Logo"
+                fill
+                className="object-contain"
+                priority
+              />
+            </div>
+          </div>
           <div className="text-center mb-8">
             <h1 className="text-3xl font-black text-gray-900 mb-2">Connexion</h1>
             <p className="text-[#E30613] font-bold text-sm bg-[#E30613]/10 inline-block px-3 py-1 rounded-lg">Accédez à votre espace DS HY'LEC</p>

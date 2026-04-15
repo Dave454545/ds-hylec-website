@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
 import BottomNav from "@/components/BottomNav";
+import PWAInstallBanner from "@/components/PWAInstallBanner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -57,6 +58,8 @@ export default function RootLayout({
           {children}
           {/* Bottom navigation — visible on mobile only, hidden md+ */}
           <BottomNav />
+          {/* PWA install prompt — iOS Safari instructions / Android native prompt */}
+          <PWAInstallBanner />
         </Providers>
       </body>
     </html>

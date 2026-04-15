@@ -3,12 +3,32 @@ import type { NextConfig } from "next";
 const withPWA = require("@ducanh2912/next-pwa").default({
   dest: "public",
   cacheOnFrontEndNav: true,
-  aggressiveFrontEndNavCaching: true,
+  // Désactivé : causait des requêtes réseau bloquées en données mobiles Safari
+  aggressiveFrontEndNavCaching: false,
   reloadOnOnline: true,
   swcMinify: true,
   disable: process.env.NODE_ENV === "development",
   workboxOptions: {
     disableDevLogs: true,
+    // Les routes API ne doivent JAMAIS être servies depuis le cache.
+    // Sans ça, Safari en données mobiles (standalone PWA) reçoit des
+    // réponses mises en cache au lieu d'appeler le réseau.
+    runtimeCaching: [
+      {
+        // API routes → toujours réseau, jamais cache
+        urlPattern: /^\/api\/.*/i,
+        handler: "NetworkOnly",
+      },
+      {
+        // Pages Next.js → network-first (réseau, fallback cache)
+        urlPattern: /^\/(?!api\/).*/i,
+        handler: "NetworkFirst",
+        options: {
+          cacheName: "pages-cache",
+          networkTimeoutSeconds: 10,
+        },
+      },
+    ],
   },
 });
 

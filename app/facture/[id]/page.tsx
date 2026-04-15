@@ -35,37 +35,36 @@ export default async function FacturePage({ params }: { params: Promise<{ id: st
   const numFacture = `F${new Date(reservation.dateIntervention).getFullYear()}-${reservation.id.slice(-5).toUpperCase()}`;
 
   return (
-    <div className="min-h-screen bg-gray-100 py-10 print:bg-white print:py-0 font-sans selection:bg-[#43A047] selection:text-white">
+    <div className="min-h-screen bg-gray-100 py-10 print:bg-white print:py-0 font-sans selection:bg-[#43A047] selection:text-white overflow-x-hidden">
       
       {/* Le bouton de téléchargement (invisible sur le PDF) */}
       <PrintButton />
 
       {/* LA FEUILLE A4 DE LA FACTURE */}
-      <div className="max-w-[210mm] mx-auto bg-white shadow-2xl print:shadow-none min-h-[297mm] relative overflow-hidden">
-        
+      <div className="w-full max-w-[210mm] mx-auto bg-white shadow-2xl print:shadow-none min-h-[297mm] relative overflow-hidden">
+
         {/* Bandeau supérieur Rouge */}
         <div className="h-4 w-full bg-[#E30613]"></div>
 
-        <div className="p-12">
+        <div className="p-4 sm:p-8 md:p-12">
           {/* HEADER : Logo et Titre */}
-          <div className="flex justify-between items-start mb-16">
+          <div className="flex flex-col sm:flex-row justify-between items-start mb-8 sm:mb-16 gap-4">
             <div>
-              <div className="relative h-20 w-48 mb-4">
-                {/* Remplace par ton vrai logo s'il est prêt */}
+              <div className="relative h-16 w-36 sm:h-20 sm:w-48 mb-3">
                 <Image src="/ds_hylec_logo.png" alt="DS HY'LEC" fill className="object-contain object-left" priority />
               </div>
               <p className="text-gray-500 font-medium text-sm">Intervention à domicile</p>
               <p className="text-gray-500 font-medium text-sm">Expertise Hybride & Dépollution</p>
             </div>
-            <div className="text-right">
-              <h1 className="text-5xl font-black text-gray-200 uppercase tracking-tighter mb-2">Facture</h1>
-              <p className="text-gray-900 font-bold text-lg">N° {numFacture}</p>
-              <p className="text-gray-500 font-medium">Date : {new Date(reservation.dateIntervention).toLocaleDateString('fr-FR')}</p>
+            <div className="sm:text-right">
+              <h1 className="text-3xl sm:text-5xl font-black text-gray-200 uppercase tracking-tighter mb-2">Facture</h1>
+              <p className="text-gray-900 font-bold text-base sm:text-lg">N° {numFacture}</p>
+              <p className="text-gray-500 font-medium text-sm">Date : {new Date(reservation.dateIntervention).toLocaleDateString('fr-FR')}</p>
             </div>
           </div>
 
           {/* ADRESSES */}
-          <div className="flex justify-between mb-16 gap-8">
+          <div className="flex flex-col sm:flex-row justify-between mb-8 sm:mb-16 gap-4 sm:gap-8">
             {/* Émetteur */}
             <div className="flex-1">
               <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Émetteur</p>
@@ -109,8 +108,8 @@ export default async function FacturePage({ params }: { params: Promise<{ id: st
           </div>
 
           {/* TABLEAU DES PRESTATIONS */}
-          <div className="mb-12">
-            <table className="w-full text-left border-collapse">
+          <div className="mb-8 sm:mb-12 overflow-x-auto">
+            <table className="w-full text-left border-collapse min-w-[480px]">
               <thead>
                 <tr className="bg-[#E30613] text-white text-sm uppercase tracking-wider">
                   <th className="py-4 px-6 rounded-tl-xl font-bold">Description du service</th>
@@ -148,8 +147,8 @@ export default async function FacturePage({ params }: { params: Promise<{ id: st
           </div>
 
           {/* RÉSUMÉ DES TOTAUX */}
-          <div className="flex justify-end mb-16">
-            <div className="w-1/2 bg-gray-50 rounded-2xl p-6 border border-gray-100">
+          <div className="flex justify-end mb-8 sm:mb-16">
+            <div className="w-full sm:w-1/2 bg-gray-50 rounded-2xl p-4 sm:p-6 border border-gray-100">
               <div className="flex justify-between py-2 text-gray-600 font-medium">
                 <span>Total HT</span>
                 <span>{montantHT.toFixed(2)} €</span>

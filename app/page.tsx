@@ -60,13 +60,12 @@ export default function Home() {
     <main className="relative min-h-screen font-sans selection:bg-[#43A047] selection:text-white overflow-x-hidden">
       
       {/* VIDÉO FIXE EN ARRIÈRE-PLAN GLOBAL - CRYSTAL CLEAR */}
-      {/* NOTE : remplace poster par une vraie capture du début de la vidéo pour un LCP optimal */}
+      {/* Pas de poster= : le fond body #000 s'affiche avant que la vidéo se charge */}
       <video
         autoPlay
         loop
         muted
         playsInline
-        poster="/ds_hylec_logo.png"
         className="fixed inset-0 w-full h-full object-cover -z-50"
       >
         <source src="/dshylec2.mp4" type="video/mp4" />

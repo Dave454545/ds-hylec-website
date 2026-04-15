@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+Allow: /a-propos
+Allow: /reserver
+Allow: /login
+
+# Block private / server-only paths
+Disallow: /admin
+Disallow: /api/
+Disallow: /dashboard-client
+Disallow: /setup-admin
+Disallow: /reset-password
+Disallow: /facture/
+
+Sitemap: https://www.dshylec.fr/sitemap.xml

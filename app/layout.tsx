@@ -1,9 +1,9 @@
-import type { Metadata, Viewport } from "next"; // Ajout de Viewport
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
+import BottomNav from "@/components/BottomNav";
 
-// Configuration des polices
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -14,23 +14,25 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// 1. Configuration de l'affichage mobile (Viewport)
+// Viewport: viewport-fit=cover enables safe-area-inset-* CSS env vars
+// userScalable: false prevents pinch-zoom (native app behaviour)
 export const viewport: Viewport = {
-  themeColor: "#EAB308", // La couleur jaune DSHylec pour la barre du téléphone
+  themeColor: "#E30613",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
+  viewportFit: "cover",
 };
 
-// 2. Métadonnées de l'application (SEO + PWA)
 export const metadata: Metadata = {
-  title: "DS Hydrocarbure - Expert Décalaminage & Diagnostic",
-  description: "Solution professionnelle de décalaminage moteur et diagnostic auto à domicile.",
-  manifest: "/manifest.json", // Lien vers ton fichier manifest
+  title: "DS HY'LEC — Expert Hybride & Diagnostic Auto à Domicile",
+  description: "Expert hybrid, diagnostic électronique et performance moteur. Intervention à domicile ou sur votre lieu de travail.",
+  manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
-    statusBarStyle: "default",
+    // black-translucent: status bar becomes transparent, content goes edge-to-edge
+    statusBarStyle: "black-translucent",
     title: "DS HY'LEC",
   },
   formatDetection: {
@@ -46,15 +48,15 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <head>
-        {/* On force l'icône pour les iPhone */}
         <link rel="apple-touch-icon" href="/ds_hylec_logo.png" />
+        {/* Preconnect to Unsplash CDN used for service card images */}
+        <link rel="preconnect" href="https://images.unsplash.com" />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {/* On enveloppe TOUTE l'app dans Providers pour que l'auth fonctionne partout */}
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Providers>
           {children}
+          {/* Bottom navigation — visible on mobile only, hidden md+ */}
+          <BottomNav />
         </Providers>
       </body>
     </html>

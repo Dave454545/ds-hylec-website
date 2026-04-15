@@ -13,11 +13,12 @@ export default function DashboardClientUI({ user, vehicules, factures, parrainag
     <main className="relative min-h-screen font-sans pb-20 selection:bg-[#43A047] selection:text-white overflow-hidden">
       
       {/* VIDÉO EN ARRIÈRE-PLAN : Pleine luminosité */}
-      <video 
-        autoPlay 
-        loop 
-        muted 
-        playsInline 
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        poster="/ds_hylec_logo.png"
         className="fixed inset-0 w-full h-full object-cover -z-50 scale-105"
       >
         <source src="/dshylec1.mp4" type="video/mp4" />
@@ -31,7 +32,10 @@ export default function DashboardClientUI({ user, vehicules, factures, parrainag
       <div className="fixed bottom-0 right-0 w-[500px] h-[500px] bg-[#43A047]/15 rounded-full blur-[120px] -z-30 animate-pulse" style={{ animationDelay: '2s', animationDuration: '8s' }} />
 
       {/* HEADER CLIENT (Glassmorphism Rouge) */}
-      <nav className="bg-gradient-to-r from-[#E30613]/95 to-[#B3050F]/95 backdrop-blur-xl px-6 pt-10 pb-16 rounded-b-[40px] shadow-[0_20px_40px_-10px_rgba(227,6,19,0.4)] relative z-10 border-b border-white/20">
+      <nav
+        className="bg-gradient-to-r from-[#E30613]/95 to-[#B3050F]/95 backdrop-blur-xl px-6 pb-16 rounded-b-[40px] shadow-[0_20px_40px_-10px_rgba(227,6,19,0.4)] relative z-10 border-b border-white/20"
+        style={{ paddingTop: 'calc(2.5rem + env(safe-area-inset-top))' }}
+      >
         <div className="max-w-4xl mx-auto flex items-center justify-between mb-6">
           <div className="flex items-baseline gap-1 text-white">
             <span className="text-2xl font-black tracking-tighter drop-shadow-md">DS HY'LEC</span>

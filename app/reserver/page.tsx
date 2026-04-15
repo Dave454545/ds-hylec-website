@@ -132,7 +132,6 @@ export default function Reserver() {
     { label: "Diagnostic électronique complet", value: "DIAGNOSTIC_ELECTRONIQUE", desc: "Analyse complète de votre véhicule avec valise professionnelle. Lecture des codes défaut, effacement des voyants et explication claire de la panne." },
     { label: "Décalaminage moteur hydrogène", value: "DECALAMINAGE_MOTEUR", desc: "Nettoyage interne du moteur. Élimine la calamine, améliore les performances, réduit la consommation et facilite le passage au contrôle technique." },
     { label: "Régénération FAP", value: "REGENERATION_FAP", desc: "Nettoyage de votre Filtre À Particules encrassé via une régénération forcée au diagnostic. Évite un remplacement très coûteux." },
-    { label: "Nettoyage vanne EGR / admission", value: "NETTOYAGE_EGR", desc: "Nettoyage ciblé du système d'admission et de la vanne EGR pour retrouver de la puissance et diminuer les fumées noires." },
     { label: "Diagnostic système hybride", value: "DIAGNOSTIC_HYBRIDE", desc: "Contrôle spécifique du système hybride (haute tension, onduleur, cellules) pour s'assurer du bon fonctionnement électrique." },
     { label: "Test batterie hybride", value: "TEST_BATTERIE_HYBRIDE", desc: "Analyse de l'état de santé réel (SOH) de votre batterie hybride. Idéal pour anticiper une défaillance ou avant un achat/revente." },
     { label: "Nettoyage refroidissement hybride", value: "NETTOYAGE_REFROIDISSEMENT_HYBRIDE", desc: "Démontage et nettoyage du ventilateur et du filtre de refroidissement de la batterie haute tension pour éviter la surchauffe." },
@@ -164,8 +163,8 @@ export default function Reserver() {
     const payload = {
       ...client, nom, prenom, typeClient, ...vehicle, problemes, service,
       date: `${dateTime.date}T${dateTime.time}:00`,
-      moyenPaiement: payment === 'en_ligne' ? 'EN_LIGNE' : 'SUR_PLACE',
-      codeParrainSaisi: codeParrain || null 
+      moyenPaiement: 'SUR_PLACE',
+      codeParrainSaisi: codeParrain || null
     };
 
     try {
@@ -191,7 +190,7 @@ export default function Reserver() {
   if (success) {
     return (
       <main className="relative min-h-screen flex items-center justify-center overflow-hidden p-4 sm:p-6 text-center selection:bg-[#43A047] selection:text-white">
-        <video autoPlay loop muted playsInline className="fixed inset-0 w-full h-full object-cover -z-50 scale-105">
+        <video autoPlay loop muted playsInline poster="/ds_hylec_logo.png" className="fixed inset-0 w-full h-full object-cover -z-50 scale-105">
           <source src="/dshylec1.mp4" type="video/mp4" />
         </video>
         <div className="fixed inset-0 bg-black/40 backdrop-blur-[4px] -z-40" />
@@ -213,8 +212,9 @@ export default function Reserver() {
   return (
     <main className="relative min-h-screen w-full max-w-[100vw] overflow-x-hidden font-sans selection:bg-[#43A047] selection:text-white pb-20">
       
-      <video 
-        autoPlay loop muted playsInline 
+      <video
+        autoPlay loop muted playsInline
+        poster="/ds_hylec_logo.png"
         className="fixed inset-0 w-full h-full object-cover -z-50 scale-105"
       >
         <source src="/dshylec1.mp4" type="video/mp4" />
@@ -224,7 +224,7 @@ export default function Reserver() {
       <div className="fixed top-1/4 -left-20 w-96 h-96 bg-[#E30613]/40 rounded-full blur-[120px] -z-30 animate-pulse" />
       <div className="fixed bottom-1/4 -right-20 w-96 h-96 bg-[#43A047]/40 rounded-full blur-[120px] -z-30 animate-pulse" style={{ animationDelay: '2s' }} />
 
-      <nav className="fixed w-full bg-white/80 backdrop-blur-xl z-50 border-b border-white/50 shadow-sm transition-all duration-300">
+      <nav className="fixed w-full bg-white/80 backdrop-blur-xl z-50 border-b border-white/50 shadow-sm transition-all duration-300 nav-safe-top">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
           <Link href="/" className="text-gray-900 font-bold text-xs sm:text-sm hover:text-[#E30613] transition bg-white/60 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border border-gray-200 shadow-sm">
             ← Retour
@@ -279,14 +279,14 @@ export default function Reserver() {
               
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-4">
                 <div className="relative w-full">
-                  <input 
-                    type="text" 
-                    placeholder="Marque" 
-                    value={vehicle.marque} 
+                  <input
+                    type="text"
+                    placeholder="Marque"
+                    value={vehicle.marque}
                     onChange={(e) => { setVehicle({...vehicle, marque: e.target.value}); setShowBrands(true); }}
                     onFocus={() => setShowBrands(true)}
                     onBlur={() => setTimeout(() => setShowBrands(false), 200)}
-                    className="w-full box-border border-2 border-white/80 rounded-xl p-3.5 sm:p-4 bg-gray-50/80 backdrop-blur-sm outline-none focus:border-[#E30613] focus:bg-white transition-colors font-bold text-gray-800 text-sm sm:text-base shadow-inner appearance-none" 
+                    className="w-full box-border border-2 border-white/80 rounded-xl p-3.5 sm:p-4 bg-gray-50/80 backdrop-blur-sm outline-none focus:border-[#E30613] focus:bg-white transition-colors font-bold text-gray-800 text-sm sm:text-base shadow-inner appearance-none"
                   />
                   {showBrands && vehicle.marque.length > 0 && (
                     <div className="absolute z-50 w-full mt-2 bg-white/95 backdrop-blur-xl border border-gray-100 shadow-2xl rounded-xl max-h-48 overflow-y-auto hide-scrollbar">
@@ -300,14 +300,14 @@ export default function Reserver() {
                 </div>
 
                 <div className="relative w-full">
-                  <input 
-                    type="text" 
-                    placeholder="Modèle" 
-                    value={vehicle.modele} 
+                  <input
+                    type="text"
+                    placeholder="Modèle"
+                    value={vehicle.modele}
                     onChange={(e) => { setVehicle({...vehicle, modele: e.target.value}); setShowModels(true); }}
                     onFocus={() => setShowModels(true)}
                     onBlur={() => setTimeout(() => setShowModels(false), 200)}
-                    className="w-full box-border border-2 border-white/80 rounded-xl p-3.5 sm:p-4 bg-gray-50/80 backdrop-blur-sm outline-none focus:border-[#E30613] focus:bg-white transition-colors font-bold text-gray-800 text-sm sm:text-base shadow-inner appearance-none" 
+                    className="w-full box-border border-2 border-white/80 rounded-xl p-3.5 sm:p-4 bg-gray-50/80 backdrop-blur-sm outline-none focus:border-[#E30613] focus:bg-white transition-colors font-bold text-gray-800 text-sm sm:text-base shadow-inner appearance-none"
                   />
                   {showModels && vehicle.modele.length > 0 && (
                     <div className="absolute z-50 w-full mt-2 bg-white/95 backdrop-blur-xl border border-gray-100 shadow-2xl rounded-xl max-h-48 overflow-y-auto hide-scrollbar">
@@ -319,6 +319,18 @@ export default function Reserver() {
                     </div>
                   )}
                 </div>
+              </div>
+
+              <div className="mb-4">
+                <input
+                  type="number"
+                  placeholder="Année (ex: 2018)"
+                  min="1990"
+                  max={new Date().getFullYear()}
+                  value={vehicle.annee}
+                  onChange={(e) => setVehicle({...vehicle, annee: e.target.value})}
+                  className="w-full box-border border-2 border-white/80 rounded-xl p-3.5 sm:p-4 bg-gray-50/80 backdrop-blur-sm outline-none focus:border-[#E30613] focus:bg-white transition-colors font-bold text-gray-800 text-sm sm:text-base shadow-inner appearance-none"
+                />
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 mb-6 sm:mb-8">
@@ -429,42 +441,25 @@ export default function Reserver() {
           {/* ÉTAPE 4 */}
           {step === 4 && (
             <div className="animate-in slide-in-from-right-4 duration-500 w-full">
-              <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mb-5 sm:mb-6 drop-shadow-sm text-center sm:text-left">Paiement</h2>
-              
+              <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mb-5 sm:mb-6 drop-shadow-sm text-center sm:text-left">Confirmation</h2>
+
               <div className="mb-6 sm:mb-8">
                 <label className="block text-xs sm:text-sm font-bold text-gray-500 uppercase tracking-wider mb-2 sm:mb-3 ml-1">Avez-vous un code parrain ? (Optionnel)</label>
                 <input type="text" placeholder="Ex: AMIGO10" value={codeParrain} onChange={(e) => setCodeParrain(e.target.value.toUpperCase())} className="w-full box-border border-2 border-white/80 rounded-xl p-3.5 sm:p-4 bg-gray-50/80 backdrop-blur-sm outline-none focus:border-[#43A047] focus:bg-white font-black text-gray-800 text-sm sm:text-base tracking-widest shadow-inner transition-colors" />
               </div>
 
-              <div className="bg-gradient-to-br from-gray-50 to-white p-4 sm:p-6 rounded-2xl mb-6 sm:mb-8 border border-gray-100 shadow-sm space-y-3">
+              <div className="bg-gradient-to-br from-gray-50 to-white p-4 sm:p-6 rounded-2xl mb-8 sm:mb-10 border border-gray-100 shadow-sm space-y-3">
                 <p className="text-xs sm:text-sm flex justify-between items-center"><span className="text-gray-500 font-medium">Service :</span> <span className="font-black text-[#E30613] uppercase text-[10px] sm:text-xs text-right max-w-[60%]">{service.replace(/_/g, ' ')}</span></p>
                 <div className="h-px w-full bg-gray-100" />
-                <p className="text-xs sm:text-sm flex justify-between items-center"><span className="text-gray-500 font-medium">Véhicule :</span> <span className="font-bold text-gray-800 text-right">{vehicle.marque} {vehicle.modele} <span className="text-gray-400 text-[10px] sm:text-xs block sm:inline">({vehicle.carburant})</span></span></p>
+                <p className="text-xs sm:text-sm flex justify-between items-center"><span className="text-gray-500 font-medium">Véhicule :</span> <span className="font-bold text-gray-800 text-right">{vehicle.marque} {vehicle.modele} {vehicle.annee && <span className="text-gray-400">({vehicle.annee})</span>} <span className="text-gray-400 text-[10px] sm:text-xs block sm:inline">({vehicle.carburant})</span></span></p>
                 <div className="h-px w-full bg-gray-100" />
                 <p className="text-xs sm:text-sm flex justify-between items-center"><span className="text-gray-500 font-medium">Date :</span> <span className="font-bold text-gray-800 text-right">{new Date(dateTime.date).toLocaleDateString('fr-FR')} à {dateTime.time}</span></p>
               </div>
 
-              <div className="flex flex-col gap-3 sm:gap-4 mb-8 sm:mb-10">
-                <button onClick={() => setPayment('en_ligne')} className={`flex items-center p-4 sm:p-5 rounded-2xl border-2 transition-all ${payment === 'en_ligne' ? 'border-[#43A047] bg-[#43A047]/5 shadow-md scale-[1.02]' : 'border-transparent bg-gray-50/80 hover:border-gray-200 hover:bg-white'}`}>
-                  <span className="text-2xl sm:text-3xl mr-4 sm:mr-5">💳</span>
-                  <div>
-                    <p className="font-black text-gray-900 text-left text-base sm:text-lg">Payer en ligne</p>
-                    <p className="text-[10px] sm:text-xs text-gray-500 font-medium text-left">Sécurisé via Stripe</p>
-                  </div>
-                </button>
-                <button onClick={() => setPayment('sur_place')} className={`flex items-center p-4 sm:p-5 rounded-2xl border-2 transition-all ${payment === 'sur_place' ? 'border-[#43A047] bg-[#43A047]/5 shadow-md scale-[1.02]' : 'border-transparent bg-gray-50/80 hover:border-gray-200 hover:bg-white'}`}>
-                  <span className="text-2xl sm:text-3xl mr-4 sm:mr-5">🤝</span>
-                  <div>
-                    <p className="font-black text-gray-900 text-left text-base sm:text-lg">Payer sur place</p>
-                    <p className="text-[10px] sm:text-xs text-gray-500 font-medium text-left">Espèces ou CB le jour J</p>
-                  </div>
-                </button>
-              </div>
-              
               <div className="flex gap-3 sm:gap-4">
                 <button onClick={() => setStep(3)} className="py-3.5 sm:py-4 bg-gray-100/80 rounded-xl flex-1 font-bold text-sm sm:text-base text-gray-500 hover:bg-gray-200 transition-colors">Retour</button>
-                <button onClick={handleConfirm} disabled={!payment || loading} className="py-3.5 sm:py-4 bg-gradient-to-r from-[#43A047] to-[#2E7D32] hover:shadow-xl hover:-translate-y-0.5 transition-all rounded-xl flex-[2] font-black text-sm sm:text-lg text-white shadow-lg shadow-[#43A047]/30 disabled:opacity-50 disabled:hover:translate-y-0">
-                  {loading ? 'Envoi...' : 'Confirmer'}
+                <button onClick={handleConfirm} disabled={loading} className="py-3.5 sm:py-4 bg-gradient-to-r from-[#43A047] to-[#2E7D32] hover:shadow-xl hover:-translate-y-0.5 transition-all rounded-xl flex-[2] font-black text-sm sm:text-lg text-white shadow-lg shadow-[#43A047]/30 disabled:opacity-50 disabled:hover:translate-y-0">
+                  {loading ? 'Envoi...' : 'Confirmer le rendez-vous'}
                 </button>
               </div>
             </div>

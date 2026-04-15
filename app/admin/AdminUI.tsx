@@ -168,11 +168,12 @@ export default function AdminUI({ initialReservations, initialUsers, initialIndi
     <main className="relative min-h-screen font-sans pb-20 selection:bg-[#43A047] selection:text-white overflow-x-hidden">
       
       {/* VIDÉO EN ARRIÈRE-PLAN : Pleine luminosité */}
-      <video 
-        autoPlay 
-        loop 
-        muted 
-        playsInline 
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        poster="/ds_hylec_logo.png"
         className="fixed inset-0 w-full h-full object-cover -z-50 scale-105"
       >
         <source src="/dshylec1.mp4" type="video/mp4" />

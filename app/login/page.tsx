@@ -51,11 +51,12 @@ export default function LoginPage() {
       </Link>
 
       {/* VIDÉO FIXE EN ARRIÈRE-PLAN */}
-      <video 
-        autoPlay 
-        loop 
-        muted 
-        playsInline 
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        poster="/ds_hylec_logo.png"
         className="fixed inset-0 w-full h-full object-cover -z-50 scale-105"
       >
         <source src="/dshylec1.mp4" type="video/mp4" />

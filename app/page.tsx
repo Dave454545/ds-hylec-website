@@ -26,13 +26,6 @@ export default function Home() {
       type: "standard" 
     },
     { 
-      id: "NETTOYAGE_EGR", 
-      title: "Nettoyage vanne EGR / admission", 
-      desc: "Nettoyage du système d'admission et de la vanne EGR. Réduction des dépôts de suie, amélioration du flux d'air, récupération de puissance et diminution de la fumée.", 
-      img: "https://images.unsplash.com/photo-1615906655593-ad0386982a0f?auto=format&fit=crop&w=600&q=80", 
-      type: "standard" 
-    },
-    { 
       id: "DIAGNOSTIC_HYBRIDE", 
       title: "Diagnostic système hybride", 
       desc: "Contrôle complet du système hybride. Lecture des défauts haute tension, analyse du fonctionnement électrique et thermique du véhicule.", 
@@ -67,11 +60,13 @@ export default function Home() {
     <main className="relative min-h-screen font-sans selection:bg-[#43A047] selection:text-white overflow-x-hidden">
       
       {/* VIDÉO FIXE EN ARRIÈRE-PLAN GLOBAL - CRYSTAL CLEAR */}
-      <video 
-        autoPlay 
-        loop 
-        muted 
-        playsInline 
+      {/* NOTE : remplace poster par une vraie capture du début de la vidéo pour un LCP optimal */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        poster="/ds_hylec_logo.png"
         className="fixed inset-0 w-full h-full object-cover -z-50"
       >
         <source src="/dshylec2.mp4" type="video/mp4" />
@@ -88,7 +83,7 @@ export default function Home() {
       <div className="fixed bottom-0 -right-32 w-[800px] h-[800px] bg-[#43A047]/15 rounded-full blur-[150px] -z-30 animate-pulse" style={{ animationDuration: '8s', animationDelay: '2s' }} />
 
       {/* NAVIGATION BAR - Effet Verre plus prononcé */}
-      <nav className="fixed w-full bg-white/60 backdrop-blur-xl z-50 border-b border-white/50 shadow-[0_4px_30px_rgba(0,0,0,0.05)] transition-all duration-300">
+      <nav className="fixed w-full bg-white/60 backdrop-blur-xl z-50 border-b border-white/50 shadow-[0_4px_30px_rgba(0,0,0,0.05)] transition-all duration-300 nav-safe-top">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Link href="/" className="relative h-32 w-70 hover:scale-105 transition-transform duration-300">
@@ -104,7 +99,7 @@ export default function Home() {
           
           <div className="hidden md:flex gap-8 text-sm font-bold text-gray-900 drop-shadow-sm">
             <Link href="#services" className="hover:text-[#43A047] transition-colors duration-300">Nos Services</Link>
-            <Link href="#avantages" className="hover:text-[#43A047] transition-colors duration-300">Pourquoi nous ?</Link>
+            <Link href="/a-propos" className="hover:text-[#43A047] transition-colors duration-300">À propos</Link>
           </div>
 
           <div className="flex items-center gap-4">
@@ -136,7 +131,7 @@ export default function Home() {
             </h1>
             
             <p className="text-lg sm:text-xl md:text-2xl text-gray-900 mb-10 max-w-3xl mx-auto font-bold leading-relaxed drop-shadow-sm">
-              <span className="italic text-[#E30613] font-black">"En route vers un nouvel air"</span>. Retrouvez les performances d'origine de votre moteur, réduisez votre consommation et passez le contrôle technique sans stress.
+              <span className="italic text-[#E30613] font-black">"On détecte, on répare, vous roulez."</span> Retrouvez les performances d'origine de votre moteur, réduisez votre consommation et passez le contrôle technique sans stress.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-5 justify-center items-center">
@@ -188,10 +183,11 @@ export default function Home() {
 
                 {/* Image de couverture animée */}
                 <div className="h-48 w-full relative overflow-hidden bg-gray-200">
-                  <img 
-                    src={srv.img} 
-                    alt={srv.title} 
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out" 
+                  <img
+                    src={srv.img}
+                    alt={srv.title}
+                    loading="lazy"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out"
                   />
                   {/* Voile noir pour la carte Premium, ou dégradé blanc pour les autres */}
                   <div className={`absolute inset-0 ${srv.type === 'premium' ? 'bg-black/30' : 'bg-gradient-to-t from-white/95 via-white/40 to-transparent'}`}></div>
@@ -234,7 +230,7 @@ export default function Home() {
         
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <p className="text-white/60 text-sm font-medium">
-            © {new Date().getFullYear()} DS HY'LEC. Spécialiste hybride et dépollution.<br className="mb-2"/>
+            © {new Date().getFullYear()} DS HY'LEC. Expert hybrid, diagnostic électronique et performance moteur.<br className="mb-2"/>
             Créé par <span className="text-[#43A047] font-bold">Kreativ Academy</span>.
           </p>
         </div>

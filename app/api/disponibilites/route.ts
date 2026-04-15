@@ -1,57 +1,61 @@
 import { NextResponse } from 'next/server';
+import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
+
+// Accepts YYYY-MM-DD or any ISO date string
+const QuerySchema = z.object({
+  date: z
+    .string()
+    .min(1, "Paramètre 'date' requis")
+    .refine(v => !isNaN(Date.parse(v)), "Format de date invalide (attendu : YYYY-MM-DD)"),
+});
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const dateParam = searchParams.get('date');
 
-  if (!dateParam) {
-    return NextResponse.json({ error: "Date manquante" }, { status: 400 });
+  const result = QuerySchema.safeParse({ date: searchParams.get('date') });
+  if (!result.success) {
+    return NextResponse.json(
+      { error: result.error.flatten().fieldErrors.date?.[0] ?? "Paramètre invalide" },
+      { status: 400 }
+    );
   }
 
-  try {
-    // 1. On définit le début et la fin de la journée demandée
-    const targetDate = new Date(dateParam);
-    const startOfDay = new Date(targetDate.setHours(0, 0, 0, 0));
-    const endOfDay = new Date(targetDate.setHours(23, 59, 59, 999));
+  const { date: dateParam } = result.data;
 
-    // 2. Vérifier si Sabile a posé un congé/indisponibilité sur cette journée
+  try {
+    const targetDate = new Date(dateParam);
+    const startOfDay = new Date(targetDate);
+    startOfDay.setHours(0, 0, 0, 0);
+    const endOfDay = new Date(targetDate);
+    endOfDay.setHours(23, 59, 59, 999);
+
+    // Vérifier si l'admin a bloqué cette journée
     const indisponibilites = await prisma.indisponibilite.findMany({
       where: {
         dateDebut: { lte: endOfDay },
-        dateFin: { gte: startOfDay },
-      }
+        dateFin:   { gte: startOfDay },
+      },
     });
 
     if (indisponibilites.length > 0) {
-      // S'il y a un congé qui tombe ce jour-là, on renvoie un tableau vide (0 créneaux)
       return NextResponse.json({ slots: [] });
     }
 
-    // 3. Récupérer les réservations existantes pour ce jour précis
+    // Créneaux déjà réservés ce jour
     const reservations = await prisma.reservation.findMany({
       where: {
-        dateIntervention: {
-          gte: startOfDay,
-          lte: endOfDay,
-        },
-        statut: {
-          not: 'ANNULEE' // On compte les RDV sauf s'ils ont été annulés
-        }
-      }
+        dateIntervention: { gte: startOfDay, lte: endOfDay },
+        statut: { not: 'ANNULEE' },
+      },
     });
 
-    // 4. On extrait les heures déjà prises au format "HH:mm"
     const reservedHours = reservations.map(r => {
       const d = new Date(r.dateIntervention);
-      // On s'assure d'avoir un format propre (ex: "09:00")
       return `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
     });
 
-    // 5. Nos créneaux standards par jour (tu peux les modifier ici !)
-    const allSlots = ["09:00", "11:00", "14:00", "16:00"];
-
-    // 6. On filtre : on ne garde que les créneaux qui NE SONT PAS dans reservedHours
+    const allSlots       = ["09:00", "11:00", "14:00", "16:00"];
     const availableSlots = allSlots.filter(slot => !reservedHours.includes(slot));
 
     return NextResponse.json({ slots: availableSlots });

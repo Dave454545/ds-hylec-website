@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -E \"\\(lib/|^[^/]*\\\\.ts$\\)\")",
+      "Bash(node -e \"require\\('zod'\\); console.log\\('zod ok'\\)\")"
+    ]
+  }
+}

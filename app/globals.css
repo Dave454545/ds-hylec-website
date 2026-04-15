@@ -1,5 +1,120 @@
 @import "tailwindcss";
 
+/* ============================================
+   DS HY'LEC — MOBILE-FIRST PWA STYLES
+   ============================================ */
+
+/* ── SAFE AREA VARIABLES ── */
+:root {
+  --safe-top:    env(safe-area-inset-top,    0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left:   env(safe-area-inset-left,   0px);
+  --safe-right:  env(safe-area-inset-right,  0px);
+}
+
+/* ── BASE ── */
+
+/*
+ * NE PAS mettre overflow-x: hidden sur html ou body.
+ * Cela transforme ces éléments en scroll containers et casse
+ * position: fixed avec z-index négatif sur iOS Safari + Android Chrome.
+ * Les vidéos en arrière-plan (-z-50 fixed) deviennent invisibles.
+ * L'overflow horizontal est géré par overflow-x-hidden sur les <main>.
+ */
+html {
+  height: 100%;
+}
+
 body {
-  background-color: #F8F9FA;
+  background-color: #000; /* Noir visible si la vidéo met du temps à charger */
+  /* Disable browser pull-to-refresh & over-scroll bounce effects */
+  overscroll-behavior: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── TOUCH OPTIMIZATION ──
+   Removes blue/grey flash on tap (iOS + Android)
+   Removes 300ms click delay (iOS + Android Chrome)  */
+a,
+button,
+[role="button"],
+input[type="submit"],
+input[type="button"],
+input[type="reset"],
+label[for],
+select {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* ── INPUTS: 16px minimum prevents auto-zoom on focus (iOS + Android) ── */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+input[type="date"],
+input[type="password"],
+input[type="search"],
+select,
+textarea {
+  font-size: 16px;
+}
+
+/* ── MINIMUM TOUCH TARGETS: 48×48px (iOS HIG + Material Design) ── */
+button,
+[role="button"] {
+  min-height: 44px;
+}
+
+/* ── SCROLLABLE CONTAINERS: momentum scrolling ── */
+.overflow-y-auto,
+.overflow-x-auto,
+.overflow-auto,
+.hide-scrollbar {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* ── HIDE SCROLLBAR ── */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ── NON-TEXTUAL ELEMENTS: prevent accidental long-press selection ── */
+video, img, svg, canvas, figure {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ── SAFE AREA UTILITY CLASSES ──
+   Apply to fixed/sticky elements to avoid notch / Dynamic Island / punch-hole */
+.safe-pt  { padding-top:    env(safe-area-inset-top); }
+.safe-pb  { padding-bottom: env(safe-area-inset-bottom); }
+.safe-pl  { padding-left:   env(safe-area-inset-left); }
+.safe-pr  { padding-right:  env(safe-area-inset-right); }
+
+/* Applied to fixed top nav bars — pushes content below notch/Dynamic Island */
+.nav-safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+/* ── BOTTOM NAV SCROLL CLEARANCE ──
+   Prevents content from being hidden behind the fixed bottom navigation bar.
+   80px = nav height (~64px) + a comfortable gap.
+   Safe-area covers Android gesture bar / iPhone home indicator.
+   Hidden on md+ where bottom nav is not rendered.                          */
+@media (max-width: 767px) {
+  main {
+    padding-bottom: calc(80px + env(safe-area-inset-bottom));
+  }
+}
+
+/* ── REDUCED MOTION: disable heavy animations for accessibility ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

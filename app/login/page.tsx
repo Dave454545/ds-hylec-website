@@ -62,9 +62,10 @@ export default function LoginPage() {
       <div className="fixed bottom-1/4 -right-20 w-96 h-96 bg-[#43A047]/30 rounded-full blur-[120px] -z-30 animate-pulse" style={{ animationDelay: '2s' }} />
 
       {/* FORMULAIRE FLOTTANT (Glassmorphism) */}
-      <div className="relative z-10 w-full max-w-md animate-in fade-in slide-in-from-bottom-12 duration-1000">
+      <div className="relative z-10 w-full max-w-md animate-in fade-in slide-in-from-bottom-12 duration-700">
 
-        <div className="bg-white/85 backdrop-blur-xl rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] p-8 border border-white/60 relative">
+        <div className="bg-white/85 backdrop-blur-xl rounded-3xl shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] border border-white/60 relative"
+          style={{ padding: 'calc(1rem + env(safe-area-inset-top)) 2rem 2rem' }}>
 
           {/* BOUTON FERMER — dans le card, en haut à droite, respecte l'encoche */}
           <Link
@@ -127,8 +128,14 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-[#E30613] to-[#B3050F] text-white py-4 rounded-2xl font-black text-lg shadow-[0_10px_25px_rgba(227,6,19,0.3)] hover:shadow-[0_15px_35px_rgba(227,6,19,0.4)] hover:-translate-y-1 transition-all duration-300 disabled:opacity-70 disabled:hover:translate-y-0"
+              className="w-full bg-gradient-to-r from-[#E30613] to-[#B3050F] text-white py-4 rounded-2xl font-black text-lg shadow-[0_10px_25px_rgba(227,6,19,0.3)] hover:shadow-[0_15px_35px_rgba(227,6,19,0.4)] hover:-translate-y-1 active:scale-[0.97] transition-all duration-300 disabled:opacity-70 disabled:hover:translate-y-0 flex items-center justify-center gap-3"
             >
+              {loading && (
+                <svg className="animate-spin h-5 w-5 text-white shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                </svg>
+              )}
               {loading ? "Connexion en cours..." : "Se connecter"}
             </button>
           </form>

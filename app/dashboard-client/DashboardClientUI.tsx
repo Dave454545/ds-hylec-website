@@ -73,21 +73,30 @@ export default function DashboardClientUI({ user, vehicules, factures, parrainag
 
         {/* CONTENU : MON GARAGE */}
         {activeTab === 'garage' && (
-          <div className="animate-in fade-in slide-in-from-bottom-6 duration-500 space-y-4">
+          <div className="animate-in fade-in duration-300 space-y-4">
             <div className="flex justify-between items-end mb-4 px-2">
               <h2 className="text-xl font-black text-gray-900 drop-shadow-sm">Mes Véhicules</h2>
               <Link href="/reserver" className="text-[#E30613] font-black text-sm hover:text-[#43A047] transition bg-white/70 backdrop-blur-sm px-3 py-1 rounded-lg shadow-sm border border-white/50 hover:bg-white">
                 + Ajouter un véhicule
               </Link>
             </div>
-            
+
             {vehicules.length === 0 ? (
               <div className="bg-white/90 backdrop-blur-lg p-10 rounded-[24px] border border-white/50 shadow-sm text-center">
-                <span className="text-4xl mb-3 block opacity-50">🚘</span>
-                <p className="text-gray-600 font-medium">Aucun véhicule enregistré pour le moment.</p>
+                <svg viewBox="0 0 80 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-20 h-12 mx-auto mb-4 opacity-25">
+                  <rect x="4" y="16" width="72" height="26" rx="6" stroke="#E30613" strokeWidth="2.5"/>
+                  <path d="M14 16 L22 6 H58 L66 16" stroke="#E30613" strokeWidth="2.5" strokeLinejoin="round"/>
+                  <circle cx="20" cy="42" r="5" stroke="#E30613" strokeWidth="2.5"/>
+                  <circle cx="60" cy="42" r="5" stroke="#E30613" strokeWidth="2.5"/>
+                </svg>
+                <p className="text-gray-700 font-black mb-1">Aucun véhicule enregistré</p>
+                <p className="text-gray-500 text-sm font-medium mb-5">Votre garage est vide pour l'instant.</p>
+                <Link href="/reserver" className="inline-block bg-[#E30613] text-white px-6 py-3 rounded-full font-bold text-sm shadow-lg shadow-[#E30613]/30 hover:bg-[#B3050F] transition-colors">
+                  Prendre un premier RDV
+                </Link>
               </div>
             ) : vehicules.map((v: any) => (
-              <div key={v.id} className="bg-white/95 backdrop-blur-xl p-6 rounded-[24px] shadow-[0_10px_30px_rgba(0,0,0,0.05)] border border-white/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:shadow-[0_15px_40px_rgba(0,0,0,0.1)] hover:scale-[1.01] transition-all duration-300">
+              <div key={v.id} className="bg-white/95 backdrop-blur-xl p-5 rounded-[24px] shadow-[0_10px_30px_rgba(0,0,0,0.05)] border border-white/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:shadow-[0_15px_40px_rgba(0,0,0,0.1)] hover:scale-[1.01] transition-all duration-300">
                 <div>
                   <div className="flex items-center gap-3 mb-1">
                     <h3 className="font-black text-xl text-[#E30613] drop-shadow-sm">{v.marque} {v.modele}</h3>
@@ -116,18 +125,27 @@ export default function DashboardClientUI({ user, vehicules, factures, parrainag
 
         {/* CONTENU : FACTURES ET INTERVENTIONS */}
         {activeTab === 'factures' && (
-          <div className="animate-in fade-in slide-in-from-bottom-6 duration-500">
+          <div className="animate-in fade-in duration-300">
             <h2 className="text-xl font-black text-gray-900 mb-4 px-2 drop-shadow-sm">Historique des interventions</h2>
             
             <div className="bg-white/95 backdrop-blur-xl rounded-[24px] shadow-[0_10px_30px_rgba(0,0,0,0.05)] border border-white/60 overflow-hidden">
               {user.reservations?.length === 0 ? (
                 <div className="p-10 text-center">
-                  <span className="text-4xl mb-3 block opacity-50">🧾</span>
-                  <p className="text-gray-600 font-medium">Aucune intervention enregistrée.</p>
+                  <svg viewBox="0 0 64 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-14 h-16 mx-auto mb-4 opacity-25">
+                    <rect x="6" y="4" width="52" height="72" rx="5" stroke="#E30613" strokeWidth="2.5"/>
+                    <line x1="16" y1="22" x2="48" y2="22" stroke="#E30613" strokeWidth="2" strokeLinecap="round"/>
+                    <line x1="16" y1="34" x2="48" y2="34" stroke="#E30613" strokeWidth="2" strokeLinecap="round"/>
+                    <line x1="16" y1="46" x2="36" y2="46" stroke="#E30613" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                  <p className="text-gray-700 font-black mb-1">Aucune intervention enregistrée</p>
+                  <p className="text-gray-500 text-sm font-medium mb-5">Vos futures interventions apparaîtront ici.</p>
+                  <Link href="/reserver" className="inline-block bg-[#E30613] text-white px-6 py-3 rounded-full font-bold text-sm shadow-lg shadow-[#E30613]/30 hover:bg-[#B3050F] transition-colors">
+                    Réserver une intervention
+                  </Link>
                 </div>
               ) : (
                 user.reservations?.map((rdv: any, idx: number) => (
-                  <div key={rdv.id} className={`p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-white/50 transition-colors ${idx !== user.reservations.length - 1 ? 'border-b border-gray-100/80' : ''}`}>
+                  <div key={rdv.id} className={`p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-white/50 transition-colors ${idx !== user.reservations.length - 1 ? 'border-b border-gray-100/80' : ''}`}>
                     <div>
                       <div className="flex items-center gap-3 mb-2">
                         <p className="font-black text-[#E30613]">{rdv.service.replace(/_/g, ' ')}</p>
@@ -173,7 +191,7 @@ export default function DashboardClientUI({ user, vehicules, factures, parrainag
 
         {/* CONTENU : PARRAINAGE DYNAMIQUE */}
         {activeTab === 'parrainage' && (
-          <div className="animate-in fade-in slide-in-from-bottom-6 duration-500">
+          <div className="animate-in fade-in duration-300">
             <h2 className="text-xl font-black text-gray-900 mb-4 px-2 drop-shadow-sm">Programme Fidélité</h2>
             
             <div className="grid sm:grid-cols-2 gap-5">

@@ -10,6 +10,12 @@
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-left:   env(safe-area-inset-left,   0px);
   --safe-right:  env(safe-area-inset-right,  0px);
+
+  /* ── BRAND COLOUR TOKENS ── */
+  --color-primary:      #E30613;
+  --color-primary-dark: #B3050F;
+  --color-accent:       #43A047;
+  --color-accent-dark:  #2E7D32;
 }
 
 /* ── BASE ── */
@@ -107,6 +113,40 @@ video, img, svg, canvas, figure {
   main {
     padding-bottom: calc(80px + env(safe-area-inset-bottom));
   }
+}
+
+/* ── PAGE TRANSITION ── */
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+main {
+  animation: page-in 0.35s ease-out both;
+}
+
+/* ── SHAKE ANIMATION (login error feedback) ── */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  15%       { transform: translateX(-6px); }
+  30%       { transform: translateX(6px); }
+  45%       { transform: translateX(-4px); }
+  60%       { transform: translateX(4px); }
+  75%       { transform: translateX(-2px); }
+  90%       { transform: translateX(2px); }
+}
+.shake {
+  animation: shake 0.5s ease-in-out both;
+}
+
+/* ── CHECKMARK ANIMATION (réservation confirmée) ── */
+@keyframes draw-check {
+  from { stroke-dashoffset: 60; }
+  to   { stroke-dashoffset: 0; }
+}
+.animate-draw-check {
+  stroke-dasharray: 60;
+  stroke-dashoffset: 60;
+  animation: draw-check 0.6s ease-out 0.2s forwards;
 }
 
 /* ── REDUCED MOTION: disable heavy animations for accessibility ── */

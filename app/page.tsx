@@ -124,7 +124,7 @@ export default function Home() {
               </span>
             </div>
 
-            <h1 className="text-[2rem] sm:text-4xl md:text-6xl lg:text-7xl font-black text-black mb-4 md:mb-6 tracking-tight leading-[1.1]">
+            <h1 className="text-[2rem] sm:text-4xl md:text-6xl lg:text-7xl font-black text-black mb-4 md:mb-6 tracking-tight leading-[1.15]">
               Spécialiste hybride, <br className="hidden md:block"/>
               <span className="text-black">électrique & performance</span>.
             </h1>
@@ -137,10 +137,10 @@ export default function Home() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-5 justify-center items-center">
-              <Link href="/reserver" className="w-full sm:w-auto px-8 py-4 bg-[#43A047] text-white rounded-full font-bold text-lg shadow-[0_10px_25px_rgba(67,160,71,0.4)] hover:bg-[#388E3C] hover:shadow-[0_15px_35px_rgba(67,160,71,0.5)] hover:-translate-y-1 transition-all duration-300">
+              <Link href="/reserver" className="w-full sm:w-auto px-8 py-4 bg-[#43A047] text-white rounded-full font-bold text-lg shadow-[0_10px_25px_rgba(67,160,71,0.4)] hover:bg-[#388E3C] hover:shadow-[0_15px_35px_rgba(67,160,71,0.5)] hover:-translate-y-1 active:scale-95 transition-all duration-300">
                 Réserver une intervention
               </Link>
-              <Link href="#services" className="w-full sm:w-auto px-8 py-4 bg-white/90 backdrop-blur-md text-[#E30613] border border-white/50 shadow-lg rounded-full font-bold text-lg hover:border-[#E30613] hover:bg-white hover:-translate-y-1 transition-all duration-300">
+              <Link href="#services" className="w-full sm:w-auto px-8 py-4 bg-white/90 backdrop-blur-md text-[#E30613] border border-white/50 shadow-lg rounded-full font-bold text-lg hover:border-[#E30613] hover:bg-white hover:-translate-y-1 active:scale-95 transition-all duration-300">
                 Découvrir nos services
               </Link>
             </div>
@@ -156,7 +156,7 @@ export default function Home() {
             <div className="inline-block bg-white/80 px-4 py-1.5 rounded-full mb-4 mx-auto border border-[#E30613]/20 shadow-sm flex justify-center w-max">
               <span className="text-[#E30613] font-bold text-xs uppercase tracking-wider">Expertise Technique</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-black text-center text-gray-900 mb-6 drop-shadow-sm">
+            <h2 className="text-2xl md:text-4xl lg:text-5xl font-black text-center text-gray-900 mb-6 drop-shadow-sm">
               Nos prestations <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#E30613] to-[#B3050F]">sur-mesure</span>
             </h2>
             <p className="text-center text-gray-800 mb-16 max-w-2xl mx-auto font-bold text-lg drop-shadow-sm">
@@ -184,7 +184,7 @@ export default function Home() {
                 )}
 
                 {/* Image de couverture animée */}
-                <div className="h-48 w-full relative overflow-hidden bg-gray-200">
+                <div className="h-36 md:h-48 w-full relative overflow-hidden bg-gray-200">
                   <img
                     src={srv.img}
                     alt={srv.title}

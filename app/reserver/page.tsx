@@ -4,11 +4,20 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
+// ── Helpers ──────────────────────────────────────────────────────────────────
+const isValidEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+const isValidTel   = (v: string) => /^(\+?\d[\d\s\-().]{7,})$/.test(v.trim());
+
 export default function Reserver() {
   const router = useRouter();
   const [step, setStep] = useState(1);
+  const [direction, setDirection] = useState<'forward' | 'back'>('forward');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+
+  // ── Validation states ────────────────────────────────────────────────────
+  const [emailTouched, setEmailTouched] = useState(false);
+  const [telTouched,   setTelTouched]   = useState(false);
 
   // États pour les demandes de l'entreprise
   const [typeClient, setTypeClient] = useState('PARTICULIER'); 
@@ -187,6 +196,20 @@ export default function Reserver() {
 
   const today = new Date().toISOString().split('T')[0];
 
+  // ── Helpers navigation ────────────────────────────────────────────────────
+  const goNext = (n: number) => { setDirection('forward'); setStep(n); };
+  const goBack = (n: number) => { setDirection('back');    setStep(n); };
+
+  const stepAnim = direction === 'forward'
+    ? 'animate-in fade-in slide-in-from-right-4 duration-400'
+    : 'animate-in fade-in slide-in-from-left-4 duration-400';
+
+  // ── Validation classes ────────────────────────────────────────────────────
+  const emailBorder = !emailTouched ? 'border-white/80'
+    : isValidEmail(client.email) ? 'border-green-400' : 'border-red-400';
+  const telBorder = !telTouched ? 'border-white/80'
+    : isValidTel(client.tel) ? 'border-green-400' : 'border-red-400';
+
   if (success) {
     return (
       <main className="relative min-h-screen flex items-center justify-center overflow-hidden p-4 sm:p-6 text-center selection:bg-[#43A047] selection:text-white">
@@ -196,7 +219,22 @@ export default function Reserver() {
         <div className="fixed inset-0 bg-black/40 backdrop-blur-[4px] -z-40" />
 
         <div className="animate-in zoom-in duration-500 bg-white/90 backdrop-blur-xl p-8 sm:p-10 rounded-[2rem] sm:rounded-[2.5rem] shadow-2xl border border-white/50 max-w-lg w-full mx-4">
-          <span className="text-5xl sm:text-6xl mb-6 block drop-shadow-md">🌿</span>
+          {/* Checkmark animé */}
+          <div className="flex items-center justify-center mb-6">
+            <div className="w-20 h-20 rounded-full bg-[#43A047]/10 flex items-center justify-center">
+              <svg viewBox="0 0 48 48" fill="none" className="w-12 h-12" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="24" cy="24" r="22" stroke="#43A047" strokeWidth="3" opacity="0.3" />
+                <polyline
+                  points="12,25 20,33 36,16"
+                  stroke="#43A047"
+                  strokeWidth="3.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="animate-draw-check"
+                />
+              </svg>
+            </div>
+          </div>
           <h1 className="text-3xl sm:text-4xl font-black text-[#E30613] mb-4">C'est confirmé !</h1>
           <p className="text-sm sm:text-base text-gray-700 mb-8 font-medium leading-relaxed">
             Votre rendez-vous a été enregistré. Un compte client a été créé automatiquement pour vous. Vérifiez vos emails !
@@ -238,17 +276,26 @@ export default function Reserver() {
       <div className="w-full max-w-xl mx-auto px-3 sm:px-4 pt-28 sm:pt-32 relative z-10 box-border">
         <div className="bg-white/90 backdrop-blur-2xl rounded-[1.5rem] sm:rounded-[2.5rem] shadow-2xl p-5 sm:p-10 border border-white/60 w-full box-border">
           
-          <div className="flex justify-between mb-8 sm:mb-10 px-2 sm:px-0">
-            {[1, 2, 3, 4].map((num) => (
-              <div key={num} className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-black text-xs sm:text-sm transition-all duration-500 ${step >= num ? 'bg-gradient-to-br from-[#E30613] to-[#B3050F] text-white shadow-lg shadow-[#E30613]/30 scale-110' : 'bg-white/50 border-2 border-gray-200 text-gray-400'}`}>
-                {num}
-              </div>
-            ))}
+          {/* Progress bar */}
+          <div className="mb-6 sm:mb-8">
+            <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden mb-4">
+              <div
+                className="h-full bg-gradient-to-r from-[#E30613] to-[#B3050F] rounded-full transition-all duration-500 ease-out"
+                style={{ width: `${(step / 4) * 100}%` }}
+              />
+            </div>
+            <div className="flex justify-between px-1 sm:px-0">
+              {[1, 2, 3, 4].map((num) => (
+                <div key={num} className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-black text-xs sm:text-sm transition-all duration-500 ${step >= num ? 'bg-gradient-to-br from-[#E30613] to-[#B3050F] text-white shadow-lg shadow-[#E30613]/30 scale-110' : 'bg-white/50 border-2 border-gray-200 text-gray-400'}`}>
+                  {num}
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* ÉTAPE 1 */}
           {step === 1 && (
-            <div className="animate-in fade-in slide-in-from-right-4 duration-500 w-full">
+            <div className={`${stepAnim} w-full`}>
               <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mb-6 sm:mb-8 drop-shadow-sm text-center sm:text-left">Quel service souhaitez vous ?</h2>
               <div className="flex flex-col gap-3 sm:gap-4 h-[350px] sm:h-[420px] overflow-y-auto pr-1 sm:pr-2 hide-scrollbar pb-8">
                 {servicesList.map((item) => (
@@ -268,13 +315,13 @@ export default function Reserver() {
                   </div>
                 ))}
               </div>
-              <button onClick={() => setStep(2)} disabled={!service} className="mt-6 sm:mt-8 w-full py-3.5 sm:py-4 rounded-xl font-black text-base sm:text-lg bg-[#E30613] text-white disabled:opacity-30 hover:bg-[#B3050F] hover:shadow-lg transition-all shadow-[#E30613]/20">Continuer</button>
+              <button onClick={() => goNext(2)} disabled={!service} className="mt-6 sm:mt-8 w-full py-3.5 sm:py-4 rounded-xl font-black text-base sm:text-lg bg-[#E30613] text-white disabled:opacity-30 hover:bg-[#B3050F] active:scale-[0.97] hover:shadow-lg transition-all shadow-[#E30613]/20">Continuer</button>
             </div>
           )}
 
-          {/* ÉTAPE 2 - LE CORRECTIF COMPLET ANTI-DÉBORDEMENT */}
+          {/* ÉTAPE 2 */}
           {step === 2 && (
-            <div className="animate-in slide-in-from-right-4 duration-500 w-full max-w-full overflow-hidden">
+            <div className={`${stepAnim} w-full max-w-full overflow-hidden`}>
               <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mb-5 sm:mb-6 drop-shadow-sm text-center sm:text-left">Le Véhicule</h2>
               
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-4">
@@ -388,15 +435,15 @@ export default function Reserver() {
               )}
 
               <div className="flex gap-3 sm:gap-4 mt-6 sm:mt-8 w-full">
-                <button onClick={() => setStep(1)} className="py-3 sm:py-4 bg-gray-100/80 rounded-xl flex-1 font-bold text-sm sm:text-base text-gray-500 hover:bg-gray-200 transition-colors">Retour</button>
-                <button onClick={() => setStep(3)} disabled={!vehicle.marque || !dateTime.date || !dateTime.time} className="py-3 sm:py-4 bg-[#E30613] hover:bg-[#B3050F] transition-all rounded-xl flex-[2] font-black text-sm sm:text-lg text-white disabled:opacity-30 shadow-lg shadow-[#E30613]/20">Suivant</button>
+                <button onClick={() => goBack(1)} className="py-3 sm:py-4 bg-gray-100/80 rounded-xl flex-1 font-bold text-sm sm:text-base text-gray-500 hover:bg-gray-200 active:scale-95 transition-all">Retour</button>
+                <button onClick={() => goNext(3)} disabled={!vehicle.marque || !dateTime.date || !dateTime.time} className="py-3 sm:py-4 bg-[#E30613] hover:bg-[#B3050F] transition-all active:scale-[0.97] rounded-xl flex-[2] font-black text-sm sm:text-lg text-white disabled:opacity-30 shadow-lg shadow-[#E30613]/20">Suivant</button>
               </div>
             </div>
           )}
 
           {/* ÉTAPE 3 */}
           {step === 3 && (
-            <div className="animate-in slide-in-from-right-4 duration-500 w-full">
+            <div className={`${stepAnim} w-full`}>
               <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mb-5 sm:mb-6 drop-shadow-sm text-center sm:text-left">Vos Coordonnées</h2>
               
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-6 sm:mb-8">
@@ -406,8 +453,22 @@ export default function Reserver() {
 
               <div className="space-y-4 sm:space-y-5 mb-8 sm:mb-10">
                 <input type="text" placeholder="Nom & Prénom" value={client.fullName} onChange={(e) => setClient({...client, fullName: e.target.value})} className="w-full box-border border-2 border-white/80 rounded-xl p-3.5 sm:p-4 bg-gray-50/80 backdrop-blur-sm outline-none focus:border-[#E30613] focus:bg-white font-bold text-gray-800 text-sm sm:text-base shadow-inner transition-colors" />
-                <input type="tel" placeholder="Téléphone" value={client.tel} onChange={(e) => setClient({...client, tel: e.target.value})} className="w-full box-border border-2 border-white/80 rounded-xl p-3.5 sm:p-4 bg-gray-50/80 backdrop-blur-sm outline-none focus:border-[#E30613] focus:bg-white font-bold text-gray-800 text-sm sm:text-base shadow-inner transition-colors" />
-                <input type="email" placeholder="Email (facture & compte)" value={client.email} onChange={(e) => setClient({...client, email: e.target.value})} className="w-full box-border border-2 border-white/80 rounded-xl p-3.5 sm:p-4 bg-gray-50/80 backdrop-blur-sm outline-none focus:border-[#E30613] focus:bg-white font-bold text-gray-800 text-sm sm:text-base shadow-inner transition-colors" />
+                <input
+                  type="tel"
+                  placeholder="Téléphone"
+                  value={client.tel}
+                  onChange={(e) => setClient({...client, tel: e.target.value})}
+                  onBlur={() => setTelTouched(true)}
+                  className={`w-full box-border border-2 ${telBorder} rounded-xl p-3.5 sm:p-4 bg-gray-50/80 backdrop-blur-sm outline-none focus:bg-white font-bold text-gray-800 text-sm sm:text-base shadow-inner transition-colors`}
+                />
+                <input
+                  type="email"
+                  placeholder="Email (facture & compte)"
+                  value={client.email}
+                  onChange={(e) => setClient({...client, email: e.target.value})}
+                  onBlur={() => setEmailTouched(true)}
+                  className={`w-full box-border border-2 ${emailBorder} rounded-xl p-3.5 sm:p-4 bg-gray-50/80 backdrop-blur-sm outline-none focus:bg-white font-bold text-gray-800 text-sm sm:text-base shadow-inner transition-colors`}
+                />
                 
                 <div className="relative w-full">
                   <input 
@@ -432,15 +493,15 @@ export default function Reserver() {
               </div>
               
               <div className="flex gap-3 sm:gap-4">
-                <button onClick={() => setStep(2)} className="py-3.5 sm:py-4 bg-gray-100/80 rounded-xl flex-1 font-bold text-sm sm:text-base text-gray-500 hover:bg-gray-200 transition-colors">Retour</button>
-                <button onClick={() => setStep(4)} disabled={!client.email || !client.adresse} className="py-3.5 sm:py-4 bg-[#E30613] hover:bg-[#B3050F] transition-all rounded-xl flex-[2] font-black text-sm sm:text-lg text-white disabled:opacity-30 shadow-lg shadow-[#E30613]/20">Récapitulatif</button>
+                <button onClick={() => goBack(2)} className="py-3.5 sm:py-4 bg-gray-100/80 rounded-xl flex-1 font-bold text-sm sm:text-base text-gray-500 hover:bg-gray-200 active:scale-95 transition-all">Retour</button>
+                <button onClick={() => goNext(4)} disabled={!client.email || !client.adresse} className="py-3.5 sm:py-4 bg-[#E30613] hover:bg-[#B3050F] transition-all active:scale-[0.97] rounded-xl flex-[2] font-black text-sm sm:text-lg text-white disabled:opacity-30 shadow-lg shadow-[#E30613]/20">Récapitulatif</button>
               </div>
             </div>
           )}
 
           {/* ÉTAPE 4 */}
           {step === 4 && (
-            <div className="animate-in slide-in-from-right-4 duration-500 w-full">
+            <div className={`${stepAnim} w-full`}>
               <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mb-5 sm:mb-6 drop-shadow-sm text-center sm:text-left">Confirmation</h2>
 
               <div className="mb-6 sm:mb-8">
@@ -457,9 +518,15 @@ export default function Reserver() {
               </div>
 
               <div className="flex gap-3 sm:gap-4">
-                <button onClick={() => setStep(3)} className="py-3.5 sm:py-4 bg-gray-100/80 rounded-xl flex-1 font-bold text-sm sm:text-base text-gray-500 hover:bg-gray-200 transition-colors">Retour</button>
-                <button onClick={handleConfirm} disabled={loading} className="py-3.5 sm:py-4 bg-gradient-to-r from-[#43A047] to-[#2E7D32] hover:shadow-xl hover:-translate-y-0.5 transition-all rounded-xl flex-[2] font-black text-sm sm:text-lg text-white shadow-lg shadow-[#43A047]/30 disabled:opacity-50 disabled:hover:translate-y-0">
-                  {loading ? 'Envoi...' : 'Confirmer le rendez-vous'}
+                <button onClick={() => goBack(3)} className="py-3.5 sm:py-4 bg-gray-100/80 rounded-xl flex-1 font-bold text-sm sm:text-base text-gray-500 hover:bg-gray-200 active:scale-95 transition-all">Retour</button>
+                <button onClick={handleConfirm} disabled={loading} className="py-3.5 sm:py-4 bg-gradient-to-r from-[#43A047] to-[#2E7D32] hover:shadow-xl hover:-translate-y-0.5 active:scale-[0.97] transition-all rounded-xl flex-[2] font-black text-sm sm:text-lg text-white shadow-lg shadow-[#43A047]/30 disabled:opacity-50 disabled:hover:translate-y-0 flex items-center justify-center gap-2">
+                  {loading && (
+                    <svg className="animate-spin h-5 w-5 text-white shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                    </svg>
+                  )}
+                  {loading ? 'Envoi en cours...' : 'Confirmer le rendez-vous'}
                 </button>
               </div>
             </div>

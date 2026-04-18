@@ -60,18 +60,6 @@ export default function APropos() {
       <div className="pt-32 pb-24 relative z-20">
         <div className="max-w-4xl mx-auto px-6 space-y-12">
 
-          {/* ACCROCHE */}
-          <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 fill-mode-both bg-white/35 backdrop-blur-xl border border-white/60 p-8 sm:p-12 rounded-[2.5rem] shadow-[0_35px_60px_-15px_rgba(0,0,0,0.1)] text-center">
-            <div className="inline-block bg-white/90 backdrop-blur-md px-5 py-2.5 rounded-full mb-6 shadow-sm border border-white/50">
-              <span className="text-[#43A047] font-black text-xs uppercase tracking-[0.2em]">Notre philosophie</span>
-            </div>
-            <p className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900 leading-relaxed">
-              "La durée de vie d'une voiture dépend de son entretien,{' '}
-              <span className="text-[#E30613]">arrêtez-vous avant qu'elle ne vous arrête</span>{' '}
-              pour éviter de perdre plus de temps et d'argent."
-            </p>
-          </div>
-
           {/* QUI SOMMES-NOUS */}
           <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-100 fill-mode-both bg-white/90 backdrop-blur-xl rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] p-8 sm:p-10 border border-white/80">
             <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mb-4">

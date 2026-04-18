@@ -8,14 +8,14 @@ export default function Home() {
       id: "DIAGNOSTIC_ELECTRONIQUE", 
       title: "Diagnostic électronique complet", 
       desc: "Analyse complète du véhicule avec valise professionnelle. Lecture des codes défaut, analyse des capteurs et calculateurs. Permet d'identifier rapidement les pannes avec explication.", 
-      img: "https://images.unsplash.com/photo-1610647752706-3bb12232b3ab?auto=format&fit=crop&w=600&q=80", 
+      img: "/diagnostic electric complet.jpeg",
       type: "standard" 
     },
     { 
       id: "DECALAMINAGE_MOTEUR", 
       title: "Décalaminage moteur hydrogène", 
       desc: "Nettoyage interne du moteur par hydrogène. Élimine la calamine accumulée, améliore les performances, réduit la consommation et les émissions. Recommandé en entretien préventif.", 
-      img: "https://images.unsplash.com/photo-1517524206127-48bbd363f3d7?auto=format&fit=crop&w=600&q=80", 
+      img: "/Decalaminage.jpeg",
       type: "standard" 
     },
     { 
@@ -29,7 +29,7 @@ export default function Home() {
       id: "DIAGNOSTIC_HYBRIDE", 
       title: "Diagnostic système hybride", 
       desc: "Contrôle complet du système hybride. Lecture des défauts haute tension, analyse du fonctionnement électrique et thermique du véhicule.", 
-      img: "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=600&q=80", 
+      img: "/diagnostic systeme hybride.jpeg",
       type: "hybride", 
       badge: "EXPERTISE" 
     },
@@ -37,7 +37,7 @@ export default function Home() {
       id: "TEST_BATTERIE_HYBRIDE", 
       title: "Test batterie hybride", 
       desc: "Analyse de l'état de santé de la batterie (SOH). Vérification des modules, tensions et performances pour anticiper une défaillance.", 
-      img: "https://images.unsplash.com/photo-1563770660941-20978e870e26?auto=format&fit=crop&w=600&q=80", 
+      img: "/test de batterie hybride.jpeg",
       type: "hybride" 
     },
     { 
@@ -116,21 +116,24 @@ export default function Home() {
       <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 min-h-[90vh] flex items-center justify-center overflow-hidden">
         {/* CONTENU TEXTE - Placé dans une carte "Glassmorphism" pour laisser la vidéo claire derrière */}
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 text-center z-20">
-          <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 fill-mode-both bg-white/35 backdrop-blur-xl border border-white/60 p-8 sm:p-12 md:p-16 rounded-[2.5rem] shadow-[0_35px_60px_-15px_rgba(0,0,0,0.1)]">
-            
+          <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 fill-mode-both p-8 sm:p-12 md:p-16 rounded-[2.5rem] shadow-[0_35px_60px_-15px_rgba(0,0,0,0.15)]" style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(4px)' }}>
+
             <div className="inline-block bg-white/90 backdrop-blur-md px-5 py-2.5 rounded-full mb-6 shadow-sm border border-white/50 hover:scale-105 transition-transform duration-300 cursor-default">
               <span className="text-[#43A047] font-black text-xs uppercase tracking-[0.2em]">
                 Intervention à domicile
               </span>
             </div>
-            
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-[#E30613] mb-6 tracking-tight leading-[1.1] drop-shadow-md">
+
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-black mb-6 tracking-tight leading-[1.1]">
               Spécialiste hybride, <br className="hidden md:block"/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#43A047] to-[#2E7D32] drop-shadow-sm">électrique & performance</span>.
+              <span className="text-black">électrique & performance</span>.
             </h1>
-            
-            <p className="text-lg sm:text-xl md:text-2xl text-gray-900 mb-10 max-w-3xl mx-auto font-bold leading-relaxed drop-shadow-sm">
-              <span className="italic text-[#E30613] font-black">"On détecte, on répare, vous roulez."</span> Retrouvez les performances d'origine de votre moteur, réduisez votre consommation et passez le contrôle technique sans stress.
+
+            <p className="text-lg sm:text-xl md:text-2xl text-black mb-4 max-w-3xl mx-auto font-bold leading-relaxed">
+              La durée de vie d'une voiture dépend de son entretien, arrêtez-vous avant qu'elle ne vous arrête pour éviter de perdre plus de temps et d'argent.
+            </p>
+            <p className="text-lg sm:text-xl md:text-2xl text-black mb-10 max-w-3xl mx-auto font-bold leading-relaxed">
+              <span className="italic font-black">"On détecte, on répare, vous roulez."</span>
             </p>
             
             <div className="flex flex-col sm:flex-row gap-5 justify-center items-center">

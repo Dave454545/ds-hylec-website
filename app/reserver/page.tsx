@@ -249,7 +249,7 @@ export default function Reserver() {
           {/* ÉTAPE 1 */}
           {step === 1 && (
             <div className="animate-in fade-in slide-in-from-right-4 duration-500 w-full">
-              <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mb-6 sm:mb-8 drop-shadow-sm text-center sm:text-left">De quoi avez-vous besoin ?</h2>
+              <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mb-6 sm:mb-8 drop-shadow-sm text-center sm:text-left">Quel service souhaitez vous ?</h2>
               <div className="flex flex-col gap-3 sm:gap-4 h-[350px] sm:h-[420px] overflow-y-auto pr-1 sm:pr-2 hide-scrollbar pb-8">
                 {servicesList.map((item) => (
                   <div key={item.value} className="flex flex-col">

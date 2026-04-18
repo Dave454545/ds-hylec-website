@@ -82,15 +82,16 @@ export default function Home() {
       <div className="fixed bottom-0 -right-32 w-[800px] h-[800px] bg-[#43A047]/15 rounded-full blur-[150px] -z-30 animate-pulse" style={{ animationDuration: '8s', animationDelay: '2s' }} />
 
       {/* NAVIGATION BAR - Effet Verre plus prononcé */}
-      <nav className="fixed w-full bg-white/60 backdrop-blur-xl z-50 border-b border-white/50 shadow-[0_4px_30px_rgba(0,0,0,0.05)] transition-all duration-300 nav-safe-top">
+      <nav className="fixed w-full bg-white/60 backdrop-blur-xl z-50 border-b border-white/50 shadow-[0_4px_30px_rgba(0,0,0,0.05)] transition-all duration-300 nav-safe-top overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 md:px-6 h-14 md:h-20 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Link href="/" className="relative h-10 w-32 md:h-32 md:w-70 hover:scale-105 transition-transform duration-300">
+          <div className="flex items-center gap-2 shrink-0">
+            <Link href="/" className="hover:scale-105 transition-transform duration-300">
               <Image
                 src="/ds_hylec_logo.png"
                 alt="DS HY'LEC Logo"
-                fill
-                className="object-contain object-left"
+                width={140}
+                height={48}
+                className="h-10 md:h-12 w-auto object-contain"
                 priority
               />
             </Link>

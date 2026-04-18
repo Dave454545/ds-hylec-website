@@ -39,18 +39,18 @@ export default function APropos() {
       {/* NAVIGATION */}
       <nav className="fixed w-full bg-white/60 backdrop-blur-xl z-50 border-b border-white/50 shadow-[0_4px_30px_rgba(0,0,0,0.05)] nav-safe-top">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <Link href="/" className="relative h-32 w-70 hover:scale-105 transition-transform duration-300">
-            <Image src="/ds_hylec_logo.png" alt="DS HY'LEC Logo" fill className="object-contain object-left" priority />
+          <Link href="/" className="relative h-8 md:h-10 w-auto shrink-0 hover:scale-105 transition-transform duration-300">
+            <Image src="/ds_hylec_logo.png" alt="DS HY'LEC Logo" width={140} height={40} className="h-8 md:h-10 w-auto object-contain" priority />
           </Link>
           <div className="hidden md:flex gap-8 text-sm font-bold text-gray-900">
             <Link href="/#services" className="hover:text-[#43A047] transition-colors duration-300">Nos Services</Link>
             <Link href="/a-propos" className="text-[#E30613] transition-colors duration-300">À propos</Link>
           </div>
-          <div className="flex items-center gap-4">
-            <Link href="/login" className="text-sm font-bold text-[#E30613] hover:text-[#43A047] transition-colors duration-300">
+          <div className="flex items-center gap-2 md:gap-4">
+            <Link href="/login" className="text-xs md:text-sm font-bold text-[#E30613] hover:text-[#43A047] transition-colors duration-300">
               Connexion
             </Link>
-            <Link href="/reserver" className="bg-[#E30613] text-white px-6 py-2.5 rounded-full font-bold text-sm shadow-[0_8px_20px_rgba(227,6,19,0.3)] hover:bg-[#B3050F] hover:-translate-y-0.5 transition-all duration-300">
+            <Link href="/reserver" className="bg-[#E30613] text-white px-3 py-2 md:px-6 md:py-2.5 rounded-full font-bold text-xs md:text-sm shadow-[0_8px_20px_rgba(227,6,19,0.3)] hover:bg-[#B3050F] hover:-translate-y-0.5 transition-all duration-300 whitespace-nowrap">
               Prendre RDV
             </Link>
           </div>

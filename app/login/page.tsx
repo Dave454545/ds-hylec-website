@@ -40,7 +40,10 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="relative flex flex-col items-center justify-center min-h-screen font-sans selection:bg-[#E30613] selection:text-white overflow-hidden p-4">
+    <main
+      className="relative flex flex-col items-center justify-center min-h-screen font-sans selection:bg-[#E30613] selection:text-white overflow-hidden px-4 py-6"
+      style={{ paddingTop: 'calc(env(safe-area-inset-top) + 1.5rem)' }}
+    >
 
       {/* VIDÉO FIXE EN ARRIÈRE-PLAN */}
       <video

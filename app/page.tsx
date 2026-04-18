@@ -83,29 +83,29 @@ export default function Home() {
 
       {/* NAVIGATION BAR - Effet Verre plus prononcé */}
       <nav className="fixed w-full bg-white/60 backdrop-blur-xl z-50 border-b border-white/50 shadow-[0_4px_30px_rgba(0,0,0,0.05)] transition-all duration-300 nav-safe-top">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 h-14 md:h-20 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Link href="/" className="relative h-32 w-70 hover:scale-105 transition-transform duration-300">
-              <Image 
-                src="/ds_hylec_logo.png" 
-                alt="DS HY'LEC Logo" 
-                fill 
-                className="object-contain object-left" 
+            <Link href="/" className="relative h-10 w-32 md:h-32 md:w-70 hover:scale-105 transition-transform duration-300">
+              <Image
+                src="/ds_hylec_logo.png"
+                alt="DS HY'LEC Logo"
+                fill
+                className="object-contain object-left"
                 priority
               />
             </Link>
           </div>
-          
+
           <div className="hidden md:flex gap-8 text-sm font-bold text-gray-900 drop-shadow-sm">
             <Link href="#services" className="hover:text-[#43A047] transition-colors duration-300">Nos Services</Link>
             <Link href="/a-propos" className="hover:text-[#43A047] transition-colors duration-300">À propos</Link>
           </div>
 
-          <div className="flex items-center gap-4">
-            <Link href="/login" className="text-sm font-bold text-[#E30613] hover:text-[#43A047] transition-colors duration-300">
+          <div className="flex items-center gap-2 md:gap-4">
+            <Link href="/login" className="text-xs md:text-sm font-bold text-[#E30613] hover:text-[#43A047] transition-colors duration-300">
               Connexion
             </Link>
-            <Link href="/reserver" className="bg-[#E30613] text-white px-6 py-2.5 rounded-full font-bold text-sm shadow-[0_8px_20px_rgba(227,6,19,0.3)] hover:bg-[#B3050F] hover:-translate-y-0.5 hover:shadow-[0_12px_25px_rgba(227,6,19,0.4)] transition-all duration-300">
+            <Link href="/reserver" className="bg-[#E30613] text-white px-4 py-2 md:px-6 md:py-2.5 rounded-full font-bold text-xs md:text-sm shadow-[0_8px_20px_rgba(227,6,19,0.3)] hover:bg-[#B3050F] hover:-translate-y-0.5 hover:shadow-[0_12px_25px_rgba(227,6,19,0.4)] transition-all duration-300">
               Prendre RDV
             </Link>
           </div>
@@ -113,26 +113,26 @@ export default function Home() {
       </nav>
 
       {/* HERO SECTION DYNAMIQUE */}
-      <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 min-h-[90vh] flex items-center justify-center overflow-hidden">
+      <section className="relative pt-20 pb-10 md:pt-32 md:pb-20 lg:pt-48 lg:pb-32 min-h-[100svh] md:min-h-[90vh] flex items-center justify-center overflow-hidden">
         {/* CONTENU TEXTE - Placé dans une carte "Glassmorphism" pour laisser la vidéo claire derrière */}
-        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 text-center z-20">
-          <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 fill-mode-both p-8 sm:p-12 md:p-16 rounded-[2.5rem] shadow-[0_35px_60px_-15px_rgba(0,0,0,0.15)]" style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(4px)' }}>
+        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 text-center z-20 w-full">
+          <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 fill-mode-both p-5 sm:p-10 md:p-16 rounded-2xl md:rounded-[2.5rem] shadow-[0_35px_60px_-15px_rgba(0,0,0,0.15)]" style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(4px)' }}>
 
-            <div className="inline-block bg-white/90 backdrop-blur-md px-5 py-2.5 rounded-full mb-6 shadow-sm border border-white/50 hover:scale-105 transition-transform duration-300 cursor-default">
+            <div className="inline-block bg-white/90 backdrop-blur-md px-4 py-2 md:px-5 md:py-2.5 rounded-full mb-4 md:mb-6 shadow-sm border border-white/50 hover:scale-105 transition-transform duration-300 cursor-default">
               <span className="text-[#43A047] font-black text-xs uppercase tracking-[0.2em]">
                 Intervention à domicile
               </span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-black mb-6 tracking-tight leading-[1.1]">
+            <h1 className="text-[2rem] sm:text-4xl md:text-6xl lg:text-7xl font-black text-black mb-4 md:mb-6 tracking-tight leading-[1.1]">
               Spécialiste hybride, <br className="hidden md:block"/>
               <span className="text-black">électrique & performance</span>.
             </h1>
 
-            <p className="text-lg sm:text-xl md:text-2xl text-black mb-4 max-w-3xl mx-auto font-bold leading-relaxed">
+            <p className="text-base sm:text-xl md:text-2xl text-black mb-3 md:mb-4 max-w-3xl mx-auto font-bold leading-relaxed">
               La durée de vie d'une voiture dépend de son entretien, arrêtez-vous avant qu'elle ne vous arrête pour éviter de perdre plus de temps et d'argent.
             </p>
-            <p className="text-lg sm:text-xl md:text-2xl text-black mb-10 max-w-3xl mx-auto font-bold leading-relaxed">
+            <p className="text-base sm:text-xl md:text-2xl text-black mb-6 md:mb-10 max-w-3xl mx-auto font-bold leading-relaxed">
               <span className="italic font-black">"On détecte, on répare, vous roulez."</span>
             </p>
             

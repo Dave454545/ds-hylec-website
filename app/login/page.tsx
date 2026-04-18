@@ -42,22 +42,12 @@ export default function LoginPage() {
   return (
     <main className="relative flex flex-col items-center justify-center min-h-screen font-sans selection:bg-[#E30613] selection:text-white overflow-hidden p-4">
 
-      {/* BOUTON FERMER (Top Right) */}
-      <Link
-        href="/"
-        className="absolute top-6 right-6 z-50 flex items-center justify-center w-11 h-11 bg-white/70 backdrop-blur-md rounded-full font-bold text-xl text-gray-800 hover:bg-white hover:scale-110 hover:shadow-lg transition-all duration-300 border border-white/50"
-        aria-label="Retour à l'accueil"
-      >
-        ×
-      </Link>
-
       {/* VIDÉO FIXE EN ARRIÈRE-PLAN */}
       <video
         autoPlay
         loop
         muted
         playsInline
-
         className="fixed inset-0 w-full h-full object-cover -z-50 scale-105"
       >
         <source src="/dshylec1.mp4" type="video/mp4" />
@@ -74,10 +64,21 @@ export default function LoginPage() {
       {/* FORMULAIRE FLOTTANT (Glassmorphism) */}
       <div className="relative z-10 w-full max-w-md animate-in fade-in slide-in-from-bottom-12 duration-1000">
 
-        <div className="bg-white/85 backdrop-blur-xl rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] p-10 border border-white/60">
-          {/* LOGO INTÉGRÉ EN HAUT DU FORMULAIRE */}
-          <div className="flex justify-center mb-6">
-            <div className="relative h-16 w-40">
+        <div className="bg-white/85 backdrop-blur-xl rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] p-8 border border-white/60 relative">
+
+          {/* BOUTON FERMER — dans le card, en haut à droite, respecte l'encoche */}
+          <Link
+            href="/"
+            className="absolute top-4 right-4 flex items-center justify-center w-11 h-11 bg-white/70 backdrop-blur-md rounded-full font-bold text-xl text-gray-800 hover:bg-white hover:scale-110 hover:shadow-lg transition-all duration-300 border border-white/50"
+            style={{ marginTop: 'env(safe-area-inset-top)' }}
+            aria-label="Retour à l'accueil"
+          >
+            ×
+          </Link>
+
+          {/* LOGO */}
+          <div className="flex justify-center mb-5 pt-4">
+            <div className="relative h-20 w-44">
               <Image
                 src="/ds_hylec_logo.png"
                 alt="DS HY'LEC Logo"
@@ -87,16 +88,17 @@ export default function LoginPage() {
               />
             </div>
           </div>
-          <div className="text-center mb-8">
+
+          <div className="text-center mb-6">
             <h1 className="text-3xl font-black text-gray-900 mb-2">Connexion</h1>
             <p className="text-[#E30613] font-bold text-sm bg-[#E30613]/10 inline-block px-3 py-1 rounded-lg">Accédez à votre espace DS HY'LEC</p>
           </div>
-          
-          <form onSubmit={handleSubmit} className="space-y-6">
+
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label className="block text-xs font-black uppercase tracking-widest text-gray-500 mb-2 ml-1">Email</label>
-              <input 
-                type="email" 
+              <input
+                type="email"
                 className="w-full p-4 bg-white/60 backdrop-blur-sm border-2 border-white/80 rounded-2xl outline-none focus:border-[#E30613] focus:bg-white shadow-inner transition-all font-bold text-gray-800 placeholder-gray-400"
                 placeholder="votre@email.com"
                 value={email}
@@ -106,8 +108,8 @@ export default function LoginPage() {
             </div>
             <div>
               <label className="block text-xs font-black uppercase tracking-widest text-gray-500 mb-2 ml-1">Mot de passe</label>
-              <input 
-                type="password" 
+              <input
+                type="password"
                 className="w-full p-4 bg-white/60 backdrop-blur-sm border-2 border-white/80 rounded-2xl outline-none focus:border-[#E30613] focus:bg-white shadow-inner transition-all font-bold text-gray-800 placeholder-gray-400"
                 placeholder="••••••••"
                 value={password}
@@ -115,26 +117,32 @@ export default function LoginPage() {
                 required
               />
             </div>
-            
+
             {error && (
               <div className="bg-red-50/90 backdrop-blur-sm border border-red-100 text-[#E30613] p-4 rounded-2xl text-xs font-bold text-center animate-in shake">
                 ⚠️ {error}
               </div>
             )}
-            
-            <button 
-              type="submit" 
+
+            <button
+              type="submit"
               disabled={loading}
               className="w-full bg-gradient-to-r from-[#E30613] to-[#B3050F] text-white py-4 rounded-2xl font-black text-lg shadow-[0_10px_25px_rgba(227,6,19,0.3)] hover:shadow-[0_15px_35px_rgba(227,6,19,0.4)] hover:-translate-y-1 transition-all duration-300 disabled:opacity-70 disabled:hover:translate-y-0"
             >
               {loading ? "Connexion en cours..." : "Se connecter"}
             </button>
           </form>
-        </div>
 
-        <p className="text-center text-white/60 text-xs font-medium mt-8 drop-shadow-md">
-          Espace sécurisé • DS HY'LEC
-        </p>
+          <div className="mt-6 text-center">
+            <p className="text-gray-400 text-xs font-medium mb-3">Espace sécurisé • DS HY'LEC</p>
+            <Link
+              href="/"
+              className="text-xs font-bold text-gray-500 hover:text-[#E30613] transition-colors duration-200"
+            >
+              ← Retour à l'accueil
+            </Link>
+          </div>
+        </div>
       </div>
     </main>
   );

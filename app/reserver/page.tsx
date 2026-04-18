@@ -267,8 +267,8 @@ export default function Reserver() {
           <Link href="/" className="text-gray-900 font-bold text-xs sm:text-sm hover:text-[#E30613] transition bg-white/60 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border border-gray-200 shadow-sm">
             ← Retour
           </Link>
-          <div className="relative h-12 w-28 sm:h-16 sm:w-36">
-            <Image src="/ds_hylec_logo.png" alt="DS HY'LEC Logo" fill className="object-contain" priority />
+          <div className="relative h-16 w-auto sm:h-16">
+            <Image src="/ds_hylec_logo.png" alt="DS HY'LEC Logo" width={144} height={64} className="h-16 w-auto object-contain" priority />
           </div>
         </div>
       </nav>

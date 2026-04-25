@@ -35,86 +35,59 @@ export default function ServicesPage() {
       </nav>
 
       {/* CONTENU */}
-      <div className="pt-20 md:pt-28 pb-32 relative z-20">
+      <div className="pt-20 md:pt-28 pb-28 relative z-20">
         <div className="max-w-7xl mx-auto px-4 md:px-6">
 
           {/* EN-TÊTE */}
-          <div className="text-center py-10 md:py-16 animate-in fade-in slide-in-from-bottom-8 duration-700 fill-mode-both">
+          <div className="text-center py-8 md:py-14 animate-in fade-in slide-in-from-bottom-8 duration-700 fill-mode-both">
             <div className="inline-block bg-white/80 backdrop-blur-md px-4 py-1.5 rounded-full mb-4 border border-[#E30613]/20 shadow-sm">
               <span className="text-[#E30613] font-bold text-xs uppercase tracking-wider">Expertise Technique</span>
             </div>
-            <h1 className="text-3xl md:text-5xl font-black text-gray-900 mb-4 drop-shadow-sm">
+            <h1 className="text-3xl md:text-5xl font-black text-gray-900 mb-3 drop-shadow-sm">
               Nos Prestations <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#E30613] to-[#B3050F]">sur Mesure</span>
             </h1>
-            <p className="text-base md:text-xl text-gray-800 max-w-2xl mx-auto font-bold">
+            <p className="text-sm md:text-lg text-gray-700 max-w-xl mx-auto font-medium">
               Expert hybride, diagnostic électronique et performance moteur
             </p>
           </div>
 
-          {/* GRILLE */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 md:gap-6">
+          {/* GRILLE — 2 cols mobile, 3 desktop */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5">
             {SERVICES.map((srv, index) => (
-              <div
+              <Link
                 key={srv.id}
-                className={`animate-in fade-in slide-in-from-bottom-12 duration-700 fill-mode-both bg-white/95 backdrop-blur-xl rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.15)] hover:-translate-y-2 transition-all duration-500 group flex flex-col overflow-hidden relative
-                  ${srv.type === 'hybride' ? 'border border-[#43A047]/30 hover:border-[#43A047]/60' : 'border border-white/80'}
-                  ${srv.type === 'premium' ? 'bg-gradient-to-br from-[#43A047] to-[#2E7D32] text-white border-0' : ''}
-                `}
-                style={{ animationDelay: `${index * 80}ms` }}
+                href={`/services/${srv.slug}`}
+                className="animate-in fade-in slide-in-from-bottom-8 duration-600 fill-mode-both group flex flex-col bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:scale-[1.01] transition-all duration-300"
+                style={{ animationDelay: `${index * 60}ms` }}
               >
-                {/* Badge */}
-                {srv.badge && (
-                  <div className="absolute top-4 right-4 z-10 bg-[#43A047]/90 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider shadow-lg">
-                    {srv.badge}
-                  </div>
-                )}
-
                 {/* Image */}
-                <div className="h-48 w-full relative overflow-hidden bg-gray-200 shrink-0">
+                <div className="h-32 sm:h-40 w-full overflow-hidden bg-gray-100 shrink-0">
                   <img
                     src={srv.img}
                     alt={srv.title}
                     loading="lazy"
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                   />
-                  <div className={`absolute inset-0 ${srv.type === 'premium' ? 'bg-black/30' : 'bg-gradient-to-t from-white/95 via-white/40 to-transparent'}`} />
                 </div>
 
-                <div className="p-5 flex flex-col flex-1 z-10 -mt-6">
-                  <h2 className={`text-lg font-black mb-2 leading-tight ${srv.type === 'premium' ? 'text-white' : 'text-gray-900'}`}>
+                {/* Contenu */}
+                <div className="p-3 sm:p-4 flex flex-col flex-1">
+                  {srv.badge && (
+                    <span className="inline-block self-start text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-[#43A047]/10 text-[#43A047] px-2 py-0.5 rounded-full mb-2">
+                      {srv.badge}
+                    </span>
+                  )}
+                  <h2 className="text-xs sm:text-sm font-semibold text-gray-900 leading-snug mb-1.5 line-clamp-2">
                     {srv.title}
                   </h2>
-                  <p className={`text-sm leading-relaxed mb-5 flex-1 font-medium line-clamp-3 ${srv.type === 'premium' ? 'text-white/90' : 'text-gray-600'}`}>
+                  <p className="text-[11px] sm:text-xs text-gray-400 leading-relaxed line-clamp-2 flex-1">
                     {srv.descCourte}
                   </p>
-
-                  {/* Deux boutons */}
-                  <div className="flex flex-col gap-2 mt-auto">
-                    <Link
-                      href={`/services/${srv.slug}`}
-                      className={`font-bold text-xs flex items-center justify-between w-full transition-all p-3 rounded-xl
-                        ${srv.type === 'premium' ? 'bg-white/20 text-white hover:bg-white/30' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-gray-900'}
-                      `}
-                    >
-                      <span>En savoir plus</span>
-                      <span className="group-hover:translate-x-0.5 transition-transform duration-200">→</span>
-                    </Link>
-                    <Link
-                      href={`/reserver?service=${srv.id}`}
-                      className={`font-bold text-sm flex items-center justify-between w-full transition-all p-4 rounded-2xl
-                        ${srv.type === 'premium'
-                          ? 'bg-white text-[#43A047] shadow-xl hover:scale-[1.02] hover:shadow-2xl'
-                          : srv.type === 'hybride'
-                            ? 'bg-green-50 text-[#43A047] group-hover:bg-[#43A047] group-hover:text-white'
-                            : 'bg-red-50 text-[#E30613] group-hover:bg-[#E30613] group-hover:text-white'
-                        }`}
-                    >
-                      <span>{srv.type === 'premium' ? 'Choisir ce pack' : 'Réserver maintenant'}</span>
-                      <span className="transform group-hover:translate-x-1 transition-transform duration-300">→</span>
-                    </Link>
+                  <div className="flex justify-end mt-2">
+                    <span className="text-[#E30613]/60 text-sm group-hover:text-[#E30613] group-hover:translate-x-0.5 transition-all duration-200">→</span>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 

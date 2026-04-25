@@ -80,17 +80,6 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
             </p>
           </div>
 
-          {/* BOUTON RÉSERVER — desktop uniquement (mobile = sticky) */}
-          <div className="hidden md:block animate-in fade-in slide-in-from-bottom-6 duration-700 delay-300 fill-mode-both">
-            <Link
-              href={`/reserver?service=${srv.id}`}
-              className="flex items-center justify-center gap-3 w-full py-5 bg-gradient-to-r from-[#E30613] to-[#B3050F] text-white rounded-2xl font-black text-lg shadow-[0_10px_25px_rgba(227,6,19,0.35)] hover:shadow-[0_15px_35px_rgba(227,6,19,0.45)] hover:-translate-y-0.5 transition-all duration-300"
-            >
-              Réserver ce service
-              <span>→</span>
-            </Link>
-          </div>
-
           {/* AUTRES SERVICES */}
           <div className="mt-10 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-400 fill-mode-both">
             <h2 className="text-lg font-black text-gray-900 mb-4 drop-shadow-sm">Autres prestations</h2>
@@ -112,20 +101,20 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
             </div>
           </div>
 
-        </div>
-      </div>
+          {/* BOUTON RÉSERVER — inline, visible sur tous écrans, margin pour la BottomNav mobile */}
+          <div
+            className="mt-8 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-500 fill-mode-both"
+            style={{ marginBottom: 'calc(90px + env(safe-area-inset-bottom))' }}
+          >
+            <Link
+              href={`/reserver?service=${srv.id}`}
+              className="flex items-center justify-center gap-3 w-full py-5 bg-gradient-to-r from-[#E30613] to-[#B3050F] text-white rounded-2xl font-black text-base md:text-lg shadow-[0_10px_25px_rgba(227,6,19,0.35)] hover:shadow-[0_15px_35px_rgba(227,6,19,0.45)] hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300"
+            >
+              Réserver ce service →
+            </Link>
+          </div>
 
-      {/* BOUTON STICKY MOBILE */}
-      <div
-        className="fixed bottom-0 left-0 right-0 md:hidden z-40 bg-white/95 backdrop-blur-xl border-t border-gray-100 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] p-4"
-        style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 1rem)' }}
-      >
-        <Link
-          href={`/reserver?service=${srv.id}`}
-          className="flex items-center justify-center gap-2 w-full py-4 bg-gradient-to-r from-[#E30613] to-[#B3050F] text-white rounded-2xl font-black text-base shadow-[0_8px_20px_rgba(227,6,19,0.3)] active:scale-[0.98] transition-transform"
-        >
-          Réserver ce service →
-        </Link>
+        </div>
       </div>
     </main>
   );

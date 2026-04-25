@@ -11,7 +11,7 @@ export default function BottomNav() {
 
   const items = [
     { href: '/',                 Icon: Home,          label: 'Accueil',    active: pathname === '/' },
-    { href: '/#services',        Icon: Wrench,         label: 'Services',   active: false },
+    { href: '/services',          Icon: Wrench,         label: 'Services',   active: pathname.startsWith('/services') },
     { href: '/reserver',         Icon: CalendarCheck,  label: 'Réserver',   active: pathname === '/reserver', cta: true },
     { href: '/a-propos',         Icon: Info,           label: 'À propos',   active: pathname === '/a-propos' },
     { href: '/dashboard-client', Icon: User,           label: 'Mon espace', active: pathname.startsWith('/dashboard') },

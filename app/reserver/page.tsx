@@ -24,7 +24,7 @@ export default function Reserver() {
   const [problemes, setProblemes] = useState<string[]>([]);
 
   // États classiques
-  const [service, setService] = useState('');
+  const [services, setServices] = useState<string[]>([]);
   const [vehicle, setVehicle] = useState({ marque: '', modele: '', annee: '', carburant: '' });
   const [dateTime, setDateTime] = useState({ date: '', time: '' });
   const [client, setClient] = useState({ fullName: '', tel: '', email: '', adresse: '' });
@@ -46,7 +46,7 @@ export default function Reserver() {
       const params = new URLSearchParams(window.location.search);
       const serviceFromUrl = params.get('service');
       if (serviceFromUrl) {
-        setService(serviceFromUrl);
+        setServices([serviceFromUrl]);
         setStep(2);
       }
     }
@@ -138,13 +138,14 @@ export default function Reserver() {
   }, [dateTime.date, dateTime.time]);
 
   const servicesList = [
-    { label: "Diagnostic électronique complet", value: "DIAGNOSTIC_ELECTRONIQUE", desc: "Analyse complète de votre véhicule avec valise professionnelle. Lecture des codes défaut, effacement des voyants et explication claire de la panne." },
-    { label: "Décalaminage moteur hydrogène", value: "DECALAMINAGE_MOTEUR", desc: "Nettoyage interne du moteur. Élimine la calamine, améliore les performances, réduit la consommation et facilite le passage au contrôle technique." },
-    { label: "Régénération FAP", value: "REGENERATION_FAP", desc: "Nettoyage de votre Filtre À Particules encrassé via une régénération forcée au diagnostic. Évite un remplacement très coûteux." },
-    { label: "Diagnostic système hybride", value: "DIAGNOSTIC_HYBRIDE", desc: "Contrôle spécifique du système hybride (haute tension, onduleur, cellules) pour s'assurer du bon fonctionnement électrique." },
-    { label: "Test batterie hybride", value: "TEST_BATTERIE_HYBRIDE", desc: "Analyse de l'état de santé réel (SOH) de votre batterie hybride. Idéal pour anticiper une défaillance ou avant un achat/revente." },
-    { label: "Nettoyage refroidissement hybride", value: "NETTOYAGE_REFROIDISSEMENT_HYBRIDE", desc: "Démontage et nettoyage du ventilateur et du filtre de refroidissement de la batterie haute tension pour éviter la surchauffe." },
-    { label: "Pack hybride complet", value: "PACK_HYBRIDE_COMPLET", desc: "Le service ultime : Diagnostic hybride + Test de la batterie + Nettoyage complet du système de refroidissement." }
+    { label: "Diagnostic électronique complet", value: "DIAGNOSTIC_ELECTRONIQUE", img: "/diagnostic electric complet.jpeg", desc: "Analyse complète de votre véhicule avec valise professionnelle. Lecture des codes défaut, effacement des voyants et explication claire de la panne." },
+    { label: "Décalaminage moteur hydrogène", value: "DECALAMINAGE_MOTEUR", img: "/Decalaminage.jpeg", desc: "Nettoyage interne du moteur. Élimine la calamine, améliore les performances, réduit la consommation et facilite le passage au contrôle technique." },
+    { label: "Régénération FAP", value: "REGENERATION_FAP", img: "/Regeneration FAP.jpeg", desc: "Nettoyage du filtre à particules encrassé. Régénération forcée via outil de diagnostic pour brûler les suies." },
+    { label: "Débouchage du filtre à particules (FAP)", value: "DEBOUCHAGE_FAP", img: "/Débouchage du filtre a particules.jpg", desc: "Traitement des filtres fortement encrassés par injection de produit nettoyant et rinçage en profondeur." },
+    { label: "Diagnostic système hybride", value: "DIAGNOSTIC_HYBRIDE", img: "/diagnostic systeme hybride.jpeg", desc: "Contrôle spécifique du système hybride (haute tension, onduleur, cellules) pour s'assurer du bon fonctionnement électrique." },
+    { label: "Test batterie hybride", value: "TEST_BATTERIE_HYBRIDE", img: "/test de batterie hybride.jpeg", desc: "Analyse de l'état de santé réel (SOH) de votre batterie hybride. Idéal pour anticiper une défaillance ou avant un achat/revente." },
+    { label: "Entretien du système hybride", value: "NETTOYAGE_REFROIDISSEMENT_HYBRIDE", img: "/Entretien du systeme hybride.jpg", desc: "Préservation des performances du système hybride : ventilateur batterie, conduits d'air et composants de refroidissement." },
+    { label: "Pack hybride complet", value: "PACK_HYBRIDE_COMPLET", img: "/diagnostic systeme hybride.jpeg", desc: "Le service ultime : Diagnostic hybride + Test de la batterie + Nettoyage complet du système de refroidissement." }
   ];
 
   const problemesList = [
@@ -170,7 +171,9 @@ export default function Reserver() {
     const nom = names.slice(1).join(' ') || ' ';
 
     const payload = {
-      ...client, nom, prenom, typeClient, ...vehicle, problemes, service,
+      ...client, nom, prenom, typeClient, ...vehicle, problemes,
+      services,
+      service: services[0] || '',
       date: `${dateTime.date}T${dateTime.time}:00`,
       moyenPaiement: 'SUR_PLACE',
       codeParrainSaisi: codeParrain || null
@@ -268,7 +271,7 @@ export default function Reserver() {
             ← Retour
           </Link>
           <div className="relative h-16 w-auto sm:h-16">
-            <Image src="/ds_hylec_logo.png" alt="DS HY'LEC Logo" width={144} height={64} className="h-16 w-auto object-contain" priority />
+            <Image src="/logo ds_hylec_neuf.png" alt="DS HY'LEC Logo" width={144} height={64} className="h-16 w-auto object-contain" priority />
           </div>
         </div>
       </nav>
@@ -296,26 +299,52 @@ export default function Reserver() {
           {/* ÉTAPE 1 */}
           {step === 1 && (
             <div className={`${stepAnim} w-full`}>
-              <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mb-6 sm:mb-8 drop-shadow-sm text-center sm:text-left">Quel service souhaitez vous ?</h2>
-              <div className="flex flex-col gap-3 sm:gap-4 h-[350px] sm:h-[420px] overflow-y-auto pr-1 sm:pr-2 hide-scrollbar pb-8">
-                {servicesList.map((item) => (
-                  <div key={item.value} className="flex flex-col">
-                    <button 
-                      onClick={() => setService(item.value)} 
-                      className={`p-4 sm:p-5 rounded-xl sm:rounded-2xl border-2 transition-all text-left font-bold text-sm sm:text-base ${service === item.value ? 'border-[#E30613] bg-[#E30613]/10 text-[#E30613] shadow-md' : 'border-transparent bg-gray-50/80 text-gray-700 hover:border-[#E30613]/30 hover:bg-white'}`}
+              <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mb-2 drop-shadow-sm text-center sm:text-left">Quel(s) service(s) ?</h2>
+              <p className="text-xs text-gray-400 font-medium mb-4 text-center sm:text-left">Vous pouvez sélectionner plusieurs services</p>
+              <div className="flex flex-col gap-3 h-[380px] sm:h-[440px] overflow-y-auto pr-1 hide-scrollbar pb-8">
+                {servicesList.map((item) => {
+                  const selected = services.includes(item.value);
+                  return (
+                    <div
+                      key={item.value}
+                      onClick={() => {
+                        if (selected) setServices(services.filter(s => s !== item.value));
+                        else setServices([...services, item.value]);
+                      }}
+                      className={`relative flex items-center gap-3 p-3 sm:p-4 rounded-xl sm:rounded-2xl border-2 transition-all cursor-pointer select-none
+                        ${selected ? 'border-[#E30613] bg-[#E30613]/8 shadow-md' : 'border-transparent bg-gray-50/80 hover:border-[#E30613]/30 hover:bg-white'}`}
                     >
-                      {item.label}
-                    </button>
-                    {service === item.value && (
-                      <div className="animate-in slide-in-from-top-2 duration-300 mt-2 p-4 sm:p-5 bg-white border border-[#E30613]/20 rounded-xl shadow-sm text-xs sm:text-sm text-gray-600 leading-relaxed font-medium">
-                        <span className="font-black text-[#E30613] block mb-1 sm:mb-2">Détail de la prestation :</span>
-                        {item.desc}
+                      {/* Checkmark */}
+                      {selected && (
+                        <div className="absolute top-2 right-2 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center shrink-0 shadow">
+                          <svg viewBox="0 0 16 16" fill="none" className="w-3 h-3">
+                            <polyline points="3,8 6,11 13,4" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        </div>
+                      )}
+                      {/* Image */}
+                      <img src={item.img} alt={item.label} className="w-12 h-12 sm:w-14 sm:h-14 object-cover rounded-lg shrink-0" />
+                      {/* Text */}
+                      <div className="flex-1 min-w-0 pr-5">
+                        <div className={`font-bold text-sm sm:text-base leading-tight ${selected ? 'text-[#E30613]' : 'text-gray-800'}`}>{item.label}</div>
+                        <div className="text-[11px] sm:text-xs text-gray-500 mt-0.5 line-clamp-2 font-medium">{item.desc}</div>
                       </div>
-                    )}
-                  </div>
-                ))}
+                    </div>
+                  );
+                })}
               </div>
-              <button onClick={() => goNext(2)} disabled={!service} className="mt-6 sm:mt-8 w-full py-3.5 sm:py-4 rounded-xl font-black text-base sm:text-lg bg-[#E30613] text-white disabled:opacity-30 hover:bg-[#B3050F] active:scale-[0.97] hover:shadow-lg transition-all shadow-[#E30613]/20">Continuer</button>
+              {services.length > 0 && (
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  {services.map(s => (
+                    <span key={s} className="inline-flex items-center gap-1 bg-[#E30613]/10 text-[#E30613] text-[10px] font-bold px-2.5 py-1 rounded-full border border-[#E30613]/20">
+                      {servicesList.find(i => i.value === s)?.label ?? s}
+                    </span>
+                  ))}
+                </div>
+              )}
+              <button onClick={() => goNext(2)} disabled={services.length === 0} className="mt-4 sm:mt-6 w-full py-3.5 sm:py-4 rounded-xl font-black text-base sm:text-lg bg-[#E30613] text-white disabled:opacity-30 hover:bg-[#B3050F] active:scale-[0.97] hover:shadow-lg transition-all shadow-[#E30613]/20">
+                Continuer {services.length > 0 && `(${services.length} service${services.length > 1 ? 's' : ''})`}
+              </button>
             </div>
           )}
 
@@ -510,7 +539,7 @@ export default function Reserver() {
               </div>
 
               <div className="bg-gradient-to-br from-gray-50 to-white p-4 sm:p-6 rounded-2xl mb-8 sm:mb-10 border border-gray-100 shadow-sm space-y-3">
-                <p className="text-xs sm:text-sm flex justify-between items-center"><span className="text-gray-500 font-medium">Service :</span> <span className="font-black text-[#E30613] uppercase text-[10px] sm:text-xs text-right max-w-[60%]">{service.replace(/_/g, ' ')}</span></p>
+                <p className="text-xs sm:text-sm flex justify-between items-start gap-2"><span className="text-gray-500 font-medium shrink-0">Service(s) :</span> <span className="font-black text-[#E30613] text-[10px] sm:text-xs text-right">{services.map(s => servicesList.find(i => i.value === s)?.label ?? s).join(' + ')}</span></p>
                 <div className="h-px w-full bg-gray-100" />
                 <p className="text-xs sm:text-sm flex justify-between items-center"><span className="text-gray-500 font-medium">Véhicule :</span> <span className="font-bold text-gray-800 text-right">{vehicle.marque} {vehicle.modele} {vehicle.annee && <span className="text-gray-400">({vehicle.annee})</span>} <span className="text-gray-400 text-[10px] sm:text-xs block sm:inline">({vehicle.carburant})</span></span></p>
                 <div className="h-px w-full bg-gray-100" />

@@ -51,9 +51,10 @@ const ReservationSchema = z.object({
   // Service & date
   service:     z.enum([
     'DIAGNOSTIC_ELECTRONIQUE', 'DECALAMINAGE_MOTEUR', 'REGENERATION_FAP',
-    'NETTOYAGE_EGR', 'DIAGNOSTIC_HYBRIDE', 'TEST_BATTERIE_HYBRIDE',
+    'DEBOUCHAGE_FAP', 'NETTOYAGE_EGR', 'DIAGNOSTIC_HYBRIDE', 'TEST_BATTERIE_HYBRIDE',
     'NETTOYAGE_REFROIDISSEMENT_HYBRIDE', 'PACK_HYBRIDE_COMPLET',
   ]),
+  services:    z.array(z.string().max(100)).max(10).default([]),
   date:        z.string().refine(v => !isNaN(Date.parse(v)), "Date invalide"),
   moyenPaiement: z.enum(['EN_LIGNE', 'SUR_PLACE']).default('SUR_PLACE'),
 
@@ -172,7 +173,7 @@ export async function POST(request: Request) {
           remiseAppliquee: remise,
           statut:          'EN_ATTENTE',
           problemes:       data.problemes,
-          notes:           `Véhicule: ${data.marque} ${data.modele}`,
+          notes:           `Véhicule: ${data.marque} ${data.modele}${data.services.length > 1 ? ` | Services: ${data.services.join(', ')}` : ''}`,
         },
       });
 

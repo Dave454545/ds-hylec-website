@@ -84,7 +84,7 @@ export default function LoginPage() {
           <div className="flex justify-center mb-5 pt-4">
             <div className="relative h-20 w-44">
               <Image
-                src="/ds_hylec_logo.png"
+                src="/logo ds_hylec_neuf.png"
                 alt="DS HY'LEC Logo"
                 fill
                 className="object-contain"

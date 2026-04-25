@@ -40,7 +40,7 @@ export default function APropos() {
       <nav className="fixed w-full bg-white/60 backdrop-blur-xl z-50 border-b border-white/50 shadow-[0_4px_30px_rgba(0,0,0,0.05)] nav-safe-top">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <Link href="/" className="relative h-16 md:h-10 w-auto shrink-0 hover:scale-105 transition-transform duration-300">
-            <Image src="/ds_hylec_logo.png" alt="DS HY'LEC Logo" width={140} height={40} className="h-16 md:h-10 w-auto object-contain" priority />
+            <Image src="/logo ds_hylec_neuf.png" alt="DS HY'LEC Logo" width={140} height={40} className="h-16 md:h-10 w-auto object-contain" priority />
           </Link>
           <div className="hidden md:flex gap-8 text-sm font-bold text-gray-900">
             <Link href="/#services" className="hover:text-[#43A047] transition-colors duration-300">Nos Services</Link>

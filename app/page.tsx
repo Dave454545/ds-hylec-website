@@ -18,14 +18,21 @@ export default function Home() {
       img: "/Decalaminage.jpeg",
       type: "standard" 
     },
-    { 
-      id: "REGENERATION_FAP", 
-      title: "Régénération FAP", 
-      desc: "Nettoyage du filtre à particules encrassé. Régénération forcée via outil de diagnostic pour brûler les suies. Permet d'éviter un remplacement coûteux du FAP.", 
-      img: "https://images.unsplash.com/photo-1542282088-fe8426682b8f?auto=format&fit=crop&w=600&q=80", 
-      type: "standard" 
+    {
+      id: "REGENERATION_FAP",
+      title: "Régénération FAP",
+      desc: "Nettoyage du filtre à particules encrassé. Régénération forcée via outil de diagnostic pour brûler les suies.",
+      img: "/Regeneration FAP.jpeg",
+      type: "standard"
     },
-    { 
+    {
+      id: "DEBOUCHAGE_FAP",
+      title: "Débouchage du filtre à particules (FAP)",
+      desc: "Traitement des filtres fortement encrassés par injection de produit nettoyant et rinçage en profondeur.",
+      img: "/Débouchage du filtre a particules.jpg",
+      type: "standard"
+    },
+    {
       id: "DIAGNOSTIC_HYBRIDE", 
       title: "Diagnostic système hybride", 
       desc: "Contrôle complet du système hybride. Lecture des défauts haute tension, analyse du fonctionnement électrique et thermique du véhicule.", 
@@ -40,12 +47,12 @@ export default function Home() {
       img: "/test de batterie hybride.jpeg",
       type: "hybride" 
     },
-    { 
-      id: "NETTOYAGE_REFROIDISSEMENT_HYBRIDE", 
-      title: "Nettoyage refroidissement hybride", 
-      desc: "Nettoyage du filtre, ventilateur et conduits d'air de la batterie hybride. Permet d'éviter la surchauffe et d'augmenter la durée de vie de la batterie.", 
-      img: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=600&q=80", 
-      type: "hybride" 
+    {
+      id: "NETTOYAGE_REFROIDISSEMENT_HYBRIDE",
+      title: "Entretien du système hybride",
+      desc: "Préservation des performances du système hybride : ventilateur batterie, conduits d'air et composants de refroidissement.",
+      img: "/Entretien du systeme hybride.jpg",
+      type: "hybride"
     },
     { 
       id: "PACK_HYBRIDE_COMPLET", 
@@ -87,7 +94,7 @@ export default function Home() {
           <div className="flex items-center gap-2 shrink-0">
             <Link href="/" className="hover:scale-105 transition-transform duration-300">
               <Image
-                src="/ds_hylec_logo.png"
+                src="/logo ds_hylec_neuf.png"
                 alt="DS HY'LEC Logo"
                 width={140}
                 height={48}

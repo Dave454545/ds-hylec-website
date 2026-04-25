@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "Bash(grep -E \"\\(lib/|^[^/]*\\\\.ts$\\)\")",
-      "Bash(node -e \"require\\('zod'\\); console.log\\('zod ok'\\)\")"
+      "Bash(node -e \"require\\('zod'\\); console.log\\('zod ok'\\)\")",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)"
     ]
   }
 }

@@ -16,8 +16,8 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
     <main className="relative min-h-screen font-sans selection:bg-[#43A047] selection:text-white overflow-x-hidden">
 
       {/* FOND VIDÉO */}
-      <video autoPlay loop muted playsInline className="fixed inset-0 w-full h-full object-cover -z-50">
-        <source src="/dshylec2.mp4" type="video/mp4" />
+      <video autoPlay loop muted playsInline preload="none" className="fixed inset-0 w-full h-full object-cover -z-50">
+        <source src="/dshylec2 compress.mp4" type="video/mp4" />
       </video>
       <div className="fixed inset-0 bg-white/10 -z-40" />
       <div className="fixed inset-x-0 bottom-0 h-64 bg-gradient-to-t from-white/90 to-transparent -z-35" />
@@ -30,7 +30,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
             ← Services
           </Link>
           <Link href="/" className="hover:scale-105 transition-transform duration-300">
-            <Image src="/logo ds_hylec_neuf.png" alt="DS HY'LEC Logo" width={140} height={48} className="h-12 md:h-12 w-auto object-contain" priority />
+            <Image src="/logo-ds_hylec_neuf.webp" alt="DS HY'LEC Logo" width={140} height={48} className="h-12 md:h-12 w-auto object-contain" priority />
           </Link>
           <Link href="/reserver" className="bg-[#E30613] text-white px-4 py-2 rounded-full font-bold text-xs shadow-[0_8px_20px_rgba(227,6,19,0.3)] hover:bg-[#B3050F] transition-all duration-300">
             Prendre RDV

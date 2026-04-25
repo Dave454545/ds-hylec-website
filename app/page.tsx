@@ -12,9 +12,10 @@ export default function Home() {
         loop
         muted
         playsInline
+        preload="none"
         className="fixed inset-0 w-full h-full object-cover -z-50"
       >
-        <source src="/dshylec2.mp4" type="video/mp4" />
+        <source src="/dshylec2 compress.mp4" type="video/mp4" />
         Votre navigateur ne supporte pas la vidéo.
       </video>
 
@@ -29,7 +30,7 @@ export default function Home() {
           <div className="flex items-center gap-2 shrink-0">
             <Link href="/" className="hover:scale-105 transition-transform duration-300">
               <Image
-                src="/logo ds_hylec_neuf.png"
+                src="/logo-ds_hylec_neuf.webp"
                 alt="DS HY'LEC Logo"
                 width={140}
                 height={48}

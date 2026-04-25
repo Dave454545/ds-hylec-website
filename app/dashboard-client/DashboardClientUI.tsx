@@ -18,10 +18,10 @@ export default function DashboardClientUI({ user, vehicules, factures, parrainag
         loop
         muted
         playsInline
-       
+        preload="none"
         className="fixed inset-0 w-full h-full object-cover -z-50 scale-105"
       >
-        <source src="/dshylec1.mp4" type="video/mp4" />
+        <source src="/dshylec1 compress.mp4" type="video/mp4" />
       </video>
 
       {/* OVERLAY CORRIGÉ : Verre dépoli allégé pour que la vidéo soit VRAIMENT visible */}

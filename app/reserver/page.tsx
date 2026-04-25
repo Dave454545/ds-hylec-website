@@ -216,8 +216,8 @@ export default function Reserver() {
   if (success) {
     return (
       <main className="relative min-h-screen flex items-center justify-center overflow-hidden p-4 sm:p-6 text-center selection:bg-[#43A047] selection:text-white">
-        <video autoPlay loop muted playsInline className="fixed inset-0 w-full h-full object-cover -z-50 scale-105">
-          <source src="/dshylec1.mp4" type="video/mp4" />
+        <video autoPlay loop muted playsInline preload="none" className="fixed inset-0 w-full h-full object-cover -z-50 scale-105">
+          <source src="/dshylec1 compress.mp4" type="video/mp4" />
         </video>
         <div className="fixed inset-0 bg-black/40 backdrop-blur-[4px] -z-40" />
 
@@ -254,11 +254,10 @@ export default function Reserver() {
     <main className="relative min-h-screen w-full max-w-[100vw] overflow-x-hidden font-sans selection:bg-[#43A047] selection:text-white">
       
       <video
-        autoPlay loop muted playsInline
-       
+        autoPlay loop muted playsInline preload="none"
         className="fixed inset-0 w-full h-full object-cover -z-50 scale-105"
       >
-        <source src="/dshylec1.mp4" type="video/mp4" />
+        <source src="/dshylec1 compress.mp4" type="video/mp4" />
       </video>
 
       <div className="fixed inset-0 bg-black/30 backdrop-blur-[6px] -z-40" />
@@ -271,7 +270,7 @@ export default function Reserver() {
             ← Retour
           </Link>
           <div className="relative h-16 w-auto sm:h-16">
-            <Image src="/logo ds_hylec_neuf.png" alt="DS HY'LEC Logo" width={144} height={64} className="h-16 w-auto object-contain" priority />
+            <Image src="/logo-ds_hylec_neuf.webp" alt="DS HY'LEC Logo" width={144} height={64} className="h-16 w-auto object-contain" priority />
           </div>
         </div>
       </nav>

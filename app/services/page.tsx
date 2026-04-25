@@ -7,8 +7,8 @@ export default function ServicesPage() {
     <main className="relative min-h-screen font-sans selection:bg-[#43A047] selection:text-white overflow-x-hidden">
 
       {/* FOND VIDÉO */}
-      <video autoPlay loop muted playsInline className="fixed inset-0 w-full h-full object-cover -z-50">
-        <source src="/dshylec2.mp4" type="video/mp4" />
+      <video autoPlay loop muted playsInline preload="none" className="fixed inset-0 w-full h-full object-cover -z-50">
+        <source src="/dshylec2 compress.mp4" type="video/mp4" />
       </video>
       <div className="fixed inset-0 bg-white/10 -z-40" />
       <div className="fixed inset-x-0 bottom-0 h-64 bg-gradient-to-t from-white/90 to-transparent -z-35" />
@@ -19,7 +19,7 @@ export default function ServicesPage() {
       <nav className="fixed w-full bg-white/60 backdrop-blur-xl z-50 border-b border-white/50 shadow-[0_4px_30px_rgba(0,0,0,0.05)] nav-safe-top">
         <div className="max-w-7xl mx-auto px-4 md:px-6 h-14 md:h-20 flex items-center justify-between">
           <Link href="/" className="hover:scale-105 transition-transform duration-300 shrink-0">
-            <Image src="/logo ds_hylec_neuf.png" alt="DS HY'LEC Logo" width={140} height={48} className="h-14 md:h-12 w-auto object-contain" priority />
+            <Image src="/logo-ds_hylec_neuf.webp" alt="DS HY'LEC Logo" width={140} height={48} className="h-14 md:h-12 w-auto object-contain" priority />
           </Link>
           <div className="hidden md:flex gap-8 text-sm font-bold text-gray-900 drop-shadow-sm">
             <Link href="/services" className="text-[#E30613] transition-colors duration-300">Nos Services</Link>

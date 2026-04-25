@@ -51,9 +51,10 @@ export default function LoginPage() {
         loop
         muted
         playsInline
+        preload="none"
         className="fixed inset-0 w-full h-full object-cover -z-50 scale-105"
       >
-        <source src="/dshylec1.mp4" type="video/mp4" />
+        <source src="/dshylec1 compress.mp4" type="video/mp4" />
         Votre navigateur ne supporte pas la vidéo.
       </video>
 
@@ -84,7 +85,7 @@ export default function LoginPage() {
           <div className="flex justify-center mb-5 pt-4">
             <div className="relative h-20 w-44">
               <Image
-                src="/logo ds_hylec_neuf.png"
+                src="/logo-ds_hylec_neuf.webp"
                 alt="DS HY'LEC Logo"
                 fill
                 className="object-contain"

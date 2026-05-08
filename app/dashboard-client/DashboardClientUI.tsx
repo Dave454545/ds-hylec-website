@@ -140,7 +140,7 @@ export default function DashboardClientUI({ user, vehicules, factures, parrainag
                   <p className="text-gray-700 font-black mb-1">Aucune intervention enregistrée</p>
                   <p className="text-gray-500 text-sm font-medium mb-5">Vos futures interventions apparaîtront ici.</p>
                   <Link href="/reserver" className="inline-block bg-[#E30613] text-white px-6 py-3 rounded-full font-bold text-sm shadow-lg shadow-[#E30613]/30 hover:bg-[#B3050F] transition-colors">
-                    Réserver une intervention
+                    Prendre rendez-vous
                   </Link>
                 </div>
               ) : (

@@ -73,15 +73,26 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
           {/* DESCRIPTION LONGUE */}
           <div className="animate-in fade-in slide-in-from-bottom-6 duration-700 delay-150 fill-mode-both bg-white/90 backdrop-blur-xl rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] border border-white/80 p-6 sm:p-8 md:p-10 mb-6">
             <h2 className="text-lg sm:text-xl font-black text-gray-800 mb-4 flex items-center gap-2">
-              <span className="text-[#E30613]">✦</span> À propos de cette prestation
+              <svg viewBox="0 0 24 24" fill="none" stroke="#E30613" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" style={{width:'16px', height:'16px', display:'inline-block', flexShrink:0}}>
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.35-4.35"/>
+              </svg> À propos de cette prestation
             </h2>
             <p className="text-gray-700 leading-relaxed font-medium text-sm sm:text-base whitespace-pre-line">
               {srv.descLongue}
             </p>
+            <div className="mt-6">
+              <Link
+                href={`/reserver?service=${srv.id}`}
+                className="flex items-center justify-center gap-3 w-full py-5 bg-gradient-to-r from-[#E30613] to-[#B3050F] text-white rounded-2xl font-black text-base md:text-lg shadow-[0_10px_25px_rgba(227,6,19,0.35)] hover:shadow-[0_15px_35px_rgba(227,6,19,0.45)] hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300"
+              >
+                Prendre rendez-vous →
+              </Link>
+            </div>
           </div>
 
           {/* AUTRES SERVICES */}
-          <div className="mt-10 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-400 fill-mode-both">
+          <div className="mt-10 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-400 fill-mode-both" style={{ marginBottom: 'calc(90px + env(safe-area-inset-bottom))' }}>
             <h2 className="text-lg font-black text-gray-900 mb-4 drop-shadow-sm">Autres prestations</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {SERVICES.filter((s) => s.slug !== srv.slug).slice(0, 6).map((other) => (
@@ -99,19 +110,6 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
                 </Link>
               ))}
             </div>
-          </div>
-
-          {/* BOUTON RÉSERVER — inline, visible sur tous écrans, margin pour la BottomNav mobile */}
-          <div
-            className="mt-8 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-500 fill-mode-both"
-            style={{ marginBottom: 'calc(90px + env(safe-area-inset-bottom))' }}
-          >
-            <Link
-              href={`/reserver?service=${srv.id}`}
-              className="flex items-center justify-center gap-3 w-full py-5 bg-gradient-to-r from-[#E30613] to-[#B3050F] text-white rounded-2xl font-black text-base md:text-lg shadow-[0_10px_25px_rgba(227,6,19,0.35)] hover:shadow-[0_15px_35px_rgba(227,6,19,0.45)] hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300"
-            >
-              Réserver ce service →
-            </Link>
           </div>
 
         </div>

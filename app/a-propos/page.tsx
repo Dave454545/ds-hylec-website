@@ -78,7 +78,10 @@ export default function APropos() {
             <div className="grid sm:grid-cols-2 gap-4">
               {expertises.map((item, i) => (
                 <div key={i} className="flex items-start gap-3 p-4 bg-gradient-to-r from-[#E30613]/5 to-transparent rounded-2xl border border-[#E30613]/10">
-                  <span className="text-[#E30613] font-black text-lg mt-0.5">✦</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#E30613" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" style={{width:'16px', height:'16px', display:'inline-block', flexShrink:0, marginTop:'2px'}}>
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="m21 21-4.35-4.35"/>
+                  </svg>
                   <span className="font-bold text-gray-800 text-sm sm:text-base">{item}</span>
                 </div>
               ))}

@@ -72,16 +72,13 @@ export default function Home() {
               <span className="text-black">électrique & performance</span>.
             </h1>
 
-            <p className="text-base sm:text-xl md:text-2xl text-black mb-3 md:mb-4 max-w-3xl mx-auto font-bold leading-relaxed">
-              La durée de vie d'une voiture dépend de son entretien, arrêtez-vous avant qu'elle ne vous arrête pour éviter de perdre plus de temps et d'argent.
-            </p>
             <p className="text-base sm:text-xl md:text-2xl text-black mb-6 md:mb-10 max-w-3xl mx-auto font-bold leading-relaxed">
-              <span className="italic font-black">"On détecte, on répare, vous roulez."</span>
+              Diagnostic, hybride et performance moteur
             </p>
 
             <div className="flex flex-col sm:flex-row gap-5 justify-center items-center">
               <Link href="/reserver" className="w-full sm:w-auto px-8 py-4 bg-[#43A047] text-white rounded-full font-bold text-lg shadow-[0_10px_25px_rgba(67,160,71,0.4)] hover:bg-[#388E3C] hover:shadow-[0_15px_35px_rgba(67,160,71,0.5)] hover:-translate-y-1 active:scale-95 transition-all duration-300">
-                Réserver une intervention
+                Prendre rendez-vous
               </Link>
               <Link href="/services" className="w-full sm:w-auto px-8 py-4 bg-white/90 backdrop-blur-md text-[#E30613] border border-white/50 shadow-lg rounded-full font-bold text-lg hover:border-[#E30613] hover:bg-white hover:-translate-y-1 active:scale-95 transition-all duration-300">
                 Découvrir nos services
@@ -99,6 +96,9 @@ export default function Home() {
             <div className="inline-block bg-white/80 px-4 py-1.5 rounded-full mb-4 mx-auto border border-[#E30613]/20 shadow-sm flex justify-center w-max">
               <span className="text-[#E30613] font-bold text-xs uppercase tracking-wider">Expertise Technique</span>
             </div>
+            <div className="flex justify-center mb-4">
+              <Image src="/logo-ds_hylec_neuf.webp" alt="DS HY'LEC" width={160} height={64} className="h-16 w-auto object-contain" />
+            </div>
             <h2 className="text-2xl md:text-4xl lg:text-5xl font-black text-center text-gray-900 mb-6 drop-shadow-sm">
               Nos prestations <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#E30613] to-[#B3050F]">sur-mesure</span>
             </h2>
@@ -110,8 +110,9 @@ export default function Home() {
           {/* Grille des services */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {SERVICES.map((srv, index) => (
-              <div
+              <Link
                 key={srv.id}
+                href={`/services/${srv.slug}`}
                 className={`animate-in fade-in slide-in-from-bottom-12 duration-700 fill-mode-both bg-white/95 backdrop-blur-xl rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.15)] hover:-translate-y-2 transition-all duration-500 group flex flex-col overflow-hidden relative
                   ${srv.type === 'hybride' ? 'border border-[#43A047]/30 hover:border-[#43A047]/60' : 'border border-white/80'}
                   ${srv.type === 'premium' ? 'bg-gradient-to-br from-[#43A047] to-[#2E7D32] text-white border-0' : ''}
@@ -143,31 +144,17 @@ export default function Home() {
                   </p>
 
                   <div className="flex flex-col gap-2 mt-auto">
-                    <Link
-                      href={`/services/${srv.slug}`}
+                    <div
                       className={`font-bold text-xs flex items-center justify-between w-full transition-all p-3 rounded-xl
-                        ${srv.type === 'premium' ? 'bg-white/20 text-white hover:bg-white/30' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-gray-900'}
+                        ${srv.type === 'premium' ? 'bg-white/20 text-white' : 'bg-gray-50 text-gray-600 group-hover:bg-gray-100 group-hover:text-gray-900'}
                       `}
                     >
                       <span>En savoir plus</span>
-                      <span>→</span>
-                    </Link>
-                    <Link
-                      href={`/reserver?service=${srv.id}`}
-                      className={`font-bold text-sm flex items-center justify-between w-full transition-all p-4 rounded-2xl
-                        ${srv.type === 'premium'
-                          ? 'bg-white text-[#43A047] shadow-xl hover:scale-[1.02] hover:shadow-2xl'
-                          : srv.type === 'hybride'
-                            ? 'bg-green-50 text-[#43A047] group-hover:bg-[#43A047] group-hover:text-white'
-                            : 'bg-red-50 text-[#E30613] group-hover:bg-[#E30613] group-hover:text-white'
-                        }`}
-                    >
-                      <span>{srv.type === 'premium' ? 'Choisir ce pack' : 'Réserver maintenant'}</span>
-                      <span className="transform group-hover:translate-x-1 transition-transform duration-300">→</span>
-                    </Link>
+                      <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

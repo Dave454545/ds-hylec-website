@@ -97,7 +97,7 @@ export default function Home() {
               <span className="text-[#E30613] font-bold text-xs uppercase tracking-wider">Expertise Technique</span>
             </div>
             <div className="flex justify-center mb-4">
-              <Image src="/logo-ds_hylec_neuf.webp" alt="DS HY'LEC" width={160} height={64} className="h-16 w-auto object-contain" />
+              <Image src="/logo-ds_hylec_neuf.webp" alt="DS HY'LEC" width={224} height={112} className="h-28 w-auto object-contain" />
             </div>
             <h2 className="text-2xl md:text-4xl lg:text-5xl font-black text-center text-gray-900 mb-6 drop-shadow-sm">
               Nos prestations <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#E30613] to-[#B3050F]">sur-mesure</span>

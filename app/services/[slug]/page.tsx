@@ -74,8 +74,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
           <div className="animate-in fade-in slide-in-from-bottom-6 duration-700 delay-150 fill-mode-both bg-white/90 backdrop-blur-xl rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] border border-white/80 p-6 sm:p-8 md:p-10 mb-6">
             <h2 className="text-lg sm:text-xl font-black text-gray-800 mb-4 flex items-center gap-2">
               <svg viewBox="0 0 24 24" fill="none" stroke="#E30613" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" style={{width:'16px', height:'16px', display:'inline-block', flexShrink:0}}>
-                <circle cx="11" cy="11" r="8"/>
-                <path d="m21 21-4.35-4.35"/>
+                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
               </svg> À propos de cette prestation
             </h2>
             <p className="text-gray-700 leading-relaxed font-medium text-sm sm:text-base whitespace-pre-line">

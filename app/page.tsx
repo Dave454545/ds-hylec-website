@@ -72,8 +72,11 @@ export default function Home() {
               <span className="text-black">& performance moteur</span>.
             </h1>
 
+            <p className="text-base sm:text-xl md:text-2xl text-black mb-3 md:mb-4 max-w-3xl mx-auto font-bold leading-relaxed">
+              La durée de vie d'une voiture dépend de son entretien, arrêtez-vous avant qu'elle ne vous arrête pour éviter de perdre plus de temps et d'argent.
+            </p>
             <p className="text-base sm:text-xl md:text-2xl text-black mb-6 md:mb-10 max-w-3xl mx-auto font-bold leading-relaxed">
-              Diagnostic, hybride et performance moteur
+              <span className="italic font-black">"On détecte, on répare, vous roulez."</span>
             </p>
 
             <div className="flex flex-col sm:flex-row gap-5 justify-center items-center">

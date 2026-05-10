@@ -184,7 +184,7 @@ export async function POST(request: Request) {
     const resetLink = `${process.env.NEXTAUTH_URL}/reset-password?email=${data.email}`;
     try {
       await resend.emails.send({
-        from:    "DS HY'LEC <onboarding@resend.dev>",
+        from:    "DS HY'LEC <contact@dshylec.fr>",
         to:      [data.email],
         subject: 'Confirmation de votre réservation ⚡',
         react:   <WelcomeEmail prenom={prenom} resetLink={resetLink} />,
@@ -195,7 +195,7 @@ export async function POST(request: Request) {
         : 'Aucun problème spécifique signalé';
 
       await resend.emails.send({
-        from:    "DS HY'LEC <onboarding@resend.dev>",
+        from:    "DS HY'LEC <contact@dshylec.fr>",
         to:      ['coulibalydavid31@gmail.com'],
         subject: '🚀 Nouveau RDV : ' + data.marque + ' ' + data.modele,
         html: `

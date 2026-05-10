@@ -85,6 +85,12 @@ export const WelcomeEmail: React.FC<Readonly<WelcomeEmailProps>> = ({
           © {new Date().getFullYear()} DS HY'LEC. Tous droits réservés.<br/>
           Intervention à domicile pour particuliers et professionnels.
         </p>
+        <p style={{ fontSize: '11px', color: '#666', margin: '10px 0 0 0' }}>
+          Cet email vous est envoyé suite à votre demande de rendez-vous sur dshylec.fr.<br/>
+          <a href="mailto:contact@dshylec.fr?subject=Désinscription" style={{ color: '#888', textDecoration: 'underline' }}>
+            Se désinscrire
+          </a>
+        </p>
       </div>
 
     </div>

@@ -194,6 +194,7 @@ export async function POST(request: Request) {
         replyTo: 'contact@dshylec.fr',
         to:      [data.email],
         subject: 'Confirmation de votre reservation DS HY\'LEC',
+        headers: { 'X-Entity-Ref-ID': new Date().getTime().toString() },
         react:   <WelcomeEmail prenom={prenom} resetLink={resetLink} services={servicesArr} />,
       });
 
@@ -206,9 +207,10 @@ export async function POST(request: Request) {
         replyTo: 'contact@dshylec.fr',
         to:      ['contact@dshylec.fr'],
         subject: 'Nouveau RDV - ' + data.marque + ' ' + data.modele,
+        headers: { 'X-Entity-Ref-ID': new Date().getTime().toString() },
         html: `
           <div style="font-family: sans-serif; color: #333;">
-            <h2>Nouveau client !</h2>
+            <h2>Nouveau rendez-vous</h2>
             <p><strong>Client :</strong> ${prenom} ${nom} <span style="background:#E30613;color:white;padding:3px 8px;border-radius:12px;font-size:12px;font-weight:bold;margin-left:8px;">${data.typeClient}</span></p>
             <p><strong>Téléphone :</strong> ${data.tel}</p>
             <p><strong>Prestation(s) :</strong> ${servicesArr.map((s: string) => s.replace(/_/g, ' ')).join(' + ')}</p>

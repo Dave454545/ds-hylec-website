@@ -196,7 +196,7 @@ export async function POST(request: Request) {
 
       await resend.emails.send({
         from:    "DS HY'LEC <contact@dshylec.fr>",
-        to:      ['coulibalydavid31@gmail.com'],
+        to:      ['contact@dshylec.fr'],
         subject: '🚀 Nouveau RDV : ' + data.marque + ' ' + data.modele,
         html: `
           <div style="font-family: sans-serif; color: #333;">

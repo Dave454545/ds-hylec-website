@@ -3,11 +3,13 @@ import * as React from 'react';
 interface WelcomeEmailProps {
   prenom: string;
   resetLink: string;
+  services?: string[];
 }
 
 export const WelcomeEmail: React.FC<Readonly<WelcomeEmailProps>> = ({
   prenom,
   resetLink,
+  services,
 }) => (
   <div style={{ fontFamily: 'Arial, sans-serif', backgroundColor: '#F8F9FA', padding: '40px 20px', color: '#333' }}>
     <div style={{ maxWidth: '600px', margin: '0 auto', backgroundColor: '#ffffff', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}>
@@ -35,6 +37,19 @@ export const WelcomeEmail: React.FC<Readonly<WelcomeEmailProps>> = ({
         <p style={{ fontSize: '16px', lineHeight: '1.6', color: '#555' }}>
           Un espace client sécurisé a été automatiquement créé pour vous. Il vous permettra de suivre vos factures, l'entretien de vos véhicules et d'accéder à votre <strong>cagnotte de parrainage</strong>.
         </p>
+
+        {services && services.length > 0 && (
+          <div style={{ backgroundColor: '#f0f9f0', border: '1px solid #c8e6c9', borderRadius: '12px', padding: '16px 20px', margin: '24px 0' }}>
+            <p style={{ margin: '0 0 10px 0', fontWeight: 'bold', color: '#2E7D32', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+              Prestation(s) réservée(s)
+            </p>
+            {services.map((s, i) => (
+              <p key={i} style={{ margin: '4px 0', color: '#1A1A1A', fontWeight: 'bold', fontSize: '15px' }}>
+                • {s.replace(/_/g, ' ')}
+              </p>
+            ))}
+          </div>
+        )}
 
         {/* BOUTON D'ACTION : Nouveau vert */}
         <div style={{ textAlign: 'center', marginTop: '40px', marginBottom: '40px' }}>

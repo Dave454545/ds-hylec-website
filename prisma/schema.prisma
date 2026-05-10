@@ -62,6 +62,7 @@ model Reservation {
   userId           String?
   vehiculeId       String?
   service          Service
+  services         String[]
   dateIntervention DateTime
   adresse          String
   

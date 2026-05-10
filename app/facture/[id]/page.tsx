@@ -133,9 +133,14 @@ export default async function FacturePage({ params }: { params: Promise<{ id: st
               <tbody>
                 <tr className="border-b border-gray-100">
                   <td className="py-6 px-6">
-                    <p className="font-bold text-gray-900 text-lg">{reservation.service.replace(/_/g, ' ')}</p>
+                    {((reservation as any).services?.length > 0
+                      ? (reservation as any).services
+                      : [reservation.service]
+                    ).map((s: string, i: number) => (
+                      <p key={i} className="font-bold text-gray-900 text-lg leading-snug">{s.replace(/_/g, ' ')}</p>
+                    ))}
                     {reservation.problemes && reservation.problemes.length > 0 && (
-                      <p className="text-sm text-gray-500 mt-1">
+                      <p className="text-sm text-gray-500 mt-2">
                         Symptômes traités : {reservation.problemes.join(', ')}
                       </p>
                     )}

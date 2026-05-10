@@ -148,7 +148,9 @@ export default function DashboardClientUI({ user, vehicules, factures, parrainag
                   <div key={rdv.id} className={`p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-white/50 transition-colors ${idx !== user.reservations.length - 1 ? 'border-b border-gray-100/80' : ''}`}>
                     <div>
                       <div className="flex items-center gap-3 mb-2">
-                        <p className="font-black text-[#E30613]">{rdv.service.replace(/_/g, ' ')}</p>
+                        <p className="font-black text-[#E30613]">
+                          {((rdv.services?.length > 0 ? rdv.services : [rdv.service]) as string[]).map((s: string) => s.replace(/_/g, ' ')).join(' + ')}
+                        </p>
                         <span className={`px-2.5 py-1 rounded-md text-[10px] font-black uppercase tracking-widest ${rdv.statut === 'TERMINEE' ? 'bg-[#43A047]/10 text-[#43A047] border border-[#43A047]/20' : 'bg-orange-100 text-orange-700 border border-orange-200'}`}>
                           {rdv.statut}
                         </span>

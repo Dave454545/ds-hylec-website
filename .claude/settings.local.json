@@ -6,7 +6,10 @@
       "Bash(git add *)",
       "Bash(git commit *)",
       "Bash(git push *)",
-      "Bash(git mv *)"
+      "Bash(git mv *)",
+      "Bash(Get-ChildItem -Recurse -Name)",
+      "Bash(xargs grep -l \"facture\\\\|invoice\")",
+      "Bash(npx prisma *)"
     ]
   }
 }

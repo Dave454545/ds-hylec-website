@@ -99,6 +99,8 @@ export async function POST(request: Request) {
   const prenom = data.prenom ?? names[0] ?? 'Client';
   const nom    = data.nom    ?? (names.slice(1).join(' ') || 'Client');
 
+  const servicesArr = data.services.length > 0 ? data.services : [data.service];
+
   try {
     const resultat = await prisma.$transaction(async (tx) => {
 
@@ -124,9 +126,12 @@ export async function POST(request: Request) {
         },
       });
 
-      // --- 3. TARIFICATION DYNAMIQUE ---
-      const tarifDb   = await tx.tarification.findUnique({ where: { service: data.service } });
-      let prixDeBase  = tarifDb ? tarifDb.prix : 89.0;
+      // --- 3. TARIFICATION DYNAMIQUE (cumul multi-services) ---
+      let prixDeBase = 0;
+      for (const svc of servicesArr) {
+        const tarifDb = await tx.tarification.findUnique({ where: { service: svc as any } });
+        prixDeBase += tarifDb ? tarifDb.prix : 89.0;
+      }
       let montantFinal = prixDeBase;
       let remise       = 0;
 
@@ -166,6 +171,7 @@ export async function POST(request: Request) {
           userId:          user.id,
           vehiculeId:      vehicule.id,
           service:         data.service,
+          services:        servicesArr,
           dateIntervention: new Date(data.date),
           adresse:         data.adresse,
           moyenPaiement:   data.moyenPaiement,
@@ -173,7 +179,7 @@ export async function POST(request: Request) {
           remiseAppliquee: remise,
           statut:          'EN_ATTENTE',
           problemes:       data.problemes,
-          notes:           `Véhicule: ${data.marque} ${data.modele}${data.services.length > 1 ? ` | Services: ${data.services.join(', ')}` : ''}`,
+          notes:           `Véhicule: ${data.marque} ${data.modele}`,
         },
       });
 
@@ -188,7 +194,7 @@ export async function POST(request: Request) {
         replyTo: 'contact@dshylec.fr',
         to:      [data.email],
         subject: 'Confirmation de votre reservation DS HY\'LEC',
-        react:   <WelcomeEmail prenom={prenom} resetLink={resetLink} />,
+        react:   <WelcomeEmail prenom={prenom} resetLink={resetLink} services={servicesArr} />,
       });
 
       const problemesText = data.problemes.length > 0
@@ -205,7 +211,7 @@ export async function POST(request: Request) {
             <h2>Nouveau client !</h2>
             <p><strong>Client :</strong> ${prenom} ${nom} <span style="background:#E30613;color:white;padding:3px 8px;border-radius:12px;font-size:12px;font-weight:bold;margin-left:8px;">${data.typeClient}</span></p>
             <p><strong>Téléphone :</strong> ${data.tel}</p>
-            <p><strong>Prestation :</strong> ${data.service.replace(/_/g, ' ')}</p>
+            <p><strong>Prestation(s) :</strong> ${servicesArr.map((s: string) => s.replace(/_/g, ' ')).join(' + ')}</p>
             <p><strong>Véhicule :</strong> ${data.marque} ${data.modele} (${data.carburant})</p>
             <p><strong>Symptômes signalés :</strong> <span style="color:#E30613;font-weight:bold;">${problemesText}</span></p>
             <p><strong>Prix estimé :</strong> <span style="color:#43A047;font-size:18px;font-weight:bold;">${resultat.montantFinal} €</span> ${resultat.remise > 0 ? '(Client parrainé ! -10€)' : ''}</p>

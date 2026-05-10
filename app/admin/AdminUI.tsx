@@ -278,7 +278,11 @@ export default function AdminUI({ initialReservations, initialUsers, initialIndi
                   <div className="p-6">
                     <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 mb-6">
                       <div>
-                        <h2 className="text-xl font-black text-gray-900 mb-2">{rdv.service.replace(/_/g, ' ')}</h2>
+                        <div className="flex flex-wrap gap-1.5 mb-2">
+                          {((rdv.services?.length > 0 ? rdv.services : [rdv.service]) as string[]).map((s: string, i: number) => (
+                            <span key={i} className="bg-gray-900/10 text-gray-900 px-2.5 py-1 rounded-lg text-sm font-black">{s.replace(/_/g, ' ')}</span>
+                          ))}
+                        </div>
                         <div className="flex items-center gap-2">
                           <span className="bg-[#E30613]/10 text-[#E30613] px-2.5 py-1 rounded-md text-xs font-black uppercase tracking-wider">{rdv.vehicule?.carburant}</span>
                           <p className="text-gray-700 font-bold text-sm">{rdv.vehicule?.marque} {rdv.vehicule?.modele}</p>

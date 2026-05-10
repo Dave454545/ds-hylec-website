@@ -1,6 +1,18 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { SERVICES } from '@/lib/services-data';
+
+export const metadata: Metadata = {
+  title: "Nos Prestations — Diagnostic, Hybride, FAP | DS HY'LEC",
+  description: "Découvrez toutes les prestations DS HY'LEC : diagnostic électronique, décalaminage, régénération FAP, diagnostic hybride. Intervention à domicile en Île-de-France.",
+  alternates: { canonical: "https://dshylec.fr/services" },
+  openGraph: {
+    title: "Nos Prestations — DS HY'LEC",
+    description: "Diagnostic, hybride, FAP, EGR. Intervention à domicile en Île-de-France.",
+    url: "https://dshylec.fr/services",
+  },
+};
 
 export default function ServicesPage() {
   return (

@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
@@ -5,6 +6,22 @@ import { SERVICES, getServiceBySlug } from '@/lib/services-data';
 
 export function generateStaticParams() {
   return SERVICES.map((s) => ({ slug: s.slug }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const service = getServiceBySlug(slug);
+  if (!service) return {};
+  return {
+    title: `${service.title} — DS HY'LEC`,
+    description: service.descCourte + " Intervention à domicile en Île-de-France.",
+    alternates: { canonical: `https://dshylec.fr/services/${slug}` },
+    openGraph: {
+      title: `${service.title} — DS HY'LEC`,
+      description: service.descCourte + " Intervention à domicile en Île-de-France.",
+      url: `https://dshylec.fr/services/${slug}`,
+    },
+  };
 }
 
 export default async function ServiceDetailPage({ params }: { params: Promise<{ slug: string }> }) {

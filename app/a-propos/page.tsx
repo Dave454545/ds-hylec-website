@@ -1,5 +1,17 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
+
+export const metadata: Metadata = {
+  title: "À propos — DS HY'LEC, Expert Diagnostic & Hybride",
+  description: "DS HY'LEC, spécialiste du diagnostic automobile et des véhicules hybrides. Intervention à domicile en Île-de-France pour particuliers et professionnels.",
+  alternates: { canonical: "https://dshylec.fr/a-propos" },
+  openGraph: {
+    title: "À propos — DS HY'LEC",
+    description: "Expert diagnostic automobile et hybride. Intervention à domicile en Île-de-France.",
+    url: "https://dshylec.fr/a-propos",
+  },
+};
 
 export default function APropos() {
   const avantages = [

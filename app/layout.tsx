@@ -27,8 +27,9 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "DS HY'LEC — Expert Hybride & Diagnostic Auto à Domicile",
-  description: "Expert hybrid, diagnostic électronique et performance moteur. Intervention à domicile ou sur votre lieu de travail.",
+  title: "DS HY'LEC — Diagnostic Auto & Expert Hybride à Domicile",
+  description: "DS HY'LEC, expert en diagnostic électronique et véhicules hybrides. Intervention à domicile en Île-de-France. Diagnostic, FAP, batterie hybride. On détecte, on répare, vous roulez.",
+  keywords: "diagnostic automobile, expert hybride, intervention domicile, FAP, batterie hybride, diagnostic électronique, Paris, Île-de-France",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
@@ -43,6 +44,28 @@ export const metadata: Metadata = {
     icon: '/logo-ds_hylec_neuf.ico',
     apple: '/logo-ds_hylec_neuf.webp',
   },
+  openGraph: {
+    title: "DS HY'LEC — Expert Diagnostic & Hybride",
+    description: "Intervention à domicile. Diagnostic électronique, FAP, hybride. On détecte, on répare, vous roulez.",
+    url: "https://dshylec.fr",
+    siteName: "DS HY'LEC",
+    locale: "fr_FR",
+    type: "website",
+    images: [{ url: "/logo-ds_hylec_neuf.webp", width: 400, height: 200 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "DS HY'LEC — Expert Diagnostic & Hybride",
+    description: "Intervention à domicile. Diagnostic, FAP, hybride.",
+  },
+  alternates: {
+    canonical: "https://dshylec.fr",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
 };
 
 export default function RootLayout({
@@ -56,6 +79,35 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/ds_hylec_logo.png" />
         {/* Preconnect to Unsplash CDN used for service card images */}
         <link rel="preconnect" href="https://images.unsplash.com" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "LocalBusiness",
+            "name": "DS HY'LEC",
+            "description": "Expert en diagnostic automobile et véhicules hybrides. Intervention à domicile.",
+            "url": "https://dshylec.fr",
+            "telephone": "0753290244",
+            "email": "contact@dshylec.fr",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Paris",
+              "addressRegion": "Île-de-France",
+              "addressCountry": "FR"
+            },
+            "serviceArea": {
+              "@type": "GeoCircle",
+              "geoMidpoint": {
+                "@type": "GeoCoordinates",
+                "latitude": 48.8566,
+                "longitude": 2.3522
+              },
+              "geoRadius": "50000"
+            },
+            "priceRange": "€€",
+            "openingHours": "Mo-Sa 08:00-19:00"
+          }) }}
+        />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Providers>

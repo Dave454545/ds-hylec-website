@@ -185,8 +185,9 @@ export async function POST(request: Request) {
     try {
       await resend.emails.send({
         from:    "DS HY'LEC <contact@dshylec.fr>",
+        replyTo: 'contact@dshylec.fr',
         to:      [data.email],
-        subject: 'Confirmation de votre réservation ⚡',
+        subject: 'Confirmation de votre reservation DS HY\'LEC',
         react:   <WelcomeEmail prenom={prenom} resetLink={resetLink} />,
       });
 
@@ -196,8 +197,9 @@ export async function POST(request: Request) {
 
       await resend.emails.send({
         from:    "DS HY'LEC <contact@dshylec.fr>",
+        replyTo: 'contact@dshylec.fr',
         to:      ['contact@dshylec.fr'],
-        subject: '🚀 Nouveau RDV : ' + data.marque + ' ' + data.modele,
+        subject: 'Nouveau RDV - ' + data.marque + ' ' + data.modele,
         html: `
           <div style="font-family: sans-serif; color: #333;">
             <h2>Nouveau client !</h2>

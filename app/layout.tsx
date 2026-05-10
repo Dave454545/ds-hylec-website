@@ -39,6 +39,10 @@ export const metadata: Metadata = {
   formatDetection: {
     telephone: false,
   },
+  icons: {
+    icon: '/logo-ds_hylec_neuf.ico',
+    apple: '/logo-ds_hylec_neuf.webp',
+  },
 };
 
 export default function RootLayout({

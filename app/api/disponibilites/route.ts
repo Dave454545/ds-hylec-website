@@ -55,7 +55,7 @@ export async function GET(request: Request) {
       return `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
     });
 
-    const allSlots       = ["09:00", "11:00", "14:00", "16:00"];
+    const allSlots       = ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"];
     const availableSlots = allSlots.filter(slot => !reservedHours.includes(slot));
 
     return NextResponse.json({ slots: availableSlots });

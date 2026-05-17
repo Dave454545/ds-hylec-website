@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -34,6 +34,10 @@ export default function Reserver() {
   // États pour la gestion des créneaux
   const [availableSlots, setAvailableSlots] = useState<string[]>([]);
   const [loadingSlots, setLoadingSlots] = useState(false);
+
+  // Refs pour distinguer scroll vs tap sur la liste services mobile
+  const touchStartY = useRef(0);
+  const isScrollingTouch = useRef(false);
 
   // États pour l'autocomplétion
   const [showBrands, setShowBrands] = useState(false);
@@ -300,13 +304,26 @@ export default function Reserver() {
             <div className={`${stepAnim} w-full`}>
               <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mb-2 drop-shadow-sm text-center sm:text-left">Quel(s) service(s) ?</h2>
               <p className="text-xs text-gray-400 font-medium mb-4 text-center sm:text-left">Vous pouvez sélectionner plusieurs services</p>
-              <div className="flex flex-col gap-3 h-[380px] sm:h-[440px] overflow-y-auto pr-1 hide-scrollbar pb-8">
+              <div
+                className="flex flex-col gap-3 h-[380px] sm:h-[440px] overflow-y-auto pr-1 hide-scrollbar pb-8 touch-pan-y"
+                style={{ WebkitOverflowScrolling: 'touch' }}
+              >
                 {servicesList.map((item) => {
                   const selected = services.includes(item.value);
                   return (
                     <div
                       key={item.value}
+                      onTouchStart={(e) => {
+                        touchStartY.current = e.touches[0].clientY;
+                        isScrollingTouch.current = false;
+                      }}
+                      onTouchMove={(e) => {
+                        if (Math.abs(e.touches[0].clientY - touchStartY.current) > 8) {
+                          isScrollingTouch.current = true;
+                        }
+                      }}
                       onClick={() => {
+                        if (isScrollingTouch.current) return;
                         if (selected) setServices(services.filter(s => s !== item.value));
                         else setServices([...services, item.value]);
                       }}
@@ -443,7 +460,7 @@ export default function Reserver() {
                   {loadingSlots ? (
                     <div className="text-center py-6 text-gray-400 font-bold text-sm sm:text-base animate-pulse bg-gray-50 rounded-xl">Recherche...</div>
                   ) : availableSlots.length > 0 ? (
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 w-full">
+                    <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-3 w-full">
                       {availableSlots.map(slot => (
                         <button
                           key={slot}

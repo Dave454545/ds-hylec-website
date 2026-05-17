@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function APropos() {
   const avantages = [
-    { icon: "🏠", title: "Intervention à domicile", desc: "Nous venons chez vous ou sur votre lieu de travail, sans contrainte de déplacement." },
+    { icon: "🏠", title: "Intervention à domicile — Paris & Île-de-France", desc: "Nous venons chez vous ou sur votre lieu de travail, sans contrainte de déplacement." },
     { icon: "⏱️", title: "Gain de temps", desc: "Plus besoin de déposer votre véhicule en garage. Nous intervenons quand ça vous arrange." },
     { icon: "⚡", title: "Expertise hybride", desc: "Spécialistes des systèmes hybrides haute tension, de la batterie à l'onduleur." },
     { icon: "🔍", title: "Diagnostic précis", desc: "Valise professionnelle, lecture des défauts, analyse des capteurs et rapport clair." },

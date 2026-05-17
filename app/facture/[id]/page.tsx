@@ -65,7 +65,7 @@ export default async function FacturePage({ params }: { params: Promise<{ id: st
               <div className="relative h-16 w-36 sm:h-20 sm:w-48 mb-3">
                 <Image src="/ds_hylec_logo.png" alt="DS HY'LEC" fill className="object-contain object-left" priority />
               </div>
-              <p className="text-gray-500 font-medium text-sm">Intervention à domicile</p>
+              <p className="text-gray-500 font-medium text-sm">INTERVENTION À DOMICILE — PARIS & ÎLE-DE-FRANCE</p>
               <p className="text-gray-500 font-medium text-sm">Expertise Hybride & Dépollution</p>
             </div>
             <div className="sm:text-right">

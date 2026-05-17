@@ -63,7 +63,7 @@ export default function Home() {
 
             <div className="inline-block bg-white/90 backdrop-blur-md px-4 py-2 md:px-5 md:py-2.5 rounded-full mb-4 md:mb-6 shadow-sm border border-white/50 hover:scale-105 transition-transform duration-300 cursor-default">
               <span className="text-[#43A047] font-black text-xs uppercase tracking-[0.2em]">
-                Intervention à domicile
+                INTERVENTION À DOMICILE — PARIS & ÎLE-DE-FRANCE
               </span>
             </div>
 

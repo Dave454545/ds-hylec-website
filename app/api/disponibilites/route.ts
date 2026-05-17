@@ -38,9 +38,16 @@ export async function GET(request: Request) {
       },
     });
 
-    if (indisponibilites.length > 0) {
+    // Journée entière bloquée → aucun créneau
+    if (indisponibilites.some(i => i.jourEntier)) {
       return NextResponse.json({ slots: [] });
     }
+
+    // Créneaux individuellement bloqués par l'admin
+    const adminBlockedSlots = indisponibilites.map(i => {
+      const d = new Date(i.dateDebut);
+      return `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
+    });
 
     // Créneaux déjà réservés ce jour
     const reservations = await prisma.reservation.findMany({
@@ -56,7 +63,7 @@ export async function GET(request: Request) {
     });
 
     const allSlots       = ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"];
-    const availableSlots = allSlots.filter(slot => !reservedHours.includes(slot));
+    const availableSlots = allSlots.filter(slot => !reservedHours.includes(slot) && !adminBlockedSlots.includes(slot));
 
     return NextResponse.json({ slots: availableSlots });
 

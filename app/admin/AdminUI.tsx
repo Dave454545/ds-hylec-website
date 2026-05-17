@@ -2,7 +2,9 @@
 import { useState } from 'react';
 import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link'; 
+import Link from 'next/link';
+
+const ALL_SLOTS = ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"];
 
 export default function AdminUI({ initialReservations, initialUsers, initialIndisponibilites, initialTarifications, stats }: any) {
   const [adminTab, setAdminTab] = useState('planning'); 
@@ -10,10 +12,22 @@ export default function AdminUI({ initialReservations, initialUsers, initialIndi
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const router = useRouter();
 
-  // États pour le formulaire de congés
+  // États pour le formulaire de congés / blocage horaires
   const [dateConge, setDateConge] = useState('');
   const [motifConge, setMotifConge] = useState('');
   const [loadingConge, setLoadingConge] = useState(false);
+  const [jourEntierMode, setJourEntierMode] = useState(true);
+  const [selectedCreneaux, setSelectedCreneaux] = useState<string[]>([]);
+
+  // Groupement des indisponibilités par date pour l'affichage
+  const indispoGroups = Object.entries(
+    (initialIndisponibilites || []).reduce((acc: Record<string, any[]>, i: any) => {
+      const key = new Date(i.dateDebut).toDateString();
+      if (!acc[key]) acc[key] = [];
+      acc[key].push(i);
+      return acc;
+    }, {} as Record<string, any[]>)
+  ) as [string, any[]][];
 
   // États pour les Tarifications
   const [prixInputs, setPrixInputs] = useState<Record<string, string>>(() => {
@@ -102,19 +116,28 @@ export default function AdminUI({ initialReservations, initialUsers, initialIndi
   const ajouterConge = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!dateConge) return;
+    if (!jourEntierMode && selectedCreneaux.length === 0) {
+      alert("Sélectionnez au moins un créneau à bloquer.");
+      return;
+    }
     setLoadingConge(true);
     try {
+      const body: any = { date: dateConge, motif: motifConge };
+      if (!jourEntierMode) body.heures = selectedCreneaux;
+
       const res = await fetch('/api/admin/indisponibilites', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ date: dateConge, motif: motifConge })
+        body: JSON.stringify(body),
       });
       if (res.ok) {
         setDateConge('');
         setMotifConge('');
+        setJourEntierMode(true);
+        setSelectedCreneaux([]);
         router.refresh();
       } else {
-        alert("Erreur lors de l'ajout du congé.");
+        alert("Erreur lors de l'ajout du blocage.");
       }
     } catch (error) {
       alert("Erreur réseau.");
@@ -124,17 +147,29 @@ export default function AdminUI({ initialReservations, initialUsers, initialIndi
   };
 
   const supprimerConge = async (id: string) => {
-    if (!confirm("Débloquer cette date ? Les clients pourront à nouveau réserver.")) return;
+    if (!confirm("Débloquer cette entrée ? Les clients pourront à nouveau réserver.")) return;
     try {
       const res = await fetch('/api/admin/indisponibilites', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id })
+        body: JSON.stringify({ id }),
       });
       if (res.ok) router.refresh();
-    } catch (error) {
-      alert("Erreur réseau.");
-    }
+      else alert("Erreur lors de la suppression.");
+    } catch { alert("Erreur réseau."); }
+  };
+
+  const supprimerCongeDate = async (dateStr: string) => {
+    if (!confirm("Débloquer tous les créneaux de cette journée ?")) return;
+    try {
+      const res = await fetch('/api/admin/indisponibilites', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ date: dateStr }),
+      });
+      if (res.ok) router.refresh();
+      else alert("Erreur lors de la suppression.");
+    } catch { alert("Erreur réseau."); }
   };
 
   const handleUpdateTarif = async (serviceValue: string) => {
@@ -387,29 +422,75 @@ export default function AdminUI({ initialReservations, initialUsers, initialIndi
             <div className="bg-white/95 backdrop-blur-xl rounded-[24px] shadow-[0_10px_30px_rgba(0,0,0,0.05)] border border-white/60 p-8 mb-8">
               <div className="flex items-center gap-3 mb-2">
                 <span className="text-2xl">🏖️</span>
-                <h2 className="text-2xl font-black text-gray-900 drop-shadow-sm">Bloquer une journée</h2>
+                <h2 className="text-2xl font-black text-gray-900 drop-shadow-sm">Bloquer une disponibilité</h2>
               </div>
-              <p className="text-sm text-gray-600 mb-8 font-medium">Sélectionnez une date pour empêcher les clients de prendre rendez-vous.</p>
-              
+              <p className="text-sm text-gray-600 mb-6 font-medium">Bloquez une journée entière ou des créneaux spécifiques.</p>
+
+              {/* Toggle journée / créneaux */}
+              <div className="flex gap-3 mb-6">
+                <button
+                  type="button"
+                  onClick={() => { setJourEntierMode(true); setSelectedCreneaux([]); }}
+                  className={`flex-1 py-3 rounded-xl font-bold text-sm border-2 transition-all ${jourEntierMode ? 'border-[#43A047] bg-[#43A047] text-white shadow-md' : 'border-gray-200 text-gray-500 bg-white hover:border-gray-300'}`}
+                >
+                  Journée entière
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setJourEntierMode(false)}
+                  className={`flex-1 py-3 rounded-xl font-bold text-sm border-2 transition-all ${!jourEntierMode ? 'border-[#E30613] bg-[#E30613] text-white shadow-md' : 'border-gray-200 text-gray-500 bg-white hover:border-gray-300'}`}
+                >
+                  Créneaux spécifiques
+                </button>
+              </div>
+
+              {/* Sélecteur de créneaux */}
+              {!jourEntierMode && (
+                <div className="mb-6">
+                  <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Créneaux à bloquer</p>
+                  <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
+                    {ALL_SLOTS.map(slot => {
+                      const active = selectedCreneaux.includes(slot);
+                      return (
+                        <button
+                          key={slot}
+                          type="button"
+                          onClick={() => {
+                            if (active) setSelectedCreneaux(selectedCreneaux.filter(s => s !== slot));
+                            else setSelectedCreneaux([...selectedCreneaux, slot]);
+                          }}
+                          className={`py-2.5 rounded-xl font-black text-sm border-2 transition-all ${active ? 'bg-[#E30613] text-white border-[#E30613] shadow-md scale-105' : 'bg-white text-gray-600 border-gray-200 hover:border-[#E30613]/50'}`}
+                        >
+                          {slot}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {selectedCreneaux.length > 0 && (
+                    <p className="text-xs text-[#E30613] font-bold mt-2">{selectedCreneaux.length} créneau{selectedCreneaux.length > 1 ? 'x' : ''} sélectionné{selectedCreneaux.length > 1 ? 's' : ''}</p>
+                  )}
+                </div>
+              )}
+
               <form onSubmit={ajouterConge} className="flex flex-col sm:flex-row gap-4">
-                <input 
-                  type="date" 
+                <input
+                  type="date"
                   value={dateConge}
                   onChange={(e) => setDateConge(e.target.value)}
                   min={new Date().toISOString().split('T')[0]}
                   required
                   className="flex-1 border-2 border-gray-200 rounded-xl p-4 bg-white/80 backdrop-blur-sm outline-none focus:border-[#43A047] focus:bg-white font-bold text-gray-800 shadow-inner transition-colors"
                 />
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   placeholder="Motif (ex: Vacances)"
                   value={motifConge}
                   onChange={(e) => setMotifConge(e.target.value)}
                   className="flex-[2] border-2 border-gray-200 rounded-xl p-4 bg-white/80 backdrop-blur-sm outline-none focus:border-[#43A047] focus:bg-white font-bold text-gray-800 shadow-inner transition-colors"
                 />
-                <button 
-                  type="submit" 
-                  disabled={loadingConge || !dateConge}
+                <button
+                  type="submit"
+                  disabled={loadingConge || !dateConge || (!jourEntierMode && selectedCreneaux.length === 0)}
                   className="bg-gradient-to-r from-[#43A047] to-[#2E7D32] hover:shadow-lg hover:-translate-y-0.5 text-white px-8 py-4 rounded-xl font-black transition-all shadow-[#43A047]/30 disabled:opacity-50 disabled:hover:translate-y-0"
                 >
                   {loadingConge ? '...' : 'Bloquer'}
@@ -417,25 +498,49 @@ export default function AdminUI({ initialReservations, initialUsers, initialIndi
               </form>
             </div>
 
-            <h2 className="text-xl font-black text-gray-900 mb-5 ml-2 drop-shadow-sm">Jours actuellement bloqués</h2>
+            <h2 className="text-xl font-black text-gray-900 mb-5 ml-2 drop-shadow-sm">Blocages actuels</h2>
             <div className="space-y-4">
-              {(!initialIndisponibilites || initialIndisponibilites.length === 0) ? (
+              {indispoGroups.length === 0 ? (
                 <div className="bg-white/90 backdrop-blur-lg p-8 rounded-[24px] border border-white/50 shadow-sm text-center">
                   <p className="text-gray-600 font-medium">Aucun jour n'est bloqué actuellement.</p>
                 </div>
               ) : (
-                initialIndisponibilites.map((indispo: any) => (
-                  <div key={indispo.id} className="bg-white/95 backdrop-blur-xl p-5 rounded-2xl border border-white/60 flex justify-between items-center shadow-sm hover:shadow-md transition-shadow">
-                    <div className="flex items-center gap-5">
-                      <div className="bg-orange-50 text-orange-600 w-14 h-14 rounded-xl flex items-center justify-center text-2xl border border-orange-100 shadow-inner">🏖️</div>
-                      <div>
-                        <p className="font-black text-gray-900 text-lg">{new Date(indispo.dateDebut).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</p>
-                        <p className="text-sm text-gray-600 font-medium mt-0.5">Motif : <span className="font-bold text-gray-800">{indispo.motif || 'Non renseigné'}</span></p>
+                indispoGroups.map(([dateKey, entries]: [string, any[]]) => {
+                  const isJourEntier = entries.some((e: any) => e.jourEntier);
+                  const first = entries[0];
+                  const dateLabel = new Date(first.dateDebut).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+                  const dateISO = new Date(first.dateDebut).toISOString().split('T')[0];
+                  const slots = entries
+                    .filter((e: any) => !e.jourEntier)
+                    .map((e: any) => {
+                      const d = new Date(e.dateDebut);
+                      return `${d.getHours().toString().padStart(2, '0')}:00`;
+                    })
+                    .sort();
+                  return (
+                    <div key={dateKey} className="bg-white/95 backdrop-blur-xl p-5 rounded-2xl border border-white/60 flex justify-between items-center shadow-sm hover:shadow-md transition-shadow">
+                      <div className="flex items-center gap-5">
+                        <div className={`w-14 h-14 rounded-xl flex items-center justify-center text-2xl border shadow-inner ${isJourEntier ? 'bg-orange-50 text-orange-600 border-orange-100' : 'bg-red-50 text-red-500 border-red-100'}`}>
+                          {isJourEntier ? '🏖️' : '⏰'}
+                        </div>
+                        <div>
+                          <p className="font-black text-gray-900 text-lg">{dateLabel}</p>
+                          {isJourEntier ? (
+                            <p className="text-sm text-gray-600 font-medium mt-0.5">Journée entière — <span className="font-bold text-gray-800">{first.motif || 'Non renseigné'}</span></p>
+                          ) : (
+                            <p className="text-sm text-gray-600 font-medium mt-0.5">Créneaux bloqués : <span className="font-bold text-[#E30613]">{slots.join(', ')}</span></p>
+                          )}
+                        </div>
                       </div>
+                      <button
+                        onClick={() => isJourEntier ? supprimerConge(first.id) : supprimerCongeDate(dateISO)}
+                        className="text-[#E30613] bg-red-50 hover:bg-[#E30613] hover:text-white border border-red-100 px-5 py-2.5 rounded-xl transition-colors font-black text-sm shadow-sm"
+                      >
+                        Débloquer
+                      </button>
                     </div>
-                    <button onClick={() => supprimerConge(indispo.id)} className="text-[#E30613] bg-red-50 hover:bg-[#E30613] hover:text-white border border-red-100 px-5 py-2.5 rounded-xl transition-colors font-black text-sm shadow-sm">Débloquer</button>
-                  </div>
-                ))
+                  );
+                })
               )}
             </div>
           </div>

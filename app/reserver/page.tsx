@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { Phone } from 'lucide-react';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 const isValidEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
@@ -257,9 +258,15 @@ export default function Reserver() {
             </div>
           </div>
           <h1 className="text-3xl sm:text-4xl font-black text-[#E30613] mb-4">C'est confirmé !</h1>
-          <p className="text-sm sm:text-base text-gray-700 mb-8 font-medium leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-700 mb-5 font-medium leading-relaxed">
             Votre rendez-vous a été enregistré. Un compte client a été créé automatiquement pour vous. Vérifiez vos emails !
           </p>
+          <div className="flex items-start gap-3 bg-[#43A047]/10 border border-[#43A047]/30 rounded-2xl p-4 mb-8 text-left">
+            <Phone size={20} className="text-[#43A047] shrink-0 mt-0.5" />
+            <p className="text-sm font-bold text-gray-700 leading-relaxed">
+              Vous serez contacté par téléphone dans les <span className="text-[#43A047]">2 heures</span> pour confirmer votre intervention.
+            </p>
+          </div>
           <div className="inline-block px-6 py-3 sm:px-8 sm:py-4 bg-gradient-to-r from-[#43A047] to-[#2E7D32] text-white rounded-full font-bold shadow-lg text-sm sm:text-base">
             Redirection vers l'accueil...
           </div>

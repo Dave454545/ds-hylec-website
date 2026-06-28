@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { Phone, Facebook, Instagram } from 'lucide-react';
 import { SERVICES } from '@/lib/services-data';
 
 export default function Home() {
@@ -167,6 +168,23 @@ export default function Home() {
       <footer className="bg-[#1A1A1A] py-16 text-center relative overflow-hidden z-20">
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#E30613] to-transparent opacity-70" />
         <div className="max-w-7xl mx-auto px-6 relative z-10">
+
+          {/* Téléphone */}
+          <a href="tel:+33753290244" className="inline-flex items-center gap-2 text-white font-bold text-lg hover:text-[#43A047] transition-colors duration-300 mb-6">
+            <Phone size={20} className="text-[#43A047]" />
+            07 53 29 02 44
+          </a>
+
+          {/* Réseaux sociaux */}
+          <div className="flex items-center justify-center gap-5 mb-8">
+            <a href="#" aria-label="Facebook DS HY'LEC" className="w-10 h-10 rounded-full bg-white/10 hover:bg-[#1877F2] flex items-center justify-center transition-all duration-300 hover:scale-110">
+              <Facebook size={18} className="text-white" />
+            </a>
+            <a href="#" aria-label="Instagram DS HY'LEC" className="w-10 h-10 rounded-full bg-white/10 hover:bg-gradient-to-br hover:from-[#F58529] hover:to-[#C13584] flex items-center justify-center transition-all duration-300 hover:scale-110">
+              <Instagram size={18} className="text-white" />
+            </a>
+          </div>
+
           <p className="text-white/60 text-sm font-medium">
             © {new Date().getFullYear()} DS HY'LEC. Expert hybrid, diagnostic électronique et performance moteur.<br className="mb-2" />
             Créé par <span className="text-[#43A047] font-bold">Kreativ Academy</span>.

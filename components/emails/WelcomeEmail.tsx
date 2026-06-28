@@ -38,6 +38,13 @@ export const WelcomeEmail: React.FC<Readonly<WelcomeEmailProps>> = ({
           Un espace client sécurisé a été automatiquement créé pour vous. Il vous permettra de suivre vos factures, l'entretien de vos véhicules et d'accéder à votre <strong>cagnotte de parrainage</strong>.
         </p>
 
+        <div style={{ backgroundColor: '#f0f9f0', border: '2px solid #43A047', borderRadius: '12px', padding: '16px 20px', margin: '24px 0', display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+          <span style={{ fontSize: '24px', flexShrink: 0 }}>📞</span>
+          <p style={{ margin: 0, fontSize: '15px', lineHeight: '1.6', color: '#2E7D32', fontWeight: 'bold' }}>
+            Notre équipe vous contactera par téléphone dans les <span style={{ textDecoration: 'underline' }}>2 heures</span> pour confirmer les détails de votre intervention.
+          </p>
+        </div>
+
         {services && services.length > 0 && (
           <div style={{ backgroundColor: '#f0f9f0', border: '1px solid #c8e6c9', borderRadius: '12px', padding: '16px 20px', margin: '24px 0' }}>
             <p style={{ margin: '0 0 10px 0', fontWeight: 'bold', color: '#2E7D32', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>

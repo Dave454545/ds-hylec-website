@@ -45,10 +45,10 @@ export default function AdminUI({ initialReservations, initialUsers, initialIndi
     { label: "Diagnostic électronique complet", value: "DIAGNOSTIC_ELECTRONIQUE" },
     { label: "Décalaminage moteur hydrogène", value: "DECALAMINAGE_MOTEUR" },
     { label: "Régénération FAP", value: "REGENERATION_FAP" },
-    { label: "Nettoyage vanne EGR / admission", value: "NETTOYAGE_EGR" },
+    { label: "Débouchage du filtre à particules (FAP)", value: "DEBOUCHAGE_FAP" },
     { label: "Diagnostic système hybride", value: "DIAGNOSTIC_HYBRIDE" },
     { label: "Test batterie hybride", value: "TEST_BATTERIE_HYBRIDE" },
-    { label: "Nettoyage refroidissement hybride", value: "NETTOYAGE_REFROIDISSEMENT_HYBRIDE" },
+    { label: "Entretien du système hybride", value: "NETTOYAGE_REFROIDISSEMENT_HYBRIDE" },
     { label: "Pack hybride complet", value: "PACK_HYBRIDE_COMPLET" }
   ];
 

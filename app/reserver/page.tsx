@@ -39,6 +39,9 @@ export default function Reserver() {
   const touchStartY = useRef(0);
   const isScrollingTouch = useRef(false);
 
+  // Prix des services (chargés depuis la DB)
+  const [prixServices, setPrixServices] = useState<Record<string, number>>({});
+
   // États pour l'autocomplétion
   const [showBrands, setShowBrands] = useState(false);
   const [showModels, setShowModels] = useState(false);
@@ -54,6 +57,17 @@ export default function Reserver() {
         setStep(2);
       }
     }
+  }, []);
+
+  useEffect(() => {
+    fetch('/api/admin/tarifications')
+      .then(r => r.json())
+      .then((tarifs: { service: string; prix: number }[]) => {
+        const map: Record<string, number> = {};
+        tarifs.forEach(t => { map[t.service] = t.prix; });
+        setPrixServices(map);
+      })
+      .catch(console.error);
   }, []);
 
   // Base de données des Marques et Modèles
@@ -344,6 +358,9 @@ export default function Reserver() {
                       <div className="flex-1 min-w-0 pr-5">
                         <div className={`font-bold text-sm sm:text-base leading-tight ${selected ? 'text-[#E30613]' : 'text-gray-800'}`}>{item.label}</div>
                         <div className="text-[11px] sm:text-xs text-gray-500 mt-0.5 line-clamp-2 font-medium">{item.desc}</div>
+                        {prixServices[item.value] !== undefined && (
+                          <div className="text-xs font-black text-[#43A047] mt-1">{prixServices[item.value]} €</div>
+                        )}
                       </div>
                     </div>
                   );
@@ -554,13 +571,34 @@ export default function Reserver() {
                 <input type="text" placeholder="Ex: AMIGO10" value={codeParrain} onChange={(e) => setCodeParrain(e.target.value.toUpperCase())} className="w-full box-border border-2 border-white/80 rounded-xl p-3.5 sm:p-4 bg-gray-50/80 backdrop-blur-sm outline-none focus:border-[#43A047] focus:bg-white font-black text-gray-800 text-sm sm:text-base tracking-widest shadow-inner transition-colors" />
               </div>
 
-              <div className="bg-gradient-to-br from-gray-50 to-white p-4 sm:p-6 rounded-2xl mb-8 sm:mb-10 border border-gray-100 shadow-sm space-y-3">
-                <p className="text-xs sm:text-sm flex justify-between items-start gap-2"><span className="text-gray-500 font-medium shrink-0">Service(s) :</span> <span className="font-black text-[#E30613] text-[10px] sm:text-xs text-right">{services.map(s => servicesList.find(i => i.value === s)?.label ?? s).join(' + ')}</span></p>
-                <div className="h-px w-full bg-gray-100" />
-                <p className="text-xs sm:text-sm flex justify-between items-center"><span className="text-gray-500 font-medium">Véhicule :</span> <span className="font-bold text-gray-800 text-right">{vehicle.marque} {vehicle.modele} {vehicle.annee && <span className="text-gray-400">({vehicle.annee})</span>} <span className="text-gray-400 text-[10px] sm:text-xs block sm:inline">({vehicle.carburant})</span></span></p>
-                <div className="h-px w-full bg-gray-100" />
-                <p className="text-xs sm:text-sm flex justify-between items-center"><span className="text-gray-500 font-medium">Date :</span> <span className="font-bold text-gray-800 text-right">{new Date(dateTime.date).toLocaleDateString('fr-FR')} à {dateTime.time}</span></p>
-              </div>
+              {(() => {
+                const totalPrice = services.reduce((sum, s) => sum + (prixServices[s] || 0), 0);
+                return (
+                  <div className="bg-gradient-to-br from-gray-50 to-white p-4 sm:p-6 rounded-2xl mb-8 sm:mb-10 border border-gray-100 shadow-sm space-y-3">
+                    <div>
+                      <p className="text-xs sm:text-sm flex justify-between items-start gap-2"><span className="text-gray-500 font-medium shrink-0">Service(s) :</span> <span className="font-black text-[#E30613] text-[10px] sm:text-xs text-right">{services.map(s => servicesList.find(i => i.value === s)?.label ?? s).join(' + ')}</span></p>
+                      {services.map(s => {
+                        const prix = prixServices[s];
+                        if (prix === undefined) return null;
+                        const label = servicesList.find(i => i.value === s)?.label ?? s;
+                        return (
+                          <p key={s} className="text-[10px] sm:text-xs flex justify-between items-center mt-1 pl-2"><span className="text-gray-400">{label}</span><span className="font-bold text-[#43A047]">{prix} €</span></p>
+                        );
+                      })}
+                    </div>
+                    {totalPrice > 0 && (
+                      <>
+                        <div className="h-px w-full bg-gray-100" />
+                        <p className="text-sm sm:text-base flex justify-between items-center"><span className="text-gray-700 font-bold">Total estimé :</span><span className="font-black text-[#43A047] text-base sm:text-lg">{totalPrice} €</span></p>
+                      </>
+                    )}
+                    <div className="h-px w-full bg-gray-100" />
+                    <p className="text-xs sm:text-sm flex justify-between items-center"><span className="text-gray-500 font-medium">Véhicule :</span> <span className="font-bold text-gray-800 text-right">{vehicle.marque} {vehicle.modele} {vehicle.annee && <span className="text-gray-400">({vehicle.annee})</span>} <span className="text-gray-400 text-[10px] sm:text-xs block sm:inline">({vehicle.carburant})</span></span></p>
+                    <div className="h-px w-full bg-gray-100" />
+                    <p className="text-xs sm:text-sm flex justify-between items-center"><span className="text-gray-500 font-medium">Date :</span> <span className="font-bold text-gray-800 text-right">{new Date(dateTime.date).toLocaleDateString('fr-FR')} à {dateTime.time}</span></p>
+                  </div>
+                );
+              })()}
 
               <div className="flex gap-3 sm:gap-4">
                 <button onClick={() => goBack(3)} className="py-3.5 sm:py-4 bg-gray-100/80 rounded-xl flex-1 font-bold text-sm sm:text-base text-gray-500 hover:bg-gray-200 active:scale-95 transition-all">Retour</button>

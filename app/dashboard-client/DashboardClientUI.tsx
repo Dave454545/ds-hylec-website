@@ -2,52 +2,259 @@
 import { useState } from 'react';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function DashboardClientUI({ user, vehicules, factures, parrainages }: any) {
   const [activeTab, setActiveTab] = useState('garage');
+  const router = useRouter();
+  const cagnotteTotale = user.cagnotte || 0;
 
-  // Calcul de la cagnotte réelle à partir des parrainages validés (ou on prend user.cagnotte directement si c'est plus simple)
-  const cagnotteTotale = user.cagnotte || 0; 
+  // ─── Cancel state ───────────────────────────────────────────────────────────
+  const [cancelTargetId, setCancelTargetId] = useState<string | null>(null);
+
+  // ─── Reschedule state ────────────────────────────────────────────────────────
+  const [rescheduleTarget, setRescheduleTarget] = useState<any | null>(null);
+  const [rescheduleDate, setRescheduleDate] = useState('');
+  const [availableSlots, setAvailableSlots] = useState<string[]>([]);
+  const [loadingSlots, setLoadingSlots] = useState(false);
+  const [rescheduleTime, setRescheduleTime] = useState('');
+
+  // ─── Shared action state ─────────────────────────────────────────────────────
+  const [loadingAction, setLoadingAction] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [actionSuccess, setActionSuccess] = useState<string | null>(null);
+
+  // Minimum date for reschedule: tomorrow
+  const minDate = (() => {
+    const d = new Date();
+    d.setDate(d.getDate() + 1);
+    return d.toISOString().split('T')[0];
+  })();
+
+  const canModify = (statut: string) => ['EN_ATTENTE', 'CONFIRMEE'].includes(statut);
+
+  const fetchSlots = async (date: string) => {
+    setLoadingSlots(true);
+    setRescheduleTime('');
+    setAvailableSlots([]);
+    try {
+      const res = await fetch(`/api/disponibilites?date=${date}`);
+      const data = await res.json();
+      setAvailableSlots(data.slots || []);
+    } catch {
+      setAvailableSlots([]);
+    } finally {
+      setLoadingSlots(false);
+    }
+  };
+
+  const handleDateChange = (date: string) => {
+    setRescheduleDate(date);
+    if (date) fetchSlots(date);
+  };
+
+  const closeModals = () => {
+    setCancelTargetId(null);
+    setRescheduleTarget(null);
+    setRescheduleDate('');
+    setRescheduleTime('');
+    setAvailableSlots([]);
+    setActionError(null);
+  };
+
+  const handleCancel = async () => {
+    if (!cancelTargetId) return;
+    setLoadingAction(true);
+    setActionError(null);
+    try {
+      const res = await fetch(`/api/reservations/${cancelTargetId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'annuler' }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setActionError(data.error || "Erreur lors de l'annulation.");
+      } else {
+        setCancelTargetId(null);
+        setActionSuccess('Votre rendez-vous a bien été annulé.');
+        router.refresh();
+      }
+    } catch {
+      setActionError('Erreur réseau. Veuillez réessayer.');
+    } finally {
+      setLoadingAction(false);
+    }
+  };
+
+  const handleReschedule = async () => {
+    if (!rescheduleTarget || !rescheduleDate || !rescheduleTime) return;
+    setLoadingAction(true);
+    setActionError(null);
+    try {
+      const res = await fetch(`/api/reservations/${rescheduleTarget.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'reprogrammer', newDate: `${rescheduleDate}T${rescheduleTime}:00` }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setActionError(data.error || 'Erreur lors de la reprogrammation.');
+      } else {
+        setRescheduleTarget(null);
+        setRescheduleDate('');
+        setRescheduleTime('');
+        setAvailableSlots([]);
+        setActionSuccess('Votre rendez-vous a bien été reprogrammé.');
+        router.refresh();
+      }
+    } catch {
+      setActionError('Erreur réseau. Veuillez réessayer.');
+    } finally {
+      setLoadingAction(false);
+    }
+  };
+
+  const statutBadge = (statut: string) => {
+    if (statut === 'TERMINEE') return 'bg-[#43A047]/10 text-[#43A047] border border-[#43A047]/20';
+    if (statut === 'ANNULEE')  return 'bg-gray-100 text-gray-500 border border-gray-200';
+    if (statut === 'EN_COURS') return 'bg-blue-50 text-blue-700 border border-blue-200';
+    return 'bg-orange-100 text-orange-700 border border-orange-200';
+  };
 
   return (
     <main className="relative min-h-screen font-sans pb-20 selection:bg-[#43A047] selection:text-white overflow-hidden">
-      
-      {/* VIDÉO EN ARRIÈRE-PLAN : Pleine luminosité */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="none"
-        className="fixed inset-0 w-full h-full object-cover -z-50 scale-105"
-      >
+
+      {/* VIDÉO EN ARRIÈRE-PLAN */}
+      <video autoPlay loop muted playsInline preload="none"
+        className="fixed inset-0 w-full h-full object-cover -z-50 scale-105">
         <source src="/dshylec1 compress.mp4" type="video/mp4" />
       </video>
-
-      {/* OVERLAY CORRIGÉ : Verre dépoli allégé pour que la vidéo soit VRAIMENT visible */}
       <div className="fixed inset-0 bg-white/30 backdrop-blur-[4px] -z-40" />
-
-      {/* HALOS LUMINEUX DYNAMIQUES */}
       <div className="fixed top-0 left-0 w-[500px] h-[500px] bg-[#E30613]/15 rounded-full blur-[120px] -z-30 animate-pulse" style={{ animationDuration: '7s' }} />
       <div className="fixed bottom-0 right-0 w-[500px] h-[500px] bg-[#43A047]/15 rounded-full blur-[120px] -z-30 animate-pulse" style={{ animationDelay: '2s', animationDuration: '8s' }} />
 
-      {/* HEADER CLIENT (Glassmorphism Rouge) */}
+      {/* SUCCESS BANNER */}
+      {actionSuccess && (
+        <div className="fixed top-4 left-4 right-4 z-50 bg-[#43A047] text-white px-5 py-4 rounded-2xl shadow-xl flex items-center justify-between gap-3 animate-in fade-in slide-in-from-top-4 duration-300">
+          <div className="flex items-center gap-3">
+            <span className="text-xl">✅</span>
+            <p className="font-bold text-sm">{actionSuccess}</p>
+          </div>
+          <button onClick={() => setActionSuccess(null)} className="text-white/80 hover:text-white text-2xl leading-none font-black">×</button>
+        </div>
+      )}
+
+      {/* MODAL : CONFIRMATION ANNULATION */}
+      {cancelTargetId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-[24px] shadow-2xl max-w-sm w-full p-6 animate-in fade-in zoom-in-95 duration-200">
+            <div className="text-center mb-5">
+              <span className="text-5xl mb-3 block">❌</span>
+              <h3 className="text-xl font-black text-gray-900 mb-2">Confirmer l&apos;annulation</h3>
+              <p className="text-gray-600 text-sm font-medium leading-relaxed">
+                Êtes-vous sûr de vouloir annuler ce rendez-vous ?<br />Cette action est irréversible.
+              </p>
+            </div>
+            {actionError && (
+              <div className="bg-red-50 border border-red-200 rounded-xl p-3 mb-4 text-red-700 text-sm font-medium leading-snug">{actionError}</div>
+            )}
+            <div className="flex gap-3">
+              <button onClick={closeModals} disabled={loadingAction}
+                className="flex-1 bg-gray-100 text-gray-700 py-3 rounded-xl font-bold text-sm hover:bg-gray-200 transition-colors disabled:opacity-50">
+                Retour
+              </button>
+              <button onClick={handleCancel} disabled={loadingAction}
+                className="flex-1 bg-[#E30613] text-white py-3 rounded-xl font-bold text-sm hover:bg-[#B3050F] transition-colors disabled:opacity-50">
+                {loadingAction ? '...' : 'Confirmer'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL : REPROGRAMMATION */}
+      {rescheduleTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-[24px] shadow-2xl max-w-sm w-full p-6 animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto">
+            <div className="text-center mb-5">
+              <span className="text-5xl mb-3 block">🔄</span>
+              <h3 className="text-xl font-black text-gray-900 mb-1">Reprogrammer</h3>
+              <p className="text-gray-600 text-sm font-medium">Choisissez une nouvelle date et un créneau disponible.</p>
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-xs font-black text-gray-700 uppercase tracking-wider mb-2">Nouvelle date</label>
+              <input
+                type="date"
+                min={minDate}
+                value={rescheduleDate}
+                onChange={(e) => handleDateChange(e.target.value)}
+                className="w-full border-2 border-gray-200 rounded-xl p-3 font-bold text-gray-800 outline-none focus:border-[#E30613] transition-colors"
+              />
+            </div>
+
+            {rescheduleDate && (
+              <div className="mb-5">
+                <label className="block text-xs font-black text-gray-700 uppercase tracking-wider mb-2">Créneau horaire</label>
+                {loadingSlots ? (
+                  <p className="text-sm text-gray-500 text-center py-4 font-medium">Chargement des créneaux...</p>
+                ) : availableSlots.length === 0 ? (
+                  <p className="text-sm text-orange-700 font-bold text-center py-4 bg-orange-50 rounded-xl border border-orange-200">
+                    Aucun créneau disponible ce jour
+                  </p>
+                ) : (
+                  <div className="grid grid-cols-3 gap-2">
+                    {availableSlots.map(slot => (
+                      <button key={slot} onClick={() => setRescheduleTime(slot)}
+                        className={`py-2.5 px-3 rounded-xl text-sm font-black transition-all ${
+                          rescheduleTime === slot
+                            ? 'bg-[#E30613] text-white shadow-md scale-105'
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        }`}>
+                        {slot}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {actionError && (
+              <div className="bg-red-50 border border-red-200 rounded-xl p-3 mb-4 text-red-700 text-sm font-medium leading-snug">{actionError}</div>
+            )}
+
+            <div className="flex gap-3">
+              <button onClick={closeModals} disabled={loadingAction}
+                className="flex-1 bg-gray-100 text-gray-700 py-3 rounded-xl font-bold text-sm hover:bg-gray-200 transition-colors disabled:opacity-50">
+                Annuler
+              </button>
+              <button onClick={handleReschedule}
+                disabled={!rescheduleDate || !rescheduleTime || loadingAction}
+                className="flex-1 bg-[#43A047] text-white py-3 rounded-xl font-bold text-sm hover:bg-[#2E7D32] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                {loadingAction ? '...' : 'Confirmer'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* HEADER */}
       <nav
         className="bg-gradient-to-r from-[#E30613]/95 to-[#B3050F]/95 backdrop-blur-xl px-6 pb-16 rounded-b-[40px] shadow-[0_20px_40px_-10px_rgba(227,6,19,0.4)] relative z-10 border-b border-white/20"
         style={{ paddingTop: 'calc(2.5rem + env(safe-area-inset-top))' }}
       >
         <div className="max-w-4xl mx-auto flex items-center justify-between mb-6">
           <div className="flex items-baseline gap-1 text-white">
-            <span className="text-2xl font-black tracking-tighter drop-shadow-md">DS HY'LEC</span>
+            <span className="text-2xl font-black tracking-tighter drop-shadow-md">DS HY&apos;LEC</span>
           </div>
-          <button 
+          <button
             onClick={() => signOut({ callbackUrl: '/' })}
             className="text-white/90 text-sm font-bold hover:text-white transition bg-white/10 hover:bg-white/25 px-5 py-2.5 rounded-full border border-white/10 backdrop-blur-sm"
           >
             Déconnexion
           </button>
         </div>
-        
         <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-left-4 duration-700">
           <h1 className="text-3xl sm:text-4xl font-black text-white mb-3 drop-shadow-md">Bonjour, {user.prenom} 👋</h1>
           <p className="text-[#43A047] font-black text-sm uppercase tracking-wider bg-white/95 backdrop-blur-md inline-block px-4 py-1.5 rounded-xl shadow-sm border border-white/50">
@@ -57,8 +264,8 @@ export default function DashboardClientUI({ user, vehicules, factures, parrainag
       </nav>
 
       <div className="max-w-4xl mx-auto px-4 -mt-8 relative z-20">
-        
-        {/* MENU DES ONGLETS (Glassmorphism Blanc) */}
+
+        {/* ONGLETS */}
         <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/60 p-2 flex gap-2 mb-8 overflow-x-auto hide-scrollbar">
           <button onClick={() => setActiveTab('garage')} className={`flex-1 py-3 px-4 rounded-xl font-bold text-sm whitespace-nowrap transition-all ${activeTab === 'garage' ? 'bg-gradient-to-br from-[#E30613] to-[#B3050F] text-white shadow-lg' : 'text-gray-700 hover:bg-white'}`}>
             🚗 Mon Garage
@@ -71,7 +278,7 @@ export default function DashboardClientUI({ user, vehicules, factures, parrainag
           </button>
         </div>
 
-        {/* CONTENU : MON GARAGE */}
+        {/* ONGLET : MON GARAGE */}
         {activeTab === 'garage' && (
           <div className="animate-in fade-in duration-300 space-y-4">
             <div className="flex justify-between items-end mb-4 px-2">
@@ -90,7 +297,7 @@ export default function DashboardClientUI({ user, vehicules, factures, parrainag
                   <circle cx="60" cy="42" r="5" stroke="#E30613" strokeWidth="2.5"/>
                 </svg>
                 <p className="text-gray-700 font-black mb-1">Aucun véhicule enregistré</p>
-                <p className="text-gray-500 text-sm font-medium mb-5">Votre garage est vide pour l'instant.</p>
+                <p className="text-gray-500 text-sm font-medium mb-5">Votre garage est vide pour l&apos;instant.</p>
                 <Link href="/reserver" className="inline-block bg-[#E30613] text-white px-6 py-3 rounded-full font-bold text-sm shadow-lg shadow-[#E30613]/30 hover:bg-[#B3050F] transition-colors">
                   Prendre un premier RDV
                 </Link>
@@ -104,7 +311,6 @@ export default function DashboardClientUI({ user, vehicules, factures, parrainag
                   </div>
                   <p className="text-gray-600 text-sm font-medium">Année {v.annee}</p>
                 </div>
-                
                 {v.dateProchainCT && (
                   <div className="bg-orange-50/90 border border-orange-200/60 p-3 rounded-xl flex items-center gap-3 shadow-inner">
                     <span className="text-2xl animate-pulse">⚠️</span>
@@ -114,7 +320,6 @@ export default function DashboardClientUI({ user, vehicules, factures, parrainag
                     </div>
                   </div>
                 )}
-                
                 <Link href="/reserver" className="bg-[#E30613]/10 text-[#E30613] font-black py-3 px-6 rounded-xl hover:bg-[#E30613] hover:text-white transition-colors text-center text-sm whitespace-nowrap shadow-sm border border-[#E30613]/20 hover:border-transparent">
                   Prendre RDV
                 </Link>
@@ -123,11 +328,11 @@ export default function DashboardClientUI({ user, vehicules, factures, parrainag
           </div>
         )}
 
-        {/* CONTENU : FACTURES ET INTERVENTIONS */}
+        {/* ONGLET : FACTURES ET INTERVENTIONS */}
         {activeTab === 'factures' && (
           <div className="animate-in fade-in duration-300">
             <h2 className="text-xl font-black text-gray-900 mb-4 px-2 drop-shadow-sm">Historique des interventions</h2>
-            
+
             <div className="bg-white/95 backdrop-blur-xl rounded-[24px] shadow-[0_10px_30px_rgba(0,0,0,0.05)] border border-white/60 overflow-hidden">
               {user.reservations?.length === 0 ? (
                 <div className="p-10 text-center">
@@ -147,55 +352,65 @@ export default function DashboardClientUI({ user, vehicules, factures, parrainag
                 user.reservations?.map((rdv: any, idx: number) => (
                   <div key={rdv.id} className={`p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-white/50 transition-colors ${idx !== user.reservations.length - 1 ? 'border-b border-gray-100/80' : ''}`}>
                     <div>
-                      <div className="flex items-center gap-3 mb-2">
+                      <div className="flex items-center gap-3 mb-2 flex-wrap">
                         <p className="font-black text-[#E30613]">
                           {((rdv.services?.length > 0 ? rdv.services : [rdv.service]) as string[]).map((s: string) => s.replace(/_/g, ' ')).join(' + ')}
                         </p>
-                        <span className={`px-2.5 py-1 rounded-md text-[10px] font-black uppercase tracking-widest ${rdv.statut === 'TERMINEE' ? 'bg-[#43A047]/10 text-[#43A047] border border-[#43A047]/20' : 'bg-orange-100 text-orange-700 border border-orange-200'}`}>
+                        <span className={`px-2.5 py-1 rounded-md text-[10px] font-black uppercase tracking-widest ${statutBadge(rdv.statut)}`}>
                           {rdv.statut}
                         </span>
                       </div>
                       <p className="text-sm text-gray-600 font-medium">
-                        Le {new Date(rdv.dateIntervention).toLocaleDateString('fr-FR')} 
+                        Le {new Date(rdv.dateIntervention).toLocaleDateString('fr-FR')}
                         {rdv.vehicule && ` • ${rdv.vehicule.marque} ${rdv.vehicule.modele}`}
                       </p>
                     </div>
 
-                    <div className="flex items-center gap-6 justify-between sm:justify-end">
+                    <div className="flex items-center gap-4 justify-between sm:justify-end flex-wrap">
                       <div className="text-right">
                         <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-0.5">Montant</p>
                         <p className="font-black text-gray-900 text-xl">{rdv.montantTotal} €</p>
                       </div>
 
                       {rdv.statut === 'TERMINEE' ? (
-                        <Link 
-                          href={`/facture/${rdv.id}`} 
-                          target="_blank" 
+                        <Link
+                          href={`/facture/${rdv.id}`}
+                          target="_blank"
                           className="bg-gray-100/90 text-gray-800 px-5 py-3 rounded-xl text-sm font-black hover:bg-[#E30613] hover:text-white transition-colors flex items-center gap-2 shadow-sm border border-gray-200"
                         >
                           <span>📄</span> Facture
                         </Link>
-                      ) : (
-                        <div className="px-5 py-3 rounded-xl text-sm font-bold text-gray-500 bg-gray-50/80 border border-gray-200 cursor-not-allowed">
-                          En attente
+                      ) : canModify(rdv.statut) ? (
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => { setActionError(null); setCancelTargetId(rdv.id); }}
+                            className="bg-[#E30613]/10 text-[#E30613] px-3 py-2.5 rounded-xl text-xs font-black hover:bg-[#E30613] hover:text-white transition-colors border border-[#E30613]/20 hover:border-transparent whitespace-nowrap"
+                          >
+                            ✕ Annuler
+                          </button>
+                          <button
+                            onClick={() => { setActionError(null); setRescheduleTarget(rdv); }}
+                            className="bg-orange-50 text-orange-700 px-3 py-2.5 rounded-xl text-xs font-black hover:bg-orange-500 hover:text-white transition-colors border border-orange-200 hover:border-transparent whitespace-nowrap"
+                          >
+                            🔄 Reprogrammer
+                          </button>
                         </div>
-                      )}
+                      ) : null}
                     </div>
                   </div>
                 ))
               )}
             </div>
             <p className="text-xs text-center text-gray-600 mt-5 font-medium bg-white/70 backdrop-blur-md p-3 rounded-xl inline-block mx-auto">
-              Les factures sont générées automatiquement une fois l'intervention terminée par le technicien.
+              Les factures sont générées automatiquement une fois l&apos;intervention terminée par le technicien.
             </p>
           </div>
         )}
 
-        {/* CONTENU : PARRAINAGE DYNAMIQUE */}
+        {/* ONGLET : PARRAINAGE */}
         {activeTab === 'parrainage' && (
           <div className="animate-in fade-in duration-300">
             <h2 className="text-xl font-black text-gray-900 mb-4 px-2 drop-shadow-sm">Programme Fidélité</h2>
-            
             <div className="grid sm:grid-cols-2 gap-5">
               <div className="bg-gradient-to-br from-[#43A047]/95 to-[#2E7D32]/95 backdrop-blur-xl p-8 rounded-[24px] text-white shadow-[0_15px_30px_rgba(67,160,71,0.3)] border border-[#43A047]/50 relative overflow-hidden group">
                 <div className="absolute -right-4 -top-4 text-9xl opacity-10 group-hover:scale-110 transition-transform duration-700">💰</div>
@@ -205,13 +420,11 @@ export default function DashboardClientUI({ user, vehicules, factures, parrainag
                   Cette somme sera automatiquement déduite de votre prochaine intervention !
                 </p>
               </div>
-
               <div className="bg-white/95 backdrop-blur-xl p-8 rounded-[24px] shadow-[0_10px_30px_rgba(0,0,0,0.05)] border border-white/60 flex flex-col justify-center">
                 <p className="font-black text-[#E30613] mb-3 text-lg drop-shadow-sm">Votre code parrain</p>
                 <p className="text-sm text-gray-700 mb-6 font-medium leading-relaxed">
-                  Partagez ce code avec vos proches. S'ils l'utilisent, vous gagnez <strong className="text-[#43A047] font-black">10€</strong> et ils obtiennent <strong className="text-[#43A047] font-black">10€</strong> de réduction !
+                  Partagez ce code avec vos proches. S&apos;ils l&apos;utilisent, vous gagnez <strong className="text-[#43A047] font-black">10€</strong> et ils obtiennent <strong className="text-[#43A047] font-black">10€</strong> de réduction !
                 </p>
-                
                 <div className="bg-gray-50/90 border-2 border-dashed border-[#E30613]/40 px-4 py-4 rounded-xl text-center font-black tracking-[0.2em] text-gray-900 text-2xl shadow-inner">
                   {user.codeParrain || 'CODE-NON-GENERE'}
                 </div>

@@ -24,8 +24,8 @@ export const SERVICES: ServiceData[] = [
     id: "DECALAMINAGE_MOTEUR",
     title: "Décalaminage moteur hydrogène",
     img: "/Decalaminage.jpeg",
-    descCourte: "Nettoyage interne du moteur par hydrogène. Élimine la calamine accumulée.",
-    descLongue: "Le décalaminage à l'hydrogène est une solution rapide, économique et écologique pour l'entretien de votre moteur diesel ou essence. Il permet d'éliminer les dépôts de calamine à l'intérieur de votre moteur. Ces résidus noirâtres sont formés par la combustion du moteur. Ils se déposent ainsi progressivement sur les pièces sensibles et onéreuses jusqu'à les endommager, comme la vanne EGR, le filtre à particules (FAP), les injections, les soupapes ou encore le turbo. L'accumulation de ces dépôts obstrue les artères de votre moteur, ce qui l'encrasse et l'empêche de fonctionner correctement. Ce phénomène s'accentue sur les voitures qui réalisent de petits trajets en ville.",
+    descCourte: "Décalaminage à l'hydrogène, ajout d'additif dans le carburant et diagnostic complet inclus.",
+    descLongue: "Le décalaminage à l'hydrogène est une solution rapide, économique et écologique pour l'entretien de votre moteur diesel ou essence. Il permet d'éliminer les dépôts de calamine à l'intérieur de votre moteur. Ces résidus noirâtres sont formés par la combustion du moteur. Ils se déposent ainsi progressivement sur les pièces sensibles et onéreuses jusqu'à les endommager, comme la vanne EGR, le filtre à particules (FAP), les injections, les soupapes ou encore le turbo. L'accumulation de ces dépôts obstrue les artères de votre moteur, ce qui l'encrasse et l'empêche de fonctionner correctement. Ce phénomène s'accentue sur les voitures qui réalisent de petits trajets en ville. Cette prestation comprend le décalaminage à l'hydrogène, l'ajout d'un additif spécifique dans le carburant ainsi qu'un diagnostic complet du véhicule.",
     type: "standard",
   },
   {

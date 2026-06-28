@@ -158,7 +158,7 @@ export default function Reserver() {
 
   const servicesList = [
     { label: "Diagnostic électronique complet", value: "DIAGNOSTIC_ELECTRONIQUE", img: "/diagnostic electric complet.jpeg", desc: "Analyse complète de votre véhicule avec valise professionnelle. Lecture des codes défaut, effacement des voyants et explication claire de la panne." },
-    { label: "Décalaminage moteur hydrogène", value: "DECALAMINAGE_MOTEUR", img: "/Decalaminage.jpeg", desc: "Nettoyage interne du moteur. Élimine la calamine, améliore les performances, réduit la consommation et facilite le passage au contrôle technique." },
+    { label: "Décalaminage moteur hydrogène", value: "DECALAMINAGE_MOTEUR", img: "/Decalaminage.jpeg", desc: "Décalaminage à l'hydrogène, ajout d'additif dans le carburant et diagnostic complet inclus." },
     { label: "Régénération FAP", value: "REGENERATION_FAP", img: "/Regeneration FAP.jpeg", desc: "Nettoyage du filtre à particules encrassé. Régénération forcée via outil de diagnostic pour brûler les suies." },
     { label: "Débouchage du filtre à particules (FAP)", value: "DEBOUCHAGE_FAP", img: "/Débouchage du filtre a particules.jpg", desc: "Traitement des filtres fortement encrassés par injection de produit nettoyant et rinçage en profondeur." },
     { label: "Diagnostic système hybride", value: "DIAGNOSTIC_HYBRIDE", img: "/diagnostic systeme hybride.jpeg", desc: "Contrôle spécifique du système hybride (haute tension, onduleur, cellules) pour s'assurer du bon fonctionnement électrique." },

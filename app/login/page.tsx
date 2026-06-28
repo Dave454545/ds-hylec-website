@@ -144,11 +144,17 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <div className="mt-6 text-center">
-            <p className="text-gray-400 text-xs font-medium mb-3">Espace sécurisé • DS HY'LEC</p>
+          <div className="mt-6 text-center space-y-3">
+            <p className="text-gray-400 text-xs font-medium">Espace sécurisé • DS HY'LEC</p>
+            <Link
+              href="/forgot-password"
+              className="block text-xs font-bold text-[#E30613] hover:text-[#B3050F] transition-colors duration-200"
+            >
+              Mot de passe oublié ?
+            </Link>
             <Link
               href="/"
-              className="text-xs font-bold text-gray-500 hover:text-[#E30613] transition-colors duration-200"
+              className="block text-xs font-bold text-gray-500 hover:text-[#E30613] transition-colors duration-200"
             >
               ← Retour à l'accueil
             </Link>

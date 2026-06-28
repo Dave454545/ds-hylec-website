@@ -4,36 +4,39 @@ import bcrypt from 'bcryptjs';
 
 export async function POST(request: Request) {
   try {
-    const { email, password } = await request.json();
+    const { token, password } = await request.json();
 
-    if (!email || !password) {
-      return NextResponse.json({ error: "Email et mot de passe requis" }, { status: 400 });
+    if (!token || !password) {
+      return NextResponse.json({ error: "Token et mot de passe requis" }, { status: 400 });
     }
 
-    // 1. On cherche l'utilisateur
-    const user = await prisma.user.findUnique({
-      where: { email: email }
-    });
-
-    if (!user) {
-      return NextResponse.json({ error: "Utilisateur non trouvé" }, { status: 404 });
+    if (password.length < 6) {
+      return NextResponse.json({ error: "Le mot de passe doit contenir au moins 6 caractères" }, { status: 400 });
     }
 
-    // 2. On hash le nouveau mot de passe (Cyber-sécurité)
+    const user = await prisma.user.findUnique({ where: { resetToken: token } });
+
+    if (!user || !user.resetTokenExpires) {
+      return NextResponse.json({ error: "Lien invalide ou déjà utilisé" }, { status: 400 });
+    }
+
+    if (user.resetTokenExpires < new Date()) {
+      return NextResponse.json({ error: "Ce lien a expiré. Veuillez en demander un nouveau." }, { status: 400 });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    // 3. On met à jour l'utilisateur dans la base
     await prisma.user.update({
-      where: { email: email },
-      data: { motDePasse: hashedPassword }
+      where: { id: user.id },
+      data: {
+        motDePasse: hashedPassword,
+        resetToken: null,
+        resetTokenExpires: null,
+      },
     });
 
-    return NextResponse.json({ 
-      success: true, 
-      message: "Mot de passe mis à jour avec succès" 
-    });
-
-  } catch (error: any) {
+    return NextResponse.json({ success: true, message: "Mot de passe mis à jour avec succès" });
+  } catch (error) {
     console.error("Erreur Reset Password:", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }

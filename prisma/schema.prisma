@@ -25,6 +25,10 @@ model User {
   dateCreation  DateTime   @default(now())
   dateMaj       DateTime   @updatedAt
 
+  // Réinitialisation de mot de passe sécurisée
+  resetToken        String?    @unique
+  resetTokenExpires DateTime?
+
   // Logique de Parrainage
   codeParrain   String?    @unique      // Le code unique à partager (ex: THOMAS-123)
   cagnotte      Float      @default(0)  // L'argent cumulé disponible pour le prochain RDV

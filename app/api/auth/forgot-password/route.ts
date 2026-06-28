@@ -28,12 +28,16 @@ export async function POST(request: Request) {
 
     const resetLink = `${process.env.NEXTAUTH_URL}/reset-password?token=${token}`;
 
-    await resend.emails.send({
-      from: 'DS HY\'LEC <onboarding@resend.dev>',
+    const { error: resendError } = await resend.emails.send({
+      from: 'DS HY\'LEC <contact@dshylec.fr>',
       to: user.email,
       subject: 'Réinitialisation de votre mot de passe DS HY\'LEC',
       react: React.createElement(ResetPasswordEmail, { prenom: user.prenom, resetLink }),
     });
+
+    if (resendError) {
+      console.error('Erreur envoi email reset:', resendError);
+    }
 
     return ok();
   } catch (error) {

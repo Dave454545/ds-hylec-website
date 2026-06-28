@@ -117,7 +117,7 @@ model Parrainage {
   statut        StatutParrainage @default(EN_ATTENTE) // On attend que le RDV soit terminé
   dateCreation  DateTime         @default(now())
 
-  parrain User @relation(fields: [parrainId], references: [id])
+  parrain User @relation(fields: [parrainId], references: [id], onDelete: Cascade)
 
   @@map("parrainages")
 }
@@ -147,7 +147,6 @@ enum Service {
   DECALAMINAGE_MOTEUR
   REGENERATION_FAP
   DEBOUCHAGE_FAP
-  NETTOYAGE_EGR
   DIAGNOSTIC_HYBRIDE
   TEST_BATTERIE_HYBRIDE
   NETTOYAGE_REFROIDISSEMENT_HYBRIDE

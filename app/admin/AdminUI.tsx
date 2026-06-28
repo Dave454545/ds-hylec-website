@@ -305,7 +305,13 @@ export default function AdminUI({ initialReservations, initialUsers, initialIndi
                       </span>
                       <span className="text-gray-500 text-sm font-bold uppercase tracking-wider">| {new Date(rdv.dateIntervention).toLocaleDateString('fr-FR')}</span>
                     </div>
-                    <span className={`px-4 py-1.5 rounded-md text-[10px] font-black uppercase tracking-widest ${rdv.statut === 'TERMINEE' ? 'bg-[#43A047]/10 text-[#43A047] border border-[#43A047]/20' : 'bg-orange-100 text-orange-700 border border-orange-200'}`}>
+                    <span className={`px-4 py-1.5 rounded-md text-[10px] font-black uppercase tracking-widest ${
+                      rdv.statut === 'TERMINEE'  ? 'bg-[#43A047]/10 text-[#43A047] border border-[#43A047]/20' :
+                      rdv.statut === 'ANNULEE'   ? 'bg-gray-100 text-gray-500 border border-gray-200' :
+                      rdv.statut === 'EN_COURS'  ? 'bg-blue-100 text-blue-700 border border-blue-200' :
+                      rdv.statut === 'CONFIRMEE' ? 'bg-teal-50 text-teal-700 border border-teal-200' :
+                                                   'bg-orange-100 text-orange-700 border border-orange-200'
+                    }`}>
                       {rdv.statut.replace('_', ' ')}
                     </span>
                   </div>

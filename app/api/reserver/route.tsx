@@ -51,7 +51,7 @@ const ReservationSchema = z.object({
   // Service & date
   service:     z.enum([
     'DIAGNOSTIC_ELECTRONIQUE', 'DECALAMINAGE_MOTEUR', 'REGENERATION_FAP',
-    'DEBOUCHAGE_FAP', 'NETTOYAGE_EGR', 'DIAGNOSTIC_HYBRIDE', 'TEST_BATTERIE_HYBRIDE',
+    'DEBOUCHAGE_FAP', 'DIAGNOSTIC_HYBRIDE', 'TEST_BATTERIE_HYBRIDE',
     'NETTOYAGE_REFROIDISSEMENT_HYBRIDE', 'PACK_HYBRIDE_COMPLET',
   ]),
   services:    z.array(z.string().max(100)).max(10).default([]),

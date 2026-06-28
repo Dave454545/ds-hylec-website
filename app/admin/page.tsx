@@ -37,7 +37,7 @@ export default async function AdminDashboardPage() {
   const stats = {
     total: reservations.length,
     pending: reservations.filter(r => r.statut === 'EN_ATTENTE').length,
-    ca: reservations.reduce((acc, r) => acc + r.montantTotal, 0),
+    ca: reservations.filter(r => r.statut !== 'ANNULEE').reduce((acc, r) => acc + r.montantTotal, 0),
     totalClients: users.length
   };
 

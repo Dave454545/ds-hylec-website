@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { SERVICES } from '@/lib/services-data';
+import { getPrixServices, getPrix } from '@/lib/get-prices';
 
 export const metadata: Metadata = {
   title: "Nos Prestations — Diagnostic, Hybride, FAP | DS HY'LEC",
@@ -14,7 +15,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  const prixMap = await getPrixServices();
   return (
     <main className="relative min-h-screen font-sans selection:bg-[#43A047] selection:text-white overflow-x-hidden">
 
@@ -95,7 +97,8 @@ export default function ServicesPage() {
                   <p className="text-[11px] sm:text-xs text-gray-400 leading-relaxed line-clamp-2 flex-1">
                     {srv.descCourte}
                   </p>
-                  <div className="flex justify-end mt-2">
+                  <div className="flex items-center justify-between mt-2">
+                    <span className="text-sm font-black text-[#43A047]">{getPrix(prixMap, srv.id)} €</span>
                     <span className="text-[#E30613]/60 text-sm group-hover:text-[#E30613] group-hover:translate-x-0.5 transition-all duration-200">→</span>
                   </div>
                 </div>

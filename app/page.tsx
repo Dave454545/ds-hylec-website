@@ -2,8 +2,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Phone } from 'lucide-react';
 import { SERVICES } from '@/lib/services-data';
+import { getPrixServices, getPrix } from '@/lib/get-prices';
 
-export default function Home() {
+export default async function Home() {
+  const prixMap = await getPrixServices();
   return (
     <main className="relative min-h-screen font-sans selection:bg-[#43A047] selection:text-white overflow-x-hidden">
 
@@ -153,7 +155,9 @@ export default function Home() {
                         ${srv.type === 'premium' ? 'bg-white/20 text-white' : 'bg-gray-50 text-gray-600 group-hover:bg-gray-100 group-hover:text-gray-900'}
                       `}
                     >
-                      <span>En savoir plus</span>
+                      <span className={`text-sm font-black ${srv.type === 'premium' ? 'text-white' : 'text-[#43A047]'}`}>
+                        {getPrix(prixMap, srv.id)} €
+                      </span>
                       <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
                     </div>
                   </div>

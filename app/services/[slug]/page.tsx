@@ -3,6 +3,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { SERVICES, getServiceBySlug } from '@/lib/services-data';
+import { getPrixServices, getPrix } from '@/lib/get-prices';
+
+export const revalidate = 3600;
 
 export function generateStaticParams() {
   return SERVICES.map((s) => ({ slug: s.slug }));
@@ -28,6 +31,9 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
   const { slug } = await params;
   const srv = getServiceBySlug(slug);
   if (!srv) notFound();
+
+  const prixMap = await getPrixServices();
+  const prix = getPrix(prixMap, srv.id);
 
   return (
     <main className="relative min-h-screen font-sans selection:bg-[#43A047] selection:text-white overflow-x-hidden">
@@ -97,14 +103,22 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
             <p className="text-gray-700 leading-relaxed font-medium text-sm sm:text-base whitespace-pre-line">
               {srv.descLongue}
             </p>
-            <div className="mt-6">
-              <Link
-                href={`/reserver?service=${srv.id}`}
-                className="flex items-center justify-center gap-3 w-full py-5 bg-gradient-to-r from-[#E30613] to-[#B3050F] text-white rounded-2xl font-black text-base md:text-lg shadow-[0_10px_25px_rgba(227,6,19,0.35)] hover:shadow-[0_15px_35px_rgba(227,6,19,0.45)] hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300"
-              >
-                Prendre rendez-vous →
-              </Link>
+            <div className="mt-6 mb-4 bg-[#43A047]/8 border border-[#43A047]/25 rounded-2xl p-4 flex items-center justify-between">
+              <div>
+                <p className="text-xs text-gray-500 font-semibold uppercase tracking-wide mb-0.5">Tarif prestation</p>
+                <p className="text-3xl font-black text-[#43A047]">{prix} €</p>
+              </div>
+              <div className="text-right text-xs text-gray-400 leading-relaxed">
+                <p>Intervention à domicile</p>
+                <p>Île-de-France</p>
+              </div>
             </div>
+            <Link
+              href={`/reserver?service=${srv.id}`}
+              className="flex items-center justify-center gap-3 w-full py-5 bg-gradient-to-r from-[#E30613] to-[#B3050F] text-white rounded-2xl font-black text-base md:text-lg shadow-[0_10px_25px_rgba(227,6,19,0.35)] hover:shadow-[0_15px_35px_rgba(227,6,19,0.45)] hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300"
+            >
+              Prendre rendez-vous →
+            </Link>
           </div>
 
           {/* AUTRES SERVICES */}
